@@ -1,4 +1,6 @@
 package game;
+import java.text.ParseException;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
@@ -9,21 +11,34 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 
 import entities.Player;
-
+/**
+ * The main class of the game Bombify. A game that is based on players trying to blow each other up.
+ * 
+ * @author Fredrik Hallberg & Victor Dahlin
+ *
+ */
 
 public class Game extends BasicGame {
-    FileToHash gameSettings = new FileToHash("res/Bombify.cfg");
-    final static boolean FULLSCREEN = false;
+    SettingsContainer gameSettings; // All the settings of the game stored in a HashMap
     Player player;
     
     public static void main(String[] args) {
-        new Game("Bombify");
+    	new Game("Bombify");
     }
 
     public Game(String title) {
         super(title);
+        try{
+    		gameSettings = new SettingsContainer("res/Bombify.cfg");
+    	} catch(ParseException e){
+    		System.out.println("Error in config file on line " + e.getErrorOffset());
+    		System.exit(0);
+    	}
         try {
-            AppGameContainer game = new AppGameContainer(this, Integer.parseInt(gameSettings.get("GAME_SIZE_X")),Integer.parseInt(gameSettings.get("GAME_SIZE_Y")), FULLSCREEN);
+            AppGameContainer game = new AppGameContainer(this, 
+            		Integer.parseInt(gameSettings.get("GAME_SIZE_X")),
+            		Integer.parseInt(gameSettings.get("GAME_SIZE_Y")), 
+            		Integer.parseInt(gameSettings.get("FULLSCREEN"))==1);
             game.setTargetFrameRate(Integer.parseInt(gameSettings.get("MAX_FPS")));
             game.setVSync(true);
             game.start();
