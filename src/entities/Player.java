@@ -46,8 +46,8 @@ public class Player implements Renderable {
     public Ellipse getEllipse(){
     	return player;
     }
-    public boolean intersects(Player p){
-    	if(player.intersects(p.getEllipse())){
+    public boolean intersects(Shape s){
+    	if(player.intersects(s)){
     		return true;
     	}
     	return false;

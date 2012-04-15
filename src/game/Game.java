@@ -7,6 +7,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 import entities.Player;
@@ -20,6 +21,7 @@ import entities.Player;
 public class Game extends BasicGame {
 	SettingsContainer gameSettings; // All the settings of the game stored in a HashMap
 	Player[] player;;
+	Rectangle field;
 	int hitCounter = 0;
 	public static void main(String[] args) {
 		new Game("Bombify");
@@ -34,6 +36,7 @@ public class Game extends BasicGame {
 			System.exit(0);
 		}
 		try {
+			
 			AppGameContainer game = new AppGameContainer(this, 
 					Integer.parseInt(gameSettings.get("GAME_SIZE_X")),
 					Integer.parseInt(gameSettings.get("GAME_SIZE_Y")), 
@@ -75,19 +78,22 @@ public class Game extends BasicGame {
 			if (in.isKeyDown(Integer.parseInt(gameSettings.get("P"+(i+1)+"E")))) {
 				accel.add(new Vector2f(1, 0));
 			}
-			player[i].setAccel(accel.normalise().scale(50f));
+			
+			if(!player[i].intersects(field)){
+				player[i].setAccel(accel.normalise().scale(50f));
+				
+			}
 			player[i].update(c, delta);
 		}
+		
 		for(int i = 0; i < player.length; i++){
 			for(int j = 0; j < player.length; j++){
-				if(player[0].intersects(player[1])){
+				if(player[0].intersects(player[1].getEllipse())){
 					hitCounter++;
 					System.out.println("OMG YOU HIT HIM!!! " + hitCounter);
 				}
 			}
 		}
-			
-		
 	}
 
 	private void updateBombs(GameContainer c, int delta, Input in) {
@@ -118,7 +124,9 @@ public class Game extends BasicGame {
 
 	@Override
 	public void init(GameContainer c) throws SlickException {
-
+		field = new Rectangle(0, 0, 
+					Integer.parseInt(gameSettings.get("GAME_SIZE_X")),
+					Integer.parseInt(gameSettings.get("GAME_SIZE_Y")));
 		player = new Player[Integer.parseInt(gameSettings.get("PLAYERS"))];
 		player[0] = new Player(new Vector2f(100, 100));
 		player[1] = new Player(new Vector2f(500, 500));
