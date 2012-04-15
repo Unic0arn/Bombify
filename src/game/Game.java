@@ -12,17 +12,19 @@ import entities.Player;
 
 
 public class Game extends BasicGame {
+    FileToHash gameSettings = new FileToHash("res/Bombify.cfg");
+    final static boolean FULLSCREEN = false;
     Player player;
-
+    
     public static void main(String[] args) {
-        new Game("Fredriks spel");
+        new Game("Bombify");
     }
 
     public Game(String title) {
         super(title);
         try {
-            AppGameContainer game = new AppGameContainer(this, 1024, 720, false);
-            game.setTargetFrameRate(60);
+            AppGameContainer game = new AppGameContainer(this, Integer.parseInt(gameSettings.get("GAME_SIZE_X")),Integer.parseInt(gameSettings.get("GAME_SIZE_Y")), FULLSCREEN);
+            game.setTargetFrameRate(Integer.parseInt(gameSettings.get("MAX_FPS")));
             game.setVSync(true);
             game.start();
         } catch (SlickException e) {

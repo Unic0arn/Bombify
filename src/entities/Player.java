@@ -5,7 +5,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Vector2f;
 
-public class Player {
+public class Player implements Renderable {
 
     Vector2f pos;
     Vector2f velo = new Vector2f(0, 0);
@@ -25,7 +25,7 @@ public class Player {
         }
         return true;
     }
-
+    @Override
     public void render(GameContainer c, Graphics g) {
         g.setColor(Color.green);
         g.fill(new Circle(pos.x, pos.y, 20));
