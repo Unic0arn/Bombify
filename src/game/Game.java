@@ -41,7 +41,7 @@ public class Game extends BasicGame {
 
     @Override
     public void init(GameContainer c) throws SlickException {
-        player = new Player(new Vector2f(400, 400));
+        player = new Player(new Vector2f(100, 100));
     }
 
     @Override
