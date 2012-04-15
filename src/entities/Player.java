@@ -3,16 +3,21 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Ellipse;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 public class Player implements Renderable {
-
-    Vector2f pos;
+    Ellipse player;
+	Vector2f pos;
     Vector2f velo = new Vector2f(0, 0);
     Vector2f accel = new Vector2f(0, 0);
 
     public Player(Vector2f pos) {
+    	
         this.pos = pos.copy();
+        player = new Ellipse(pos.getX(),pos.getY(),20,20);
+        player.setLocation(pos);
     }
 
     public boolean update(GameContainer c, int delta) {
@@ -23,6 +28,7 @@ public class Player implements Renderable {
         if (velo.length() < 0.1) {
             velo.set(0, 0);
         }
+        player.setLocation(pos);
         return true;
     }
     @Override
@@ -33,6 +39,18 @@ public class Player implements Renderable {
 
     public void setAccel(Vector2f a) {
         accel = a;
+    }
+    public Vector2f getPos(){
+    	return pos;
+    }
+    public Ellipse getEllipse(){
+    	return player;
+    }
+    public boolean intersects(Player p){
+    	if(player.intersects(p.getEllipse())){
+    		return true;
+    	}
+    	return false;
     }
 
 }
