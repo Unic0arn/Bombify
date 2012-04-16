@@ -31,7 +31,7 @@ public class SettingsContainer extends HashMap<String, String> {
 			while ((str = in.readLine()) != null) {
 				linenr++;
 				if(!str.startsWith("#")){ //This is a comment-line and is therefor ignored.
-					String[] splitstr = str.split("=");
+					String[] splitstr = str.split("//|=");
 					if(splitstr.length < 2 || splitstr[1].equals("")){ //If the file is in some way corrupted.
 						throw new ParseException(splitstr.toString(), linenr);
 					}
