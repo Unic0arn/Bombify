@@ -1,4 +1,5 @@
 package game;
+
 import java.text.ParseException;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
@@ -15,14 +16,16 @@ import entities.Player;
  * The main class of the game Bombify. A game that is based on players trying to blow each other up.
  * 
  * @author Fredrik Hallberg & Victor Dahlin
+ * @version 2012-04-16
  *
  */
 
 public class Game extends BasicGame {
 	SettingsContainer gameSettings; // All the settings of the game stored in a HashMap
-	Player[] player;;
+	Player[] player;
 	Rectangle field;
 	int hitCounter = 0;
+		
 	public static void main(String[] args) {
 		new Game("Bombify");
 	}
@@ -36,7 +39,7 @@ public class Game extends BasicGame {
 			System.exit(0);
 		}
 		try {
-			
+
 			AppGameContainer game = new AppGameContainer(this, 
 					Integer.parseInt(gameSettings.get("GAME_SIZE_X")),
 					Integer.parseInt(gameSettings.get("GAME_SIZE_Y")), 
@@ -78,14 +81,14 @@ public class Game extends BasicGame {
 			if (in.isKeyDown(Integer.parseInt(gameSettings.get("P"+(i+1)+"E")))) {
 				accel.add(new Vector2f(1, 0));
 			}
-			
+
 			if(!player[i].intersects(field)){
 				player[i].setAccel(accel.normalise().scale(50f));
-				
+
 			}
 			player[i].update(c, delta);
 		}
-		
+
 		for(int i = 0; i < player.length; i++){
 			for(int j = 0; j < player.length; j++){
 				if(player[0].intersects(player[1].getEllipse())){
@@ -110,26 +113,26 @@ public class Game extends BasicGame {
 		}
 	}
 
-	private void renderWalls(GameContainer c, Graphics g) {
+	
+	private void renderWalls(GameContainer c, Graphics g) {		
 		// TODO Auto-generated method stub
-
 	}
 
 	private void renderItems(GameContainer c, Graphics g) {
 		// TODO Auto-generated method stub
 
 	}
+	
 
-
-
+	
 	@Override
 	public void init(GameContainer c) throws SlickException {
 		field = new Rectangle(0, 0, 
-					Integer.parseInt(gameSettings.get("GAME_SIZE_X")),
-					Integer.parseInt(gameSettings.get("GAME_SIZE_Y")));
+				Integer.parseInt(gameSettings.get("GAME_SIZE_X")),
+				Integer.parseInt(gameSettings.get("GAME_SIZE_Y")));
 		player = new Player[Integer.parseInt(gameSettings.get("PLAYERS"))];
 		player[0] = new Player(new Vector2f(100, 100));
-		player[1] = new Player(new Vector2f(500, 500));
+		player[1] = new Player(new Vector2f(700, 500));
 	}
 	@Override
 	public void update(GameContainer c, int delta) throws SlickException {
