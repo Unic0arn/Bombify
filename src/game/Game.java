@@ -105,7 +105,7 @@ public class Game extends BasicGame {
 	}
 	private void renderBackground(GameContainer c, Graphics g) {
 		g.setBackground(Color.black);
-		g.setAntiAlias(true);
+		g.setAntiAlias(true);		
 	}
 	private void renderPlayers(GameContainer c, Graphics g) {
 		for(int i = 0; i < player.length; i++){
@@ -113,9 +113,29 @@ public class Game extends BasicGame {
 		}
 	}
 
-	
-	private void renderWalls(GameContainer c, Graphics g) {		
-		// TODO Auto-generated method stub
+	// Temp walls for testning player. 
+	private void renderWalls(GameContainer c, Graphics g) {
+		g.setColor(Color.white);
+		
+		// x-wall (1) above
+		for (int i = 30; i < 760; i += 30) {			
+			g.fillRect(i, 0, 30, 30);
+		}
+		
+		// y-wall (1) left side
+		for (int i = 0; i < 570; i += 30) {
+			g.fillRect(0, i, 30, 30);
+		}
+		
+		// x-wall (2) below
+		for (int i = 0; i < 760; i += 30) {
+			g.fillRect(i, 570, 30, 30);
+		}
+		
+		// y-wall (2) right side
+		for (int i = 0; i < 571; i += 30) {
+			g.fillRect(770, i, 30, 30);
+		}
 	}
 
 	private void renderItems(GameContainer c, Graphics g) {
