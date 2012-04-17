@@ -35,7 +35,7 @@ public class Game extends BasicGame {
 	public Game(String title) {
 		super(title);
 		try{
-			gameSettings = new SettingsContainer("res/Bombify.cfg");
+			gameSettings = new SettingsContainer("data/Bombify.cfg");
 		} catch(ParseException e){
 			System.out.println("Error in config file on line " + e.getErrorOffset());
 			System.exit(0);
