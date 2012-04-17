@@ -1,8 +1,6 @@
 package game;
 
-import java.text.ParseException;
-import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.BasicGame;
+import java.util.HashMap;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -10,6 +8,10 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
+
+import settings.SettingsContainer;
 //import org.newdawn.slick.Image; 
 
 import entities.Player;
@@ -22,72 +24,109 @@ import map.Block;
  *
  */
 
-public class Game extends BasicGame {
-	SettingsContainer gameSettings; // All the settings of the game stored in a HashMap
+public class PlayState extends BasicGameState {
+	Boolean paused =false;
+	SettingsContainer gameSettings;
+	HashMap<String,Integer> playerControls;
 	Player[] player;
 	Rectangle field;
 	Block wall; 
+	int players;
 	int hitCounter = 0;
+	
+
+	public PlayState(SettingsContainer gs) {
+		super();
+		gameSettings = gs;
+	}
+	private void parseControls() {
+		playerControls = new HashMap<String,Integer>();
+		for(int i = 0; i < players;i++){
+			playerControls.put("P"+(i+1)+"N",Integer.parseInt(gameSettings.get("P"+(i+1)+"N")));
+			playerControls.put("P"+(i+1)+"S",Integer.parseInt(gameSettings.get("P"+(i+1)+"S")));
+			playerControls.put("P"+(i+1)+"W",Integer.parseInt(gameSettings.get("P"+(i+1)+"W")));
+			playerControls.put("P"+(i+1)+"E",Integer.parseInt(gameSettings.get("P"+(i+1)+"E")));
+		}
+	}
+
+	@Override
+	public void enter(GameContainer gc, StateBasedGame sbg){
+		paused = false;
+	}
+
+	@Override
+	public int getID() {
+		return 1;
+	}
+	@Override
+	public void init(GameContainer gc, StateBasedGame game)
+			throws SlickException {
+		players = Integer.parseInt(gameSettings.get("PLAYERS"));
+		parseControls();
 		
-	public static void main(String[] args) {
-		new Game("Bombify");
+		field = new Rectangle(0, 0, 
+				gc.getWidth(),
+				gc.getHeight());
+		player = new Player[players];
+		player[0] = new Player(new Vector2f(55, 60));
+		player[1] = new Player(new Vector2f(740, 535));
 	}
 
-	public Game(String title) {
-		super(title);
-		try{
-			gameSettings = new SettingsContainer("res/Bombify.cfg");
-		} catch(ParseException e){
-			System.out.println("Error in config file on line " + e.getErrorOffset());
-			System.exit(0);
-		}
-		try {
 
-			AppGameContainer game = new AppGameContainer(this, 
-					Integer.parseInt(gameSettings.get("GAME_SIZE_X")),
-					Integer.parseInt(gameSettings.get("GAME_SIZE_Y")), 
-					Integer.parseInt(gameSettings.get("FULLSCREEN"))==1);
-			game.setTargetFrameRate(Integer.parseInt(gameSettings.get("MAX_FPS")));
-			game.setVSync(true);
-			game.start();
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
+
+	@Override
+	public void render(GameContainer c, StateBasedGame game, Graphics g)
+			throws SlickException {
+		
+		renderBackground(c,g);
+		renderItems(c,g);
+		renderWalls(c,g);
+		renderPlayers(c,g);
 	}
 
+
+
+	@Override
+	public void update(GameContainer c, StateBasedGame game, int delta)
+			throws SlickException {
+		Input in = c.getInput();
+		if (in.isKeyDown(Input.KEY_ESCAPE)) {
+			c.exit();
+		}
+		updateBombs(c,delta,in);
+		updatePlayers(c,delta,in);
+		updateItems(c,delta,in);
+		updateWalls(c,delta,in);
+	}
 
 
 	private void updateWalls(GameContainer c, int delta, Input in) {
 		// TODO Auto-generated method stub
 
 	}
-
 	private void updateItems(GameContainer c, int delta, Input in) {
 		// TODO Auto-generated method stub
 
 	}
-
 	private void updatePlayers(GameContainer c, int delta, Input in) {
-
-
 		for(int i = 0; i < player.length; i++){
 			Vector2f accel = new Vector2f(0, 0);
-			if (in.isKeyDown(Integer.parseInt(gameSettings.get("P"+(i+1)+"N")))) {
+			if (in.isKeyDown(playerControls.get("P"+(i+1)+"N"))) {
 				accel.add(new Vector2f(0, -1));
 			}
-			if (in.isKeyDown(Integer.parseInt(gameSettings.get("P"+(i+1)+"S")))) {
+			if (in.isKeyDown(playerControls.get("P"+(i+1)+"S"))) {
 				accel.add(new Vector2f(0, 1));
 			}
-			if (in.isKeyDown(Integer.parseInt(gameSettings.get("P"+(i+1)+"W")))) {
+			if (in.isKeyDown(playerControls.get("P"+(i+1)+"W"))) {
 				accel.add(new Vector2f(-1, 0));
 			}
-			if (in.isKeyDown(Integer.parseInt(gameSettings.get("P"+(i+1)+"E")))) {
+			if (in.isKeyDown(playerControls.get("P"+(i+1)+"E"))) {
 				accel.add(new Vector2f(1, 0));
 			}
-
-			if(!player[i].intersects(field)){
+			player[i].setAccel(accel.normalise().scale(50f));
+			if(player[i].intersects(field)){
 				player[i].setAccel(accel.normalise().scale(50f));
-
+				player[i].update(c, delta);
 			}
 			player[i].update(c, delta);
 		}
@@ -101,7 +140,6 @@ public class Game extends BasicGame {
 			}
 		}
 	}
-
 	private void updateBombs(GameContainer c, int delta, Input in) {
 		// TODO Auto-generated method stub
 
@@ -115,7 +153,6 @@ public class Game extends BasicGame {
 			player[i].render(c, g);
 		}
 	}
-
 	/**
 	 * Temp walls until we figure out something better, 
 	 * would be nice with pictures instead of rectangles. 
@@ -144,40 +181,23 @@ public class Game extends BasicGame {
 			g.fillRect(i, 320, 50, 50);
 			g.fillRect(i, 430, 50, 50);
 		}
-
 	}
-
 	private void renderItems(GameContainer c, Graphics g) {
 		// TODO Auto-generated method stub
 	}
 	
+	
+	
+
+
+
+
+
+
 
 	
-	@Override
-	public void init(GameContainer c) throws SlickException {
-		field = new Rectangle(0, 0, 
-				Integer.parseInt(gameSettings.get("GAME_SIZE_X")),
-				Integer.parseInt(gameSettings.get("GAME_SIZE_Y")));
-		player = new Player[Integer.parseInt(gameSettings.get("PLAYERS"))];
-		player[0] = new Player(new Vector2f(55, 60));
-		player[1] = new Player(new Vector2f(740, 535));
-	}
-	@Override
-	public void update(GameContainer c, int delta) throws SlickException {
-		Input in = c.getInput();
-		if (in.isKeyDown(Input.KEY_ESCAPE)) {
-			c.exit();
-		}
-		updateBombs(c,delta,in);
-		updatePlayers(c,delta,in);
-		updateItems(c,delta,in);
-		updateWalls(c,delta,in);
-	}
-	@Override
-	public void render(GameContainer c, Graphics g) throws SlickException {
-		renderBackground(c,g);
-		renderItems(c,g);
-		renderWalls(c,g);
-		renderPlayers(c,g);
-	}
+
+
+
+
 }
