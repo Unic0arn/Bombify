@@ -12,6 +12,7 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 import entities.Player;
+import map.Block; 
 /**
  * The main class of the game Bombify. A game that is based on players trying to blow each other up.
  * 
@@ -24,6 +25,7 @@ public class Game extends BasicGame {
 	SettingsContainer gameSettings; // All the settings of the game stored in a HashMap
 	Player[] player;
 	Rectangle field;
+	Block wall; 
 	int hitCounter = 0;
 		
 	public static void main(String[] args) {
@@ -113,34 +115,39 @@ public class Game extends BasicGame {
 		}
 	}
 
-	// Temp walls for testning player. 
-	private void renderWalls(GameContainer c, Graphics g) {
+	/**
+	 * Temp walls until we figure out something better, 
+	 * would be nice with pictures instead of rectangles. 
+	 * @param gc
+	 * @param g
+	 */
+	private void renderWalls(GameContainer gc, Graphics g) {
 		g.setColor(Color.white);
 		
-		// x-wall (1) above
-		for (int i = 30; i < 760; i += 30) {			
+		// x-wall above and under. 
+		for (int i = 0; i < 800; i += 30) {			
 			g.fillRect(i, 0, 30, 30);
-		}
-		
-		// y-wall (1) left side
-		for (int i = 0; i < 570; i += 30) {
-			g.fillRect(0, i, 30, 30);
-		}
-		
-		// x-wall (2) below
-		for (int i = 0; i < 760; i += 30) {
 			g.fillRect(i, 570, 30, 30);
 		}
 		
-		// y-wall (2) right side
-		for (int i = 0; i < 571; i += 30) {
+		// y-wall right/left side. 
+		for (int i = 30; i < 570; i += 30) {
+			g.fillRect(0, i, 30, 30);
 			g.fillRect(770, i, 30, 30);
 		}
+		
+		// Fixed middle thingy. 
+		for (int i = 110; i < 770; i+=110) {
+			g.fillRect(i, 100, 50, 50);
+			g.fillRect(i, 210, 50, 50);
+			g.fillRect(i, 320, 50, 50);
+			g.fillRect(i, 430, 50, 50);
+		}
+
 	}
 
 	private void renderItems(GameContainer c, Graphics g) {
 		// TODO Auto-generated method stub
-
 	}
 	
 
@@ -151,8 +158,8 @@ public class Game extends BasicGame {
 				Integer.parseInt(gameSettings.get("GAME_SIZE_X")),
 				Integer.parseInt(gameSettings.get("GAME_SIZE_Y")));
 		player = new Player[Integer.parseInt(gameSettings.get("PLAYERS"))];
-		player[0] = new Player(new Vector2f(100, 100));
-		player[1] = new Player(new Vector2f(700, 500));
+		player[0] = new Player(new Vector2f(55, 60));
+		player[1] = new Player(new Vector2f(740, 535));
 	}
 	@Override
 	public void update(GameContainer c, int delta) throws SlickException {

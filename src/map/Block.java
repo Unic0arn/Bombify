@@ -1,5 +1,10 @@
 package map;
 
+
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Color;
+
 /**
  * This class will create x and y coordinates for
  * one wall with frame 800 x 600 in future: 
@@ -31,5 +36,7 @@ public class Block {
 	 */
 	public int getYCoordinate() {
 		return Y = number.nextInt(600);		
-	}	
+	}
+	
+	
 }
