@@ -10,6 +10,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
+//import org.newdawn.slick.Image; 
 
 import entities.Player;
 import map.Block; 
@@ -35,7 +36,7 @@ public class Game extends BasicGame {
 	public Game(String title) {
 		super(title);
 		try{
-			gameSettings = new SettingsContainer("data/Bombify.cfg");
+			gameSettings = new SettingsContainer("res/Bombify.cfg");
 		} catch(ParseException e){
 			System.out.println("Error in config file on line " + e.getErrorOffset());
 			System.exit(0);
