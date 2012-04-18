@@ -2,6 +2,8 @@ package game;
 
 import java.text.ParseException;
 
+import menu.Menu;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -23,8 +25,10 @@ public class BombifyGame extends StateBasedGame {
 
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
+		addState(new Lobby());
 		PlayState state = new PlayState(gameSettings);
 		addState(state);
+		addState(new Menu(gameSettings));
 	}
 	public static void main(String[] args) throws SlickException
 	{
