@@ -58,6 +58,10 @@ public class PlayState extends BasicGameState {
 	public int getID() {
 		return 1;
 	}
+	
+	/**
+	 * Starting position for field and players. 
+	 */
 	@Override
 	public void init(GameContainer gc, StateBasedGame game)
 			throws SlickException {
@@ -68,8 +72,8 @@ public class PlayState extends BasicGameState {
 				gc.getWidth(),
 				gc.getHeight());
 		player = new Player[players];
-		player[0] = new Player(new Vector2f(50, 50));
-		player[1] = new Player(new Vector2f(750, 550));
+		player[0] = new Player(new Vector2f(70, 70));
+		player[1] = new Player(new Vector2f(730, 530));
 	}
 
 
@@ -154,57 +158,35 @@ public class PlayState extends BasicGameState {
 		}
 	}
 	/**
-	 * Temp walls until we figure out something better, 
-	 * would be nice with pictures instead of rectangles. 
+	 * Fixed walls soon to be pictures.
 	 * @param gc
 	 * @param g
 	 */
 	private void renderWalls(GameContainer gc, Graphics g) {
-		g.setColor(Color.white);
+		g.setColor(Color.white);		
 		
-//		// x-wall above and under. 
-//		for (int i = 20; i < 780; i += 20) {			
-//			g.fillRect(i, 0, 20, 20);
-//			g.fillRect(i, 580, 20, 20);
-//		}
-//		
-//		// y-wall right/left side. 
-//		for (int i = 0; i < 600; i += 20) {
-//			g.fillRect(0, i, 20, 20);
-//			g.fillRect(780, i, 20, 20);
-//		}
-//		
-//		// Fixed middle thingy. 
-//		for (int i = 80; i < 720; i+= 90) {
-//			g.fillRect(i, 80, 40, 40);
-//			g.fillRect(i, 170, 40, 40);
-//			//g.fillRect(i, 300, 40, 40);
-//			//g.fillRect(i, 420, 40, 40);
-//			//g.fillRect(i, 540, 40, 40);
-//		}
-
-		
-		
-		// x-wall above and under. 
-		for (int i = 0; i < 800; i += 30) {			
-			g.fillRect(i, 0, 30, 30);
-			g.fillRect(i, 570, 30, 30);
+		// X-wall above and under. 
+		for (int i = 20; i < 760; i += 40) {			
+			g.fillRect(i, 0, 40, 40);
+			g.fillRect(i, 560, 40, 40);
 		}
 		
-		// y-wall right/left side. 
-		for (int i = 30; i < 570; i += 30) {
-			g.fillRect(0, i, 30, 30);
-			g.fillRect(770, i, 30, 30);
+		// Y-wall R/L-side. 
+		for (int i = 0; i < 560; i += 40) {
+			g.fillRect(0, i, 40, 40);
+			g.fillRect(760, i, 40, 40);
 		}
 		
-		// Fixed middle thingy. 
-		for (int i = 110; i < 770; i+=110) {
+		// Concrete walls
+		for (int i = 100; i < 720; i+=110) {
 			g.fillRect(i, 100, 50, 50);
-			g.fillRect(i, 210, 50, 50);
-			g.fillRect(i, 320, 50, 50);
-			g.fillRect(i, 430, 50, 50);
+			g.fillRect(i, 212, 50, 50);
+			g.fillRect(i, 332, 50, 50);
+			g.fillRect(i, 448, 50, 50);
 		}
 	}
+	
+	
 	private void renderItems(GameContainer c, Graphics g) {
 		// TODO Auto-generated method stub
 	}
