@@ -68,8 +68,8 @@ public class PlayState extends BasicGameState {
 				gc.getWidth(),
 				gc.getHeight());
 		player = new Player[players];
-		player[0] = new Player(new Vector2f(55, 60));
-		player[1] = new Player(new Vector2f(740, 535));
+		player[0] = new Player(new Vector2f(50, 50));
+		player[1] = new Player(new Vector2f(750, 550));
 	}
 
 
@@ -161,6 +161,29 @@ public class PlayState extends BasicGameState {
 	 */
 	private void renderWalls(GameContainer gc, Graphics g) {
 		g.setColor(Color.white);
+		
+//		// x-wall above and under. 
+//		for (int i = 20; i < 780; i += 20) {			
+//			g.fillRect(i, 0, 20, 20);
+//			g.fillRect(i, 580, 20, 20);
+//		}
+//		
+//		// y-wall right/left side. 
+//		for (int i = 0; i < 600; i += 20) {
+//			g.fillRect(0, i, 20, 20);
+//			g.fillRect(780, i, 20, 20);
+//		}
+//		
+//		// Fixed middle thingy. 
+//		for (int i = 80; i < 720; i+= 90) {
+//			g.fillRect(i, 80, 40, 40);
+//			g.fillRect(i, 170, 40, 40);
+//			//g.fillRect(i, 300, 40, 40);
+//			//g.fillRect(i, 420, 40, 40);
+//			//g.fillRect(i, 540, 40, 40);
+//		}
+
+		
 		
 		// x-wall above and under. 
 		for (int i = 0; i < 800; i += 30) {			
