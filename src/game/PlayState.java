@@ -187,6 +187,7 @@ public class PlayState extends BasicGameState {
 			g.fillRect(i, 212, 50, 50);
 			g.fillRect(i, 332, 50, 50);
 			g.fillRect(i, 448, 50, 50);
+			
 		}
 	}
 	
