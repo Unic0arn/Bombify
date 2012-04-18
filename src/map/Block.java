@@ -1,9 +1,6 @@
 package map;
 
 
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Color;
 
 /**
  * This class will create x and y coordinates for
