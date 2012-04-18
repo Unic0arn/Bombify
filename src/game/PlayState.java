@@ -11,9 +11,7 @@ import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.Image; 
-
 import settings.SettingsContainer;
-
 
 import entities.Player;
 import map.Block; 
@@ -34,7 +32,7 @@ public class PlayState extends BasicGameState {
 	Block wall; 
 	int players;
 	int hitCounter = 0;
-	Image outerBrick = null;
+	private Image outerBrick, concrete = null;
 	
 
 	public PlayState(SettingsContainer gs) {
@@ -71,6 +69,7 @@ public class PlayState extends BasicGameState {
 		parseControls();
 		
 		outerBrick = new Image("res/brick.png");
+		concrete = new Image("res/brick2.png");
 		
 		field = new Rectangle(0, 0, 
 				gc.getWidth(),
@@ -180,15 +179,25 @@ public class PlayState extends BasicGameState {
 			outerBrick.draw(760, i);
 		}
 		
+		
+		
 		// Concrete walls
-		g.setColor(Color.white);
-		for (int i = 100; i < 720; i+=110) {
-			g.fillRect(i, 100, 50, 50);
-			g.fillRect(i, 212, 50, 50);
-			g.fillRect(i, 332, 50, 50);
-			g.fillRect(i, 448, 50, 50);
-			
+		for (int i = 100; i < 720; i+= 110) {
+			concrete.draw(i, 100);
+			concrete.draw(i, 212);
+			concrete.draw(i, 332);
+			concrete.draw(i, 448);
 		}
+		
+		
+//		g.setColor(Color.white);
+//		for (int i = 100; i < 720; i+=110) {
+//			g.fillRect(i, 100, 50, 50);
+//			g.fillRect(i, 212, 50, 50);
+//			g.fillRect(i, 332, 50, 50);
+//			g.fillRect(i, 448, 50, 50);
+//			
+//		}
 	}
 	
 	
