@@ -15,6 +15,7 @@ import settings.SettingsContainer;
 
 import entities.Player;
 import map.Block; 
+import map.OuterWall;
 import map.Square;
 import map.Tile;
 /**
@@ -36,11 +37,12 @@ public class PlayState extends BasicGameState {
 	int players;
 	int hitCounter = 0;
 	private Image outerBrick, concrete = null;
-	int nrtiles = 10;
+	int nrtiles = 20;
 
-	public PlayState(SettingsContainer gs) {
+	public PlayState(SettingsContainer gs) throws SlickException {
 		super();
 		gameSettings = gs;
+		
 	}
 	private void parseSettings() {
 		players = Integer.parseInt(gameSettings.get("PLAYERS"));
@@ -66,15 +68,41 @@ public class PlayState extends BasicGameState {
 	public void init(GameContainer gc, StateBasedGame game)
 			throws SlickException {
 		parseSettings();
+		outerBrick = new Image("res/brick.png");
+	 	 
+	    concrete = new Image("res/brick2.png");
 		player = new Player[players];
 		player[0] = new Player(new Vector2f(70, 70));
 		player[1] = new Player(new Vector2f(730, 530));
 		tiles = new Square[nrtiles][nrtiles];
+		for(int i = 0; i< nrtiles;i++){
+			tiles[i][0] = new OuterWall();
+			tiles[i][0].setImg(outerBrick);
+		}
+		for(int i = 0; i< nrtiles;i++){
+			tiles[0][i] = new OuterWall();
+			tiles[0][i].setImg(outerBrick);
+		}
+
+		for(int i = 0; i< nrtiles;i++){
+			tiles[nrtiles-1][i] = new OuterWall();
+			tiles[nrtiles-1][i].setImg(outerBrick);
+		}
+
+		for(int i = 0; i< nrtiles;i++){
+			tiles[i][nrtiles-1] = new OuterWall();
+			tiles[i][nrtiles-1].setImg(outerBrick);
+		}
+		
+		
+		
 		for(int i = 1;i<nrtiles;i+=2){
 			for(int j = 1;j<nrtiles;j+=2){
 				tiles[i][j] = new Block();
+				tiles[i][j].setImg(concrete);
 			}
 		}
+		
 		for(int i = 0;i<nrtiles;i+=2){
 			for(int j = 0;j<nrtiles;j+=2){
 				tiles[i][j] = new Tile();
@@ -182,21 +210,6 @@ public class PlayState extends BasicGameState {
 	private void renderWalls(GameContainer gc, Graphics g) throws SlickException {
 		g.setColor(Color.white);
 		
-		
-		/*
-		// Concrete walls
-		for (int i = 100; i < 720; i+= 110) {
-			concrete.draw(i, 100);
-			concrete.draw(i, 212);
-			concrete.draw(i, 332);
-			concrete.draw(i, 448);
-		}
-		
-		// y-wall right/left side. 
-		for (int i = 30; i < 570; i += 30) {
-			g.fillRect(0, i, 30, 30);
-			g.fillRect(770, i, 30, 30);
-		}*/
 		
 		for(int i = 1;i<nrtiles;i++){
 			for(int j = 1;j<nrtiles;j++){

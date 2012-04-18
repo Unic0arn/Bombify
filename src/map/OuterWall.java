@@ -7,9 +7,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
-import entities.Player;
-
-public class Tile implements Square {
+public class OuterWall implements Square {
 	private Image img;
 	@Override
 	public void render(GameContainer container, Graphics g, int x, int y,
@@ -36,12 +34,10 @@ public class Tile implements Square {
 			g.fill(new Rectangle(posx,posy,sizex,sizey));
 		}
 	}
-	public boolean collides(Player p) {
-		return false;
-	}
+
 	@Override
-	public void setImg(Image i){
+	public void setImg(Image i) {
 		img = i;
 	}
-}
 
+}

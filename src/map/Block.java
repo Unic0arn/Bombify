@@ -57,5 +57,9 @@ public class Block implements Square{
 	public boolean collides(Player p) {
 		return false;
 	}
+	@Override
+	public void setImg(Image i) {
+			img = i;
+	}
 
 }
