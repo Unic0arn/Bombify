@@ -23,11 +23,13 @@ public class Button {
 	private Image img;
 	private Color buttonColor = Color.blue,
 			stringColor = Color.black;
+
 	public Button(int x, int y, int xx, int yy){
 		posx=x;
 		posy=y;
 		sizex=xx;
 		sizey=yy;
+
 	}
 	public Button(int x, int y, int xx, int yy,Image im){
 		this(x,y,xx,yy);
@@ -67,6 +69,7 @@ public class Button {
 	 */
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
+
 			
 			if(img!=null){
 				g.drawImage(img,
@@ -83,6 +86,7 @@ public class Button {
 				g.setColor(buttonColor);	
 				g.fill(new Rectangle(posx,posy,sizex,sizey));
 				g.setColor(stringColor);
+
 				g.drawString(buttonString, posx, posy);
 			}
 	}
