@@ -67,8 +67,7 @@ public class Button {
 	 */
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
-			g.setColor(buttonColor);	
-			g.fill(new Rectangle(posx,posy,sizex,sizey));
+			
 			if(img!=null){
 				g.drawImage(img,
 	                      posx,
@@ -81,6 +80,8 @@ public class Button {
 	                      img.getHeight());
 			}
 			else{
+				g.setColor(buttonColor);	
+				g.fill(new Rectangle(posx,posy,sizex,sizey));
 				g.setColor(stringColor);
 				g.drawString(buttonString, posx, posy);
 			}

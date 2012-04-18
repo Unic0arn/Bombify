@@ -16,6 +16,8 @@ import settings.SettingsContainer;
 
 import entities.Player;
 import map.Block; 
+import map.Square;
+import map.Tile;
 /**
  * The main class of the game Bombify. A game that is based on players trying to blow each other up.
  * 
@@ -27,19 +29,22 @@ import map.Block;
 public class PlayState extends BasicGameState {
 	Boolean paused =false;
 	SettingsContainer gameSettings;
+	
 	HashMap<String,Integer> playerControls;
 	Player[] player;
+	Square[][] tiles;
 	Rectangle field;
 	Block wall; 
 	int players;
 	int hitCounter = 0;
-	
+	int nrtiles = 10;
 
 	public PlayState(SettingsContainer gs) {
 		super();
 		gameSettings = gs;
 	}
-	private void parseControls() {
+	private void parseSettings() {
+		players = Integer.parseInt(gameSettings.get("PLAYERS"));
 		playerControls = new HashMap<String,Integer>();
 		for(int i = 0; i < players;i++){
 			playerControls.put("P"+(i+1)+"N",Integer.parseInt(gameSettings.get("P"+(i+1)+"N")));
@@ -49,27 +54,39 @@ public class PlayState extends BasicGameState {
 		}
 	}
 
-	@Override
-	public void enter(GameContainer gc, StateBasedGame sbg){
-		paused = false;
-	}
 
 	@Override
 	public int getID() {
-		return 1;
+		return Constants.GAME;
 	}
 	@Override
 	public void init(GameContainer gc, StateBasedGame game)
 			throws SlickException {
-		players = Integer.parseInt(gameSettings.get("PLAYERS"));
-		parseControls();
-		
-		field = new Rectangle(0, 0, 
-				gc.getWidth(),
-				gc.getHeight());
+		parseSettings();
 		player = new Player[players];
 		player[0] = new Player(new Vector2f(50, 50));
 		player[1] = new Player(new Vector2f(750, 550));
+		tiles = new Square[nrtiles][nrtiles];
+		for(int i = 1;i<nrtiles;i+=2){
+			for(int j = 1;j<nrtiles;j+=2){
+				tiles[i][j] = new Block();
+			}
+		}
+		for(int i = 0;i<nrtiles;i+=2){
+			for(int j = 0;j<nrtiles;j+=2){
+				tiles[i][j] = new Tile();
+			}
+		}
+		for(int i = 0;i<nrtiles;i+=2){
+			for(int j = 1;j<nrtiles;j+=2){
+				tiles[i][j] = new Tile();
+			}
+		}
+		for(int i = 1;i<nrtiles;i+=2){
+			for(int j = 0;j<nrtiles;j+=2){
+				tiles[i][j] = new Tile();
+			}
+		}
 	}
 
 
@@ -124,10 +141,10 @@ public class PlayState extends BasicGameState {
 				accel.add(new Vector2f(1, 0));
 			}
 			player[i].setAccel(accel.normalise().scale(50f));
-			if(player[i].intersects(field)){
+			/*if(player[i].intersects(field)){
 				player[i].setAccel(accel.normalise().scale(50f));
 				player[i].update(c, delta);
-			}
+			}*/
 			player[i].update(c, delta);
 		}
 
@@ -158,8 +175,9 @@ public class PlayState extends BasicGameState {
 	 * would be nice with pictures instead of rectangles. 
 	 * @param gc
 	 * @param g
+	 * @throws SlickException 
 	 */
-	private void renderWalls(GameContainer gc, Graphics g) {
+	private void renderWalls(GameContainer gc, Graphics g) throws SlickException {
 		g.setColor(Color.white);
 		
 //		// x-wall above and under. 
@@ -184,7 +202,7 @@ public class PlayState extends BasicGameState {
 //		}
 
 		
-		
+		/*
 		// x-wall above and under. 
 		for (int i = 0; i < 800; i += 30) {			
 			g.fillRect(i, 0, 30, 30);
@@ -195,15 +213,22 @@ public class PlayState extends BasicGameState {
 		for (int i = 30; i < 570; i += 30) {
 			g.fillRect(0, i, 30, 30);
 			g.fillRect(770, i, 30, 30);
+		}*/
+		
+		for(int i = 1;i<nrtiles;i++){
+			for(int j = 1;j<nrtiles;j++){
+				tiles[i][j].render(gc,g, i, j, nrtiles-1);
+			}
 		}
 		
+		/*
 		// Fixed middle thingy. 
 		for (int i = 110; i < 770; i+=110) {
 			g.fillRect(i, 100, 50, 50);
 			g.fillRect(i, 210, 50, 50);
 			g.fillRect(i, 320, 50, 50);
 			g.fillRect(i, 430, 50, 50);
-		}
+		}*/
 	}
 	private void renderItems(GameContainer c, Graphics g) {
 		// TODO Auto-generated method stub

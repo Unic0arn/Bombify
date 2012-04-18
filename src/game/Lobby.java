@@ -26,6 +26,7 @@ public class Lobby extends BasicGameState {
 		b[1] = new Button(300,200,50,30,"Menu");
 		b[0].setShortCut(Constants.GAME);
 		b[1].setShortCut(Constants.MENU);
+		b[1].setButtonColor(Color.red);
 	}
 
 	@Override
@@ -56,7 +57,7 @@ public class Lobby extends BasicGameState {
 
 	@Override
 	public int getID() {
-		return 0;
+		return Constants.LOBBY;
 	}
 
 }

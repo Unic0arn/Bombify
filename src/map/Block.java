@@ -1,5 +1,15 @@
 package map;
 
+import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.state.StateBasedGame;
+
+import entities.Player;
+
 
 
 /**
@@ -10,30 +20,42 @@ package map;
  * @author Fredrik Hallberg & Victor Dahlin
  * @version 2012-04-16
  */
-
-import java.util.Random; 
-public class Block {
-	Random number;
-	private static int X, Y;
+public class Block implements Square{
+	boolean immovable = false;
+	private Image img;
 	
 	public Block() {
-		number = new Random();
-		int[] x = new int[20]; 
+		
+	
+	
 	}
-	
-	/**
-	 * Random number on x-axis
-	 */
-	public int getXCoordinate() {
-		return X = number.nextInt(800);		
+	public void render(GameContainer container, Graphics g,
+			int x, int y, int tiles)
+			throws SlickException {
+			int sizex=container.getWidth()/tiles;
+			int sizey=container.getHeight()/tiles;
+			int posx = container.getWidth()/tiles * x;
+			int posy = container.getHeight()/tiles * y;
+			
+			
+			if(img!=null){
+				g.drawImage(img,
+	                      posx,
+	                      posy,
+	                      posx+sizex,
+	                      posy+sizey,
+	                      0,
+	                      0,
+	                      img.getWidth(),
+	                      img.getHeight());
+			}
+			else{
+				g.setColor(Color.darkGray);
+				g.fill(new Rectangle(posx,posy,sizex,sizey));
+			}
 	}
-	
-	/**
-	 * Random nr on y-axis
-	 */
-	public int getYCoordinate() {
-		return Y = number.nextInt(600);		
+	public boolean collides(Player p) {
+		return false;
 	}
-	
-	
+
 }

@@ -1,5 +1,7 @@
 package menu;
 
+import game.Constants;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -33,7 +35,6 @@ public class Menu extends BasicGameState{
 	}
 	@Override
 	public int getID() {
-		// TODO Auto-generated method stub
-		return 2;
+		return Constants.MENU;
 	}
 }
