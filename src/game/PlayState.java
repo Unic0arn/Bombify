@@ -10,9 +10,10 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.Image; 
 
 import settings.SettingsContainer;
-//import org.newdawn.slick.Image; 
+
 
 import entities.Player;
 import map.Block; 
@@ -33,6 +34,7 @@ public class PlayState extends BasicGameState {
 	Block wall; 
 	int players;
 	int hitCounter = 0;
+	Image outerBrick = null;
 	
 
 	public PlayState(SettingsContainer gs) {
@@ -67,6 +69,8 @@ public class PlayState extends BasicGameState {
 			throws SlickException {
 		players = Integer.parseInt(gameSettings.get("PLAYERS"));
 		parseControls();
+		
+		outerBrick = new Image("res/brick.png");
 		
 		field = new Rectangle(0, 0, 
 				gc.getWidth(),
@@ -162,22 +166,22 @@ public class PlayState extends BasicGameState {
 	 * @param gc
 	 * @param g
 	 */
-	private void renderWalls(GameContainer gc, Graphics g) {
-		g.setColor(Color.white);		
+	private void renderWalls(GameContainer gc, Graphics g) {		
 		
-		// X-wall above and under. 
-		for (int i = 20; i < 760; i += 40) {			
-			g.fillRect(i, 0, 40, 40);
-			g.fillRect(i, 560, 40, 40);
+		// X-wall above and under.
+		for (int i = 40; i < 730; i+= 40) {
+			outerBrick.draw(i, 0);
+			outerBrick.draw(i, 560);
 		}
 		
 		// Y-wall R/L-side. 
-		for (int i = 0; i < 560; i += 40) {
-			g.fillRect(0, i, 40, 40);
-			g.fillRect(760, i, 40, 40);
+		for (int i = 0; i < 570; i += 40) {
+			outerBrick.draw(0, i);
+			outerBrick.draw(760, i);
 		}
 		
 		// Concrete walls
+		g.setColor(Color.white);
 		for (int i = 100; i < 720; i+=110) {
 			g.fillRect(i, 100, 50, 50);
 			g.fillRect(i, 212, 50, 50);
