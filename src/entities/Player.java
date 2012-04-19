@@ -2,6 +2,7 @@ package entities;
 
 import game.PlayState;
 import map.FloorTile;
+import map.Block;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -17,13 +18,13 @@ public class Player implements Renderable {
 	Vector2f pos;
 	Vector2f velo = new Vector2f(0, 0);
 	Vector2f accel = new Vector2f(0, 0);
+	boolean hitting = false;
 	boolean moving = true;
 
 	public Player(FloorTile tile) {
 		this.tile = tile;
 		pos = tile.getMiddle();
 		goal = tile;
-		System.out.println(tile.getGridx());
 	}
 
 	public boolean update(GameContainer c, int delta, PlayState p) {
@@ -32,16 +33,21 @@ public class Player implements Renderable {
 				if(p.getTiles()[(int) (tile.getGridx() + accel.x)][(int) (tile.getGridy() + accel.y)] instanceof FloorTile){
 					goal = (FloorTile) p.getTiles()[(int) (tile.getGridx() + accel.x)][(int) (tile.getGridy() + accel.y)];
 					moving = true;
-					System.out.println(goal);
+				}
+				if(hitting){
+					if(p.getTiles()[(int) (tile.getGridx() + accel.x)][(int) (tile.getGridy() + accel.y)] instanceof Block){
+						Block b = (Block) p.getTiles()[(int) (tile.getGridx() + accel.x)][(int) (tile.getGridy() + accel.y)];	
+						
+						b.destroy(p);
+					}
+					hitting = false;
 				}
 			}
+			
 		}else{
-			System.out.println(pos);
-			System.out.println(goal.getMiddle());
 			if(goal.getMiddle().copy().sub(pos).scale(0.1f).length()<0.1){
 				moving  = false;
 				tile = goal;
-				System.out.println("lol");
 			}
 			else{
 				velo = (goal.getMiddle().copy().sub(pos).scale(0.5f));
@@ -76,6 +82,10 @@ public class Player implements Renderable {
 			return true;
 		}*/
 		return false;
+	}
+
+	public void hit() {
+		hitting=true;
 	}
 
 }

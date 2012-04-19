@@ -28,13 +28,5 @@ public interface Square {
 	 * @param i - The image to replace the old image with.
 	 */
 	public void setImg(Image i);
-	/**
-	 * Tills if the player is colliding with the square in any way. 
-	 * Standing on or touching the wall.
-	 * @param p - The player to compare with.
-	 * @return true - If the player "touches" the square false - if not
-	 */
-	public boolean collides(Player p);
-	
 	
 }

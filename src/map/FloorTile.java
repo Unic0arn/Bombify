@@ -24,19 +24,17 @@ public class FloorTile implements Square {
 	public int getGridy() {
 		return gridy;
 	}
-	public FloorTile(int x, int y){
+	public FloorTile(int x, int y, GameContainer container, int tiles){
 		gridx = x;
 		gridy = y;
+		sizex = (container.getWidth()/tiles);
+		sizey = (container.getHeight()/tiles);
+		posx = (container.getWidth()/tiles * x);
+		posy = (container.getHeight()/tiles * y);
 	}
 	@Override
 	public void render(GameContainer container, Graphics g, int x, int y,
 			int tiles) throws SlickException {
-		 sizex = (container.getWidth()/tiles);
-		 sizey = (container.getHeight()/tiles);
-		 posx = (container.getWidth()/tiles * x);
-		 posy = (container.getHeight()/tiles * y);
-
-
 		if(img!=null){
 			g.drawImage(img,
 					posx,
@@ -53,16 +51,9 @@ public class FloorTile implements Square {
 			g.fill(new Rectangle(posx,posy,sizex,sizey));
 		}
 	}
-
 	@Override
 	public void setImg(Image i){
 		img = i;
-	}
-
-	@Override
-	public boolean collides(Player p) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 	public Vector2f getMiddle(){
 		return new Vector2f(posx+(sizex/2f), posy+(sizey/2f));

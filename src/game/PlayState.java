@@ -1,6 +1,8 @@
 package game;
 
 import java.util.HashMap;
+import java.util.Random;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -29,7 +31,7 @@ import map.FloorTile;
 public class PlayState extends BasicGameState {
 	Boolean paused =false; //Maybe for pausing the game not used at the moment!
 	SettingsContainer gameSettings; //An object to conatin all settings.
-
+	GameContainer gamecont;
 	HashMap<String,Integer> playerControls; //Store the player controls in a hashmap.
 	Player[] player; //A vector of the players.
 	Square[][] tiles; //A grid of all the "tiles" in the game.
@@ -59,6 +61,8 @@ public class PlayState extends BasicGameState {
 			playerControls.put("P"+(i+1)+"S",Integer.parseInt(gameSettings.get("P"+(i+1)+"S")));
 			playerControls.put("P"+(i+1)+"W",Integer.parseInt(gameSettings.get("P"+(i+1)+"W")));
 			playerControls.put("P"+(i+1)+"E",Integer.parseInt(gameSettings.get("P"+(i+1)+"E")));
+			playerControls.put("P"+(i+1)+"B",Integer.parseInt(gameSettings.get("P"+(i+1)+"B")));
+			
 		}
 	}
 
@@ -73,6 +77,7 @@ public class PlayState extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame game)
 			throws SlickException {
+		gamecont = gc;
 		parseSettings(); // Start by parsing all the settings.
 		//Assign the images.
 		outerBrick = new Image("res/brick.png");
@@ -93,20 +98,36 @@ public class PlayState extends BasicGameState {
 					tiles[x][y] = new OuterWall();
 					tiles[x][y].setImg(outerBrick);
 				}else if(y%2==0 && x%2==0){
-					tiles[x][y] = new Block();
+					tiles[x][y] = new Block(x,y,gamecont,nrtiles);
 					tiles[x][y].setImg(concrete);
 				}else{
-					tiles[x][y] = new FloorTile(x,y);
+					tiles[x][y] = new FloorTile(x,y,gc,nrtiles);
 					//tiles[x][y].setImg(floorTile);
 				}
 			}
 		}
 		//Creates the players and gives them positions.
 		player = new Player[players];
-		player[0] = new Player((FloorTile) tiles[1][1]);
-		System.out.println((FloorTile) tiles[1][1]);
-		player[1] = new Player((FloorTile) tiles[nrtiles - 2][nrtiles-2]);
+		System.out.println(tiles[1][1]);
+		System.out.println(tiles[1][1]);
+		FloorTile ft = (FloorTile) tiles[1][1];
 
+		System.out.println(ft.getGridx());
+		player[0] = new Player(ft);
+		ft = (FloorTile) tiles[nrtiles - 2][nrtiles-2];
+		player[1] = new Player(ft);
+		Random r = new Random();
+		
+		for(int i = 0; i< nrtiles;i++){
+			for(int j = 0; j< nrtiles;j++){
+				if(tiles[i][j] instanceof FloorTile){
+					if (r.nextInt(10) < 6){
+
+						tiles[i][j] = new Block(i,j,gamecont,nrtiles).setImmovable(false);
+					}
+				}
+			}
+		}
 	}
 
 
@@ -161,17 +182,11 @@ public class PlayState extends BasicGameState {
 			else if (in.isKeyDown(playerControls.get("P"+(i+1)+"E"))) {
 				accel.add(new Vector2f(1, 0));
 			}
+			if (in.isKeyDown(playerControls.get("P"+(i+1)+"B"))) {
+				player[i].hit();
+			}
 			player[i].setAccel(accel.normalise());
 			player[i].update(c, delta, this);
-		}
-
-		for(int i = 0; i < player.length; i++){
-			for(int j = 0; j < player.length; j++){
-				if(player[0].intersects(player[1].getEllipse())){
-					hitCounter++;
-					System.out.println("OMG YOU HIT HIM!!! " + hitCounter);
-				}
-			}
 		}
 	}
 	private void updateBombs(GameContainer c, int delta, Input in) {
@@ -205,5 +220,8 @@ public class PlayState extends BasicGameState {
 	}
 	public Square[][] getTiles(){
 		return tiles;
+	}
+	public void removeWall(Block b) {
+		tiles[b.getGridx()][b.getGridy()] = new FloorTile(b.getGridx(),b.getGridy(),gamecont,nrtiles);
 	}
 }

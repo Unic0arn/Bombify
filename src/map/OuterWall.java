@@ -46,10 +46,4 @@ public class OuterWall implements Square {
 		img = i;
 	}
 
-	@Override
-	public boolean collides(Player p) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }

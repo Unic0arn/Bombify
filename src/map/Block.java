@@ -6,7 +6,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
-
+import game.PlayState;
 import entities.Player;
 
 
@@ -17,23 +17,42 @@ import entities.Player;
  * @version 2012-04-16
  */
 public class Block implements Square{
-	boolean immovable = false;
+	boolean immovable =true;
 	private Image img;
+	int gridx,gridy,posx,posy,sizex,sizey;
+	public int getGridx() {
+		return gridx;
+	}
+	public int getGridy() {
+		return gridy;
+	}
+	public Block(int x, int y, GameContainer container, int tiles) {
 
-	public Block() {
+		gridx = x;
+		gridy = y;
+		sizex=container.getWidth()/tiles;
+		sizey=container.getHeight()/tiles;
+		posx = container.getWidth()/tiles * x;
+		posy = container.getHeight()/tiles * y;
 
-
-
+	}
+	public Block setImmovable(boolean b){
+		immovable = b;
+		return this;
+	}
+	public boolean destroy(PlayState gs){
+		if(immovable){
+			return false;
+		}
+		else {
+			gs.removeWall(this);
+			return true;
+		}
 	}
 	public void render(GameContainer container, Graphics g,
 			int x, int y, int tiles)
 					throws SlickException {
-		int sizex=container.getWidth()/tiles;
-		int sizey=container.getHeight()/tiles;
-		int posx = container.getWidth()/tiles * x;
-		int posy = container.getHeight()/tiles * y;
-
-
+		
 		if(img!=null){
 			g.drawImage(img,
 					posx,
@@ -53,11 +72,6 @@ public class Block implements Square{
 	@Override
 	public void setImg(Image i) {
 		img = i;
-	}
-	@Override
-	public boolean collides(Player p) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }

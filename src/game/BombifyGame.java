@@ -8,7 +8,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import settings.SettingsContainer;
+import settings.*;
 /**
  * The main game container! Distributes all the effort across different
  * "gameStates" which basically are different "windows".
@@ -30,16 +30,19 @@ public class BombifyGame extends StateBasedGame {
 		addState(new Lobby());
 		PlayState state = new PlayState(gameSettings);
 		addState(state);
+		addState(new SettingsMenu());
 	}
 	public static void main(String[] args) throws SlickException
 	{
 		AppGameContainer app = new AppGameContainer(new BombifyGame());
 
 		// Application properties
-		app.setDisplayMode(Integer.parseInt(gameSettings.get("GAME_SIZE_X")),
-				Integer.parseInt(gameSettings.get("GAME_SIZE_Y")), false);
+		app.setDisplayMode(
+				Integer.parseInt(gameSettings.get("GAME_SIZE_X")),
+				Integer.parseInt(gameSettings.get("GAME_SIZE_Y")), 
+				Integer.parseInt(gameSettings.get("FULLSCREEN"))==1);
 		//app.setSmoothDeltas(true);
-		app.setTargetFrameRate(Integer.parseInt(gameSettings.get("MAX_FPS")));
+		//app.setTargetFrameRate(Integer.parseInt(gameSettings.get("MAX_FPS")));
 		app.setTargetFrameRate(60);
 		app.setVSync(true);
 		app.start();
