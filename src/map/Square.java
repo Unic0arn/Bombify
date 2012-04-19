@@ -27,6 +27,6 @@ public interface Square {
 	 * Sets the square to contain a new image.
 	 * @param i - The image to replace the old image with.
 	 */
-	public void setImg(Image i);
+	public Square setImg(Image i);
 	
 }

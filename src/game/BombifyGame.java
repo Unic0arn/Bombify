@@ -2,7 +2,6 @@ package game;
 
 import java.text.ParseException;
 
-
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;

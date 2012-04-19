@@ -70,8 +70,9 @@ public class Block implements Square{
 		}
 	}
 	@Override
-	public void setImg(Image i) {
+	public Block setImg(Image i) {
 		img = i;
+		return this;
 	}
 
 }

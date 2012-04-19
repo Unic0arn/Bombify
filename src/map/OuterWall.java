@@ -42,8 +42,9 @@ public class OuterWall implements Square {
 	}
 
 	@Override
-	public void setImg(Image i) {
+	public OuterWall setImg(Image i) {
 		img = i;
+		return this;
 	}
 
 }

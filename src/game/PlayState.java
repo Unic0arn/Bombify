@@ -37,8 +37,10 @@ public class PlayState extends BasicGameState {
 	Square[][] tiles; //A grid of all the "tiles" in the game.
 	int players; // The amount of players 1-4
 	int hitCounter = 0;
-	private Image outerBrick = null, concrete = null,floorTile = null;
-	int nrtiles = 17; // must be odd otherwise map is weird.
+
+	private Image outerBrick = null, concrete = null,floorTile = null, bomb = null;
+	int nrtiles = 15; // must be odd otherwise map is weird.
+
 	/**
 	 * Creates a new game with the desired settings.
 	 * @param gs - The settings file.
@@ -63,6 +65,7 @@ public class PlayState extends BasicGameState {
 			playerControls.put("P"+(i+1)+"E",Integer.parseInt(gameSettings.get("P"+(i+1)+"E")));
 			playerControls.put("P"+(i+1)+"B",Integer.parseInt(gameSettings.get("P"+(i+1)+"B")));
 			
+
 		}
 	}
 
@@ -79,10 +82,16 @@ public class PlayState extends BasicGameState {
 			throws SlickException {
 		gamecont = gc;
 		parseSettings(); // Start by parsing all the settings.
+
 		//Assign the images.
 		outerBrick = new Image("res/brick.png");
-		floorTile = new Image("res/brick_3.png");
+		floorTile = new Image("res/metal.png");
 		concrete = new Image("res/brick2.png");
+		bomb = new Image("/res/bomb.png");
+
+
+		//Creates the players and gives them positions.
+		player = new Player[players];
 
 		//Defines the tiles.
 		tiles = new Square[nrtiles][nrtiles];
@@ -101,8 +110,10 @@ public class PlayState extends BasicGameState {
 					tiles[x][y] = new Block(x,y,gamecont,nrtiles);
 					tiles[x][y].setImg(concrete);
 				}else{
+
 					tiles[x][y] = new FloorTile(x,y,gc,nrtiles);
-					//tiles[x][y].setImg(floorTile);
+					tiles[x][y].setImg(floorTile);
+
 				}
 			}
 		}
@@ -117,13 +128,13 @@ public class PlayState extends BasicGameState {
 		ft = (FloorTile) tiles[nrtiles - 2][nrtiles-2];
 		player[1] = new Player(ft);
 		Random r = new Random();
-		
+
 		for(int i = 0; i< nrtiles;i++){
 			for(int j = 0; j< nrtiles;j++){
 				if(tiles[i][j] instanceof FloorTile){
 					if (r.nextInt(10) < 6){
 
-						tiles[i][j] = new Block(i,j,gamecont,nrtiles).setImmovable(false);
+						tiles[i][j] = new Block(i,j,gamecont,nrtiles).setImmovable(false).setImg(bomb);
 					}
 				}
 			}
@@ -135,7 +146,6 @@ public class PlayState extends BasicGameState {
 	@Override
 	public void render(GameContainer c, StateBasedGame game, Graphics g)
 			throws SlickException {
-
 		renderBackground(c,g);
 		renderItems(c,g);
 		renderMap(c,g);
@@ -148,12 +158,13 @@ public class PlayState extends BasicGameState {
 	public void update(GameContainer c, StateBasedGame game, int delta)
 			throws SlickException {
 		Input in = c.getInput();
+
 		//Just checking if anyone pressed the escape key to end game.
 		if (in.isKeyDown(Input.KEY_ESCAPE)) {
 			c.exit();
-		}
-		updateBombs(c,delta,in);
+		}		
 		updatePlayers(c,delta,in);
+		updateBombs(c,delta,in);
 		updateItems(c,delta,in);
 		updateWalls(c,delta,in);
 	}
@@ -185,12 +196,22 @@ public class PlayState extends BasicGameState {
 			if (in.isKeyDown(playerControls.get("P"+(i+1)+"B"))) {
 				player[i].hit();
 			}
-			player[i].setAccel(accel.normalise());
+			player[i].setAccel(accel);
+
 			player[i].update(c, delta, this);
+		}
+
+		for(int i = 0; i < player.length; i++){
+			for(int j = 0; j < player.length; j++){
+				if(player[0].intersects(player[1].getEllipse())){
+					hitCounter++;
+					System.out.println("OMG YOU HIT HIM!!! " + hitCounter);
+				}
+			}
 		}
 	}
 	private void updateBombs(GameContainer c, int delta, Input in) {
-		// TODO Auto-generated method stub
+		//TODO
 
 	}
 	private void renderBackground(GameContainer c, Graphics g) {
@@ -208,7 +229,9 @@ public class PlayState extends BasicGameState {
 	 * @param g
 	 * @throws SlickException 
 	 */
+
 	private void renderMap(GameContainer gc, Graphics g) throws SlickException {
+
 		for(int i =0;i<nrtiles;i++){
 			for(int j = 0;j<nrtiles;j++){
 				tiles[i][j].render(gc,g, i, j, nrtiles);
@@ -222,6 +245,6 @@ public class PlayState extends BasicGameState {
 		return tiles;
 	}
 	public void removeWall(Block b) {
-		tiles[b.getGridx()][b.getGridy()] = new FloorTile(b.getGridx(),b.getGridy(),gamecont,nrtiles);
+		tiles[b.getGridx()][b.getGridy()] = new FloorTile(b.getGridx(),b.getGridy(),gamecont,nrtiles).setImg(floorTile);
 	}
 }

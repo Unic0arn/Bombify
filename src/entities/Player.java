@@ -60,6 +60,7 @@ public class Player implements Renderable {
 	@Override
 	public void render(GameContainer c, Graphics g) {
 		g.setColor(Color.green);
+
 		g.fill(new Circle(pos.x, pos.y, 10));
 	}
 

@@ -26,8 +26,8 @@ public class Lobby extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		b = new Button[2];
-		b[0] = new Button(300,100,50,30,"Game");
-		b[1] = new Button(300,200,50,30,"Menu");
+		b[0] = new Button(320,200,100,50,"Start");
+		b[1] = new Button(320,250,100,50,"Menu");
 		b[0].setShortCut(Constants.GAME);
 		b[1].setShortCut(Constants.SETTINGMENU);
 		b[1].setButtonColor(Color.red);

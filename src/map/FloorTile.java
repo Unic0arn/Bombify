@@ -52,8 +52,9 @@ public class FloorTile implements Square {
 		}
 	}
 	@Override
-	public void setImg(Image i){
+	public FloorTile setImg(Image i){
 		img = i;
+		return this;
 	}
 	public Vector2f getMiddle(){
 		return new Vector2f(posx+(sizex/2f), posy+(sizey/2f));
