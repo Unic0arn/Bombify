@@ -35,9 +35,9 @@ public class PlayState extends BasicGameState {
 	Square[][] tiles; //A grid of all the "tiles" in the game.
 	int players; // The amount of players 1-4
 	int hitCounter = 0;
+
 	private Image outerBrick = null, concrete = null,floorTile = null, bomb = null;
 	int nrtiles = 15; // must be odd otherwise map is weird.
-	
 	
 	/**
 	 * Creates a new game with the desired settings.
@@ -87,9 +87,7 @@ public class PlayState extends BasicGameState {
 		
 		//Creates the players and gives them positions.
 		player = new Player[players];
-		player[0] = new Player(new Vector2f((gc.getWidth()/nrtiles)-20, gc.getHeight()/nrtiles+20));
-		player[1] = new Player(new Vector2f(gc.getWidth()-gc.getWidth()/nrtiles-30, gc.getHeight()-gc.getHeight()/nrtiles-20));
-		
+
 		//Defines the tiles.
 		tiles = new Square[nrtiles][nrtiles];
 
@@ -108,11 +106,21 @@ public class PlayState extends BasicGameState {
 					tiles[x][y].setImg(concrete);
 				}else{
 
-					tiles[x][y] = new FloorTile();
-					tiles[x][y].setImg(floorTile);
+
+
+
+
+					tiles[x][y] = new FloorTile(x,y);
+					//tiles[x][y].setImg(floorTile);
+
 				}
 			}
 		}
+
+		player[0] = new Player((FloorTile) tiles[1][1]);
+		System.out.println((FloorTile) tiles[1][1]);
+		player[1] = new Player((FloorTile) tiles[nrtiles - 2][nrtiles-2]);
+
 	}
 
 
@@ -122,7 +130,7 @@ public class PlayState extends BasicGameState {
 			throws SlickException {
 		renderBackground(c,g);
 		renderItems(c,g);
-		renderWalls(c,g);
+		renderMap(c,g);
 		renderPlayers(c,g);
 	}
 
@@ -153,27 +161,23 @@ public class PlayState extends BasicGameState {
 
 	}
 	private void updatePlayers(GameContainer c, int delta, Input in) {
-
 		for(int i = 0; i < player.length; i++){
 			Vector2f accel = new Vector2f(0, 0);
 			if (in.isKeyDown(playerControls.get("P"+(i+1)+"N"))) {
 				accel.add(new Vector2f(0, -1));
 			}
-			if (in.isKeyDown(playerControls.get("P"+(i+1)+"S"))) {
+			else if (in.isKeyDown(playerControls.get("P"+(i+1)+"S"))) {
 				accel.add(new Vector2f(0, 1));
 			}
-			if (in.isKeyDown(playerControls.get("P"+(i+1)+"W"))) {
+			else if (in.isKeyDown(playerControls.get("P"+(i+1)+"W"))) {
 				accel.add(new Vector2f(-1, 0));
 			}
-			if (in.isKeyDown(playerControls.get("P"+(i+1)+"E"))) {
+			else if (in.isKeyDown(playerControls.get("P"+(i+1)+"E"))) {
 				accel.add(new Vector2f(1, 0));
 			}
-			if (in.isKeyDown(playerControls.get("P"+(i+1)+"B"))) {
-				updateBombs(c, delta, in);
-			}
-						
-			player[i].setAccel(accel.normalise().scale(50f));
-			player[i].update(c, delta);
+
+			player[i].setAccel(accel.normalise());
+			player[i].update(c, delta, this);
 		}
 
 		for(int i = 0; i < player.length; i++){
@@ -204,7 +208,9 @@ public class PlayState extends BasicGameState {
 	 * @param g
 	 * @throws SlickException 
 	 */
-	private void renderWalls(GameContainer gc, Graphics g) throws SlickException {
+
+	private void renderMap(GameContainer gc, Graphics g) throws SlickException {
+
 		for(int i =0;i<nrtiles;i++){
 			for(int j = 0;j<nrtiles;j++){
 				tiles[i][j].render(gc,g, i, j, nrtiles);
@@ -213,5 +219,8 @@ public class PlayState extends BasicGameState {
 	}
 	private void renderItems(GameContainer c, Graphics g) {
 		// TODO Auto-generated method stub
+	}
+	public Square[][] getTiles(){
+		return tiles;
 	}
 }
