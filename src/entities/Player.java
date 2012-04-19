@@ -36,7 +36,7 @@ public class Player implements Renderable {
 	@Override
 	public void render(GameContainer c, Graphics g) {
 		g.setColor(Color.green);
-		g.fill(new Circle(pos.x, pos.y, 25));
+		g.fill(new Circle(pos.x, pos.y, 20));
 	}
 
 	public void setAccel(Vector2f a) {

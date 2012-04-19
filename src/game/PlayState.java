@@ -35,8 +35,10 @@ public class PlayState extends BasicGameState {
 	Square[][] tiles; //A grid of all the "tiles" in the game.
 	int players; // The amount of players 1-4
 	int hitCounter = 0;
-	private Image outerBrick = null, concrete = null,floorTile = null;
-	int nrtiles = 11; // must be odd otherwise map is weird.
+	private Image outerBrick = null, concrete = null,floorTile = null, bomb = null;
+	int nrtiles = 15; // must be odd otherwise map is weird.
+	
+	
 	/**
 	 * Creates a new game with the desired settings.
 	 * @param gs - The settings file.
@@ -59,6 +61,7 @@ public class PlayState extends BasicGameState {
 			playerControls.put("P"+(i+1)+"S",Integer.parseInt(gameSettings.get("P"+(i+1)+"S")));
 			playerControls.put("P"+(i+1)+"W",Integer.parseInt(gameSettings.get("P"+(i+1)+"W")));
 			playerControls.put("P"+(i+1)+"E",Integer.parseInt(gameSettings.get("P"+(i+1)+"E")));
+			playerControls.put("P"+(i+1)+"B",Integer.parseInt(gameSettings.get("P"+(i+1)+"B")));
 		}
 	}
 
@@ -74,14 +77,19 @@ public class PlayState extends BasicGameState {
 	public void init(GameContainer gc, StateBasedGame game)
 			throws SlickException {
 		parseSettings(); // Start by parsing all the settings.
+		
 		//Assign the images.
 		outerBrick = new Image("res/brick.png");
-		floorTile = new Image("res/brick_3.png");
+		floorTile = new Image("res/metal.png");
 		concrete = new Image("res/brick2.png");
+		bomb = new Image("/res/bomb.png");
+		
+		
 		//Creates the players and gives them positions.
 		player = new Player[players];
-		player[0] = new Player(new Vector2f((gc.getWidth()/nrtiles)+20, gc.getHeight()/nrtiles+20));
-		player[1] = new Player(new Vector2f(gc.getWidth()-gc.getWidth()/nrtiles+20, gc.getHeight()-gc.getHeight()/nrtiles+20));
+		player[0] = new Player(new Vector2f((gc.getWidth()/nrtiles)-20, gc.getHeight()/nrtiles+20));
+		player[1] = new Player(new Vector2f(gc.getWidth()-gc.getWidth()/nrtiles-30, gc.getHeight()-gc.getHeight()/nrtiles-20));
+		
 		//Defines the tiles.
 		tiles = new Square[nrtiles][nrtiles];
 
@@ -90,18 +98,18 @@ public class PlayState extends BasicGameState {
 		 * should be placed.
 		 * 
 		 */
-		for(int i = 0;i<nrtiles;i++){
-			for(int j = 0;j<nrtiles;j++){
-				if(i == 0||i ==nrtiles-1||j==0||j==nrtiles-1){
-					tiles[i][j] = new OuterWall();
-					tiles[i][j].setImg(outerBrick);
-				}else if(j%2==0 && i%2==0){
-					tiles[i][j] = new Block();
-					tiles[i][j].setImg(concrete);
+		for(int x = 0;x<nrtiles;x++){
+			for(int y = 0;y<nrtiles;y++){
+				if(x == 0||x ==nrtiles-1||y==0||y==nrtiles-1){
+					tiles[x][y] = new OuterWall();
+					tiles[x][y].setImg(outerBrick);
+				}else if(y%2==0 && x%2==0){
+					tiles[x][y] = new Block();
+					tiles[x][y].setImg(concrete);
 				}else{
 
-					tiles[i][j] = new FloorTile();
-					tiles[i][j].setImg(floorTile);
+					tiles[x][y] = new FloorTile();
+					tiles[x][y].setImg(floorTile);
 				}
 			}
 		}
@@ -112,7 +120,6 @@ public class PlayState extends BasicGameState {
 	@Override
 	public void render(GameContainer c, StateBasedGame game, Graphics g)
 			throws SlickException {
-
 		renderBackground(c,g);
 		renderItems(c,g);
 		renderWalls(c,g);
@@ -125,12 +132,13 @@ public class PlayState extends BasicGameState {
 	public void update(GameContainer c, StateBasedGame game, int delta)
 			throws SlickException {
 		Input in = c.getInput();
+		
 		//Just checking if anyone pressed the escape key to end game.
 		if (in.isKeyDown(Input.KEY_ESCAPE)) {
 			c.exit();
-		}
-		updateBombs(c,delta,in);
+		}		
 		updatePlayers(c,delta,in);
+		updateBombs(c,delta,in);
 		updateItems(c,delta,in);
 		updateWalls(c,delta,in);
 	}
@@ -160,6 +168,10 @@ public class PlayState extends BasicGameState {
 			if (in.isKeyDown(playerControls.get("P"+(i+1)+"E"))) {
 				accel.add(new Vector2f(1, 0));
 			}
+			if (in.isKeyDown(playerControls.get("P"+(i+1)+"B"))) {
+				updateBombs(c, delta, in);
+			}
+						
 			player[i].setAccel(accel.normalise().scale(50f));
 			player[i].update(c, delta);
 		}
@@ -174,7 +186,7 @@ public class PlayState extends BasicGameState {
 		}
 	}
 	private void updateBombs(GameContainer c, int delta, Input in) {
-		// TODO Auto-generated method stub
+		//TODO
 
 	}
 	private void renderBackground(GameContainer c, Graphics g) {
@@ -193,7 +205,6 @@ public class PlayState extends BasicGameState {
 	 * @throws SlickException 
 	 */
 	private void renderWalls(GameContainer gc, Graphics g) throws SlickException {
-		g.setColor(Color.white);
 		for(int i =0;i<nrtiles;i++){
 			for(int j = 0;j<nrtiles;j++){
 				tiles[i][j].render(gc,g, i, j, nrtiles);
