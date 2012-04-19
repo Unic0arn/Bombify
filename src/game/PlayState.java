@@ -6,7 +6,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -36,8 +35,8 @@ public class PlayState extends BasicGameState {
 	Block wall; 
 	int players;
 	int hitCounter = 0;
-	private Image outerBrick, concrete = null;
-	int nrtiles = 20;
+	private Image outerBrick = null, concrete = null,floorTile = null;
+	int nrtiles = 9; // must be odd otherwise map is weird.
 
 	public PlayState(SettingsContainer gs) throws SlickException {
 		super();
@@ -69,53 +68,26 @@ public class PlayState extends BasicGameState {
 			throws SlickException {
 		parseSettings();
 		outerBrick = new Image("res/brick.png");
-	 	 
+	 	 floorTile = new Image("res/brick_3.png");
 	    concrete = new Image("res/brick2.png");
 		player = new Player[players];
-		player[0] = new Player(new Vector2f(70, 70));
-		player[1] = new Player(new Vector2f(730, 530));
+		player[0] = new Player(new Vector2f((gc.getWidth()/nrtiles)+20, gc.getHeight()/nrtiles+20));
+		player[1] = new Player(new Vector2f(gc.getWidth()-gc.getWidth()/nrtiles+20, gc.getHeight()-gc.getHeight()/nrtiles+20));
 		tiles = new Square[nrtiles][nrtiles];
-		for(int i = 0; i< nrtiles;i++){
-			tiles[i][0] = new OuterWall();
-			tiles[i][0].setImg(outerBrick);
-		}
-		for(int i = 0; i< nrtiles;i++){
-			tiles[0][i] = new OuterWall();
-			tiles[0][i].setImg(outerBrick);
-		}
+		
+		for(int i = 0;i<nrtiles;i++){
+			for(int j = 0;j<nrtiles;j++){
+				if(i == 0 || i ==nrtiles - 1 || j==0||j==nrtiles-1){
+					tiles[i][j] = new OuterWall();
+					tiles[i][j].setImg(outerBrick);
+				}else if( j %2 ==0 && i%2 ==0){
+					tiles[i][j] = new Block();
+					tiles[i][j].setImg(concrete);
+				}else{
 
-		for(int i = 0; i< nrtiles;i++){
-			tiles[nrtiles-1][i] = new OuterWall();
-			tiles[nrtiles-1][i].setImg(outerBrick);
-		}
-
-		for(int i = 0; i< nrtiles;i++){
-			tiles[i][nrtiles-1] = new OuterWall();
-			tiles[i][nrtiles-1].setImg(outerBrick);
-		}
-		
-		
-		
-		for(int i = 1;i<nrtiles;i+=2){
-			for(int j = 1;j<nrtiles;j+=2){
-				tiles[i][j] = new Block();
-				tiles[i][j].setImg(concrete);
-			}
-		}
-		
-		for(int i = 0;i<nrtiles;i+=2){
-			for(int j = 0;j<nrtiles;j+=2){
-				tiles[i][j] = new Tile();
-			}
-		}
-		for(int i = 0;i<nrtiles;i+=2){
-			for(int j = 1;j<nrtiles;j+=2){
-				tiles[i][j] = new Tile();
-			}
-		}
-		for(int i = 1;i<nrtiles;i+=2){
-			for(int j = 0;j<nrtiles;j+=2){
-				tiles[i][j] = new Tile();
+					tiles[i][j] = new Tile();
+					tiles[i][j].setImg(floorTile);
+				}
 			}
 		}
 	}
@@ -211,9 +183,9 @@ public class PlayState extends BasicGameState {
 		g.setColor(Color.white);
 		
 		
-		for(int i = 1;i<nrtiles;i++){
-			for(int j = 1;j<nrtiles;j++){
-				tiles[i][j].render(gc,g, i, j, nrtiles-1);
+		for(int i =0;i<nrtiles;i++){
+			for(int j = 0;j<nrtiles;j++){
+				tiles[i][j].render(gc,g, i, j, nrtiles);
 			}
 		}
 		
