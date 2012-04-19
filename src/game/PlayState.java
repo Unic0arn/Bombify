@@ -16,9 +16,10 @@ import entities.Player;
 import map.Block; 
 import map.OuterWall;
 import map.Square;
-import map.Tile;
+import map.FloorTile;
 /**
- * The main class of the game Bombify. A game that is based on players trying to blow each other up.
+ * This is the playing part of the game.
+ * A game that is based on players trying to blow each other up.
  * 
  * @author Fredrik Hallberg & Victor Dahlin
  * @version 2012-04-16
@@ -26,23 +27,30 @@ import map.Tile;
  */
 
 public class PlayState extends BasicGameState {
-	Boolean paused =false;
-	SettingsContainer gameSettings;
-	
-	HashMap<String,Integer> playerControls;
-	Player[] player;
-	Square[][] tiles;
-	Block wall; 
-	int players;
+	Boolean paused =false; //Maybe for pausing the game not used at the moment!
+	SettingsContainer gameSettings; //An object to conatin all settings.
+
+	HashMap<String,Integer> playerControls; //Store the player controls in a hashmap.
+	Player[] player; //A vector of the players.
+	Square[][] tiles; //A grid of all the "tiles" in the game.
+	int players; // The amount of players 1-4
 	int hitCounter = 0;
 	private Image outerBrick = null, concrete = null,floorTile = null;
-	int nrtiles = 9; // must be odd otherwise map is weird.
-
+	int nrtiles = 11; // must be odd otherwise map is weird.
+	/**
+	 * Creates a new game with the desired settings.
+	 * @param gs - The settings file.
+	 * @throws SlickException
+	 */
 	public PlayState(SettingsContainer gs) throws SlickException {
 		super();
 		gameSettings = gs;
-		
 	}
+	/**
+	 * Parses the most used settings from the hashmap.
+	 * This is to avoid constant parsing and ParseInts which are
+	 * time consuming.
+	 */
 	private void parseSettings() {
 		players = Integer.parseInt(gameSettings.get("PLAYERS"));
 		playerControls = new HashMap<String,Integer>();
@@ -54,38 +62,45 @@ public class PlayState extends BasicGameState {
 		}
 	}
 
-
 	@Override
 	public int getID() {
 		return Constants.GAME;
 	}
-	
+
 	/**
 	 * Starting position for field and players. 
 	 */
 	@Override
 	public void init(GameContainer gc, StateBasedGame game)
 			throws SlickException {
-		parseSettings();
+		parseSettings(); // Start by parsing all the settings.
+		//Assign the images.
 		outerBrick = new Image("res/brick.png");
-	 	 floorTile = new Image("res/brick_3.png");
-	    concrete = new Image("res/brick2.png");
+		floorTile = new Image("res/brick_3.png");
+		concrete = new Image("res/brick2.png");
+		//Creates the players and gives them positions.
 		player = new Player[players];
 		player[0] = new Player(new Vector2f((gc.getWidth()/nrtiles)+20, gc.getHeight()/nrtiles+20));
 		player[1] = new Player(new Vector2f(gc.getWidth()-gc.getWidth()/nrtiles+20, gc.getHeight()-gc.getHeight()/nrtiles+20));
+		//Defines the tiles.
 		tiles = new Square[nrtiles][nrtiles];
-		
+
+		/*
+		 * Quite complex "algorithm" to decide where walls and tiles 
+		 * should be placed.
+		 * 
+		 */
 		for(int i = 0;i<nrtiles;i++){
 			for(int j = 0;j<nrtiles;j++){
-				if(i == 0 || i ==nrtiles - 1 || j==0||j==nrtiles-1){
+				if(i == 0||i ==nrtiles-1||j==0||j==nrtiles-1){
 					tiles[i][j] = new OuterWall();
 					tiles[i][j].setImg(outerBrick);
-				}else if( j %2 ==0 && i%2 ==0){
+				}else if(j%2==0 && i%2==0){
 					tiles[i][j] = new Block();
 					tiles[i][j].setImg(concrete);
 				}else{
 
-					tiles[i][j] = new Tile();
+					tiles[i][j] = new FloorTile();
 					tiles[i][j].setImg(floorTile);
 				}
 			}
@@ -97,7 +112,7 @@ public class PlayState extends BasicGameState {
 	@Override
 	public void render(GameContainer c, StateBasedGame game, Graphics g)
 			throws SlickException {
-		
+
 		renderBackground(c,g);
 		renderItems(c,g);
 		renderWalls(c,g);
@@ -110,6 +125,7 @@ public class PlayState extends BasicGameState {
 	public void update(GameContainer c, StateBasedGame game, int delta)
 			throws SlickException {
 		Input in = c.getInput();
+		//Just checking if anyone pressed the escape key to end game.
 		if (in.isKeyDown(Input.KEY_ESCAPE)) {
 			c.exit();
 		}
@@ -129,6 +145,7 @@ public class PlayState extends BasicGameState {
 
 	}
 	private void updatePlayers(GameContainer c, int delta, Input in) {
+
 		for(int i = 0; i < player.length; i++){
 			Vector2f accel = new Vector2f(0, 0);
 			if (in.isKeyDown(playerControls.get("P"+(i+1)+"N"))) {
@@ -144,10 +161,6 @@ public class PlayState extends BasicGameState {
 				accel.add(new Vector2f(1, 0));
 			}
 			player[i].setAccel(accel.normalise().scale(50f));
-			/*if(player[i].intersects(field)){
-				player[i].setAccel(accel.normalise().scale(50f));
-				player[i].update(c, delta);
-			}*/
 			player[i].update(c, delta);
 		}
 
@@ -181,41 +194,13 @@ public class PlayState extends BasicGameState {
 	 */
 	private void renderWalls(GameContainer gc, Graphics g) throws SlickException {
 		g.setColor(Color.white);
-		
-		
 		for(int i =0;i<nrtiles;i++){
 			for(int j = 0;j<nrtiles;j++){
 				tiles[i][j].render(gc,g, i, j, nrtiles);
 			}
 		}
-		
-		/*
-		// Fixed middle thingy. 
-		for (int i = 110; i < 770; i+=110) {
-			g.fillRect(i, 100, 50, 50);
-			g.fillRect(i, 210, 50, 50);
-			g.fillRect(i, 320, 50, 50);
-			g.fillRect(i, 430, 50, 50);
-		}*/
 	}
-	
-	
 	private void renderItems(GameContainer c, Graphics g) {
 		// TODO Auto-generated method stub
 	}
-	
-	
-	
-
-
-
-
-
-
-
-	
-
-
-
-
 }

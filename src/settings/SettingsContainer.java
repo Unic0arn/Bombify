@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.util.HashMap;
 /**
  * A class to handle settings and configuration information.
+ * Extends a hashmap so that the settings are accessible with the key.
  * @author Viking Edström & Fredrik Hallberg
  *
  */
@@ -55,7 +56,9 @@ public class SettingsContainer extends HashMap<String, String> {
 		result = keySet().toArray(result);
 		return result;
 	}
-
+	/**
+	 * Write the new settings to the old settings file when saved.
+	 */
 	public void writeToFile() {
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter(configfile));

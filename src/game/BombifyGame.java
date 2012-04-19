@@ -2,7 +2,6 @@ package game;
 
 import java.text.ParseException;
 
-import menu.Menu;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
@@ -10,7 +9,10 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import settings.SettingsContainer;
-
+/**
+ * The main game container! Distributes all the effort across different
+ * "gameStates" which basically are different "windows".
+ */
 public class BombifyGame extends StateBasedGame {
 	static SettingsContainer gameSettings; // All the settings of the game stored in a HashMap
 	public BombifyGame() {
@@ -28,12 +30,11 @@ public class BombifyGame extends StateBasedGame {
 		addState(new Lobby());
 		PlayState state = new PlayState(gameSettings);
 		addState(state);
-		addState(new Menu(gameSettings));
 	}
 	public static void main(String[] args) throws SlickException
 	{
 		AppGameContainer app = new AppGameContainer(new BombifyGame());
-	
+
 		// Application properties
 		app.setDisplayMode(Integer.parseInt(gameSettings.get("GAME_SIZE_X")),
 				Integer.parseInt(gameSettings.get("GAME_SIZE_Y")), false);

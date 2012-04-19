@@ -10,9 +10,14 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-
+/**
+ * A lobby to welcome the player when first starting the application.
+ * Contains buttons with shortcuts to the game or settings.
+ * @author Fredrik
+ *
+ */
 public class Lobby extends BasicGameState {
-	Button[] b;
+	Button[] b; // An array of buttons.
 
 	public Lobby(){
 
@@ -24,10 +29,9 @@ public class Lobby extends BasicGameState {
 		b[0] = new Button(300,100,50,30,"Game");
 		b[1] = new Button(300,200,50,30,"Menu");
 		b[0].setShortCut(Constants.GAME);
-		b[1].setShortCut(Constants.MENU);
+		b[1].setShortCut(Constants.SETTINGMENU);
 		b[1].setButtonColor(Color.red);
 	}
-
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
@@ -35,15 +39,12 @@ public class Lobby extends BasicGameState {
 			b[i].render(container, game, g);
 		}
 	}
-
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
 		Input in = container.getInput();
 
 		if(in.isMousePressed(0)){
-			
-			
 			Vector2f mousePos = new Vector2f( in.getAbsoluteMouseX(), in.getAbsoluteMouseY());
 			for(int i= 0; i < b.length;i++){
 				if(b[i].isClicked(mousePos)){
@@ -51,12 +52,9 @@ public class Lobby extends BasicGameState {
 				}
 			}
 		}
-
 	}
-
 	@Override
 	public int getID() {
 		return Constants.LOBBY;
 	}
-
 }

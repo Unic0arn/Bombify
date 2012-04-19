@@ -7,6 +7,12 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
+import entities.Player;
+/**
+ * A class that contains information about an outer wall.
+ * @author Fredrik & Victor
+ *
+ */
 public class OuterWall implements Square {
 	private Image img;
 	@Override
@@ -38,6 +44,12 @@ public class OuterWall implements Square {
 	@Override
 	public void setImg(Image i) {
 		img = i;
+	}
+
+	@Override
+	public boolean collides(Player p) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

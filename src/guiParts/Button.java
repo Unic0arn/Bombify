@@ -15,13 +15,19 @@ import org.newdawn.slick.state.StateBasedGame;
  *
  */
 public class Button {
-	private  int posx,posy,sizex,sizey;
+	private  int posx,posy,sizex,sizey; // Self explanatory.
 	private  String buttonString; //What should be written on the button.
 	private int shortcut; //Where this button leads, the constants are in the Constants class.
-	private Image img;
+	private Image img; // The image on the button.
 	private Color buttonColor = Color.blue,
-			stringColor = Color.black;
-
+			stringColor = Color.black; // Colors in case an image is missing.
+	/**
+	 * Creates a button at the specified location with the specified size.
+	 * @param x - The x-Position of the button relative to the game-window
+	 * @param y - The y-Position of the button relative to the game-window
+	 * @param xx - The width of the button
+	 * @param yy - The height of the button
+	 */
 	public Button(int x, int y, int xx, int yy){
 		posx=x;
 		posy=y;
@@ -29,6 +35,15 @@ public class Button {
 		sizey=yy;
 
 	}
+	/**
+	 * Creates a button at the specified location with the specified size.
+	 * Also adds an image to the button.
+	 * @param x - The x-Position of the button relative to the game-window
+	 * @param y - The y-Position of the button relative to the game-window
+	 * @param xx - The width of the button
+	 * @param yy - The height of the button
+	 * @param im - An image to be added to the button.
+	 */
 	public Button(int x, int y, int xx, int yy,Image im){
 		this(x,y,xx,yy);
 		img=im;
@@ -57,9 +72,9 @@ public class Button {
 	public int getSizey() {
 		return sizey;
 	}
-	
+
 	/**
-	 * Renders the button with blue color and black font.
+	 * Renders the button.
 	 * @param container
 	 * @param game
 	 * @param g
@@ -68,36 +83,45 @@ public class Button {
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
 
-			
-			if(img!=null){
-				g.drawImage(img,
-	                      posx,
-	                      posy,
-	                      posx+sizex,
-	                      posy+sizey,
-	                      0,
-	                      0,
-	                      img.getWidth(),
-	                      img.getHeight());
-			}
-			else{
-				g.setColor(buttonColor);	
-				g.fill(new Rectangle(posx,posy,sizex,sizey));
-				g.setColor(stringColor);
 
-				g.drawString(buttonString, posx, posy);
-			}
+		if(img!=null){
+			g.drawImage(img,
+					posx,
+					posy,
+					posx+sizex,
+					posy+sizey,
+					0,
+					0,
+					img.getWidth(),
+					img.getHeight());
+		}
+		else{
+			g.setColor(buttonColor);	
+			g.fill(new Rectangle(posx,posy,sizex,sizey));
+			g.setColor(stringColor);
+
+			g.drawString(buttonString, posx, posy);
+		}
 	}
 	/**
 	 * Set the shortcut to where this button leads.
-	 * @param gameState
+	 * The shortcut is in the form of an int which is specified
+	 * in the Constants class.
+	 * @param gameState - An int which points to another gameState (see constants)
 	 */
 	public void setShortCut(int gameState){
 		shortcut = gameState;
 	}
 	/**
+	 * Returns the shortcut this button holds.
+	 * @return - An int which points to another gameState (see constants)
+	 */
+	public int getShortCut() {
+		return shortcut;
+	}
+	/**
 	 * Checks weather the mouse is inside the frame of this button.
-	 * @param mouse
+	 * @param mouse - A vector containing the x and y coordinates of the mouse pointer.
 	 * @return true - if mouse is inside, false - if mouse is not inside.
 	 */
 	public boolean isClicked(Vector2f mouse) {
@@ -106,9 +130,10 @@ public class Button {
 		}
 		return false;
 	}
-	public int getShortCut() {
-		return shortcut;
-	}
+	/**
+	 * Sets the image of this button.
+	 * @param im - The image.
+	 */
 	public void setImage(Image im) {
 		img = im;
 	}

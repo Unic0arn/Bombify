@@ -8,9 +8,14 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
 import entities.Player;
-
-public class Tile implements Square {
+/**
+ * A class that contains information about a tile on the floor.
+ * @author Fredrik
+ *
+ */
+public class FloorTile implements Square {
 	private Image img;
+
 	@Override
 	public void render(GameContainer container, Graphics g, int x, int y,
 			int tiles) throws SlickException {
@@ -36,12 +41,16 @@ public class Tile implements Square {
 			g.fill(new Rectangle(posx,posy,sizex,sizey));
 		}
 	}
-	public boolean collides(Player p) {
-		return false;
-	}
+
 	@Override
 	public void setImg(Image i){
 		img = i;
+	}
+
+	@Override
+	public boolean collides(Player p) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
 
