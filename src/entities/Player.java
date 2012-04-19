@@ -48,13 +48,6 @@ public class Player implements Renderable {
 				pos.add(velo);
 			}
 		}
-		
-		/*velo.add(accel.copy().scale(delta / 1000f));
-		accel.set(0, 0);
-		*/
-		
-		
-		//player.setLocation(pos);
 		return true;
 	}
 

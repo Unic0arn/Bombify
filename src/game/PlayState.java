@@ -78,8 +78,7 @@ public class PlayState extends BasicGameState {
 		outerBrick = new Image("res/brick.png");
 		floorTile = new Image("res/brick_3.png");
 		concrete = new Image("res/brick2.png");
-		//Creates the players and gives them positions.
-		player = new Player[players];
+
 		//Defines the tiles.
 		tiles = new Square[nrtiles][nrtiles];
 
@@ -102,7 +101,8 @@ public class PlayState extends BasicGameState {
 				}
 			}
 		}
-
+		//Creates the players and gives them positions.
+		player = new Player[players];
 		player[0] = new Player((FloorTile) tiles[1][1]);
 		System.out.println((FloorTile) tiles[1][1]);
 		player[1] = new Player((FloorTile) tiles[nrtiles - 2][nrtiles-2]);
