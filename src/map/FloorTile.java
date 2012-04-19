@@ -6,6 +6,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 
 import entities.Player;
 /**
@@ -15,14 +16,25 @@ import entities.Player;
  */
 public class FloorTile implements Square {
 	private Image img;
-
+	int posx,posy,sizex,sizey;
+	int gridx,gridy;
+	public int getGridx() {
+		return gridx;
+	}
+	public int getGridy() {
+		return gridy;
+	}
+	public FloorTile(int x, int y){
+		gridx = x;
+		gridy = y;
+	}
 	@Override
 	public void render(GameContainer container, Graphics g, int x, int y,
 			int tiles) throws SlickException {
-		int sizex = (container.getWidth()/tiles);
-		int sizey = (container.getHeight()/tiles);
-		int posx = (container.getWidth()/tiles * x);
-		int posy = (container.getHeight()/tiles * y);
+		 sizex = (container.getWidth()/tiles);
+		 sizey = (container.getHeight()/tiles);
+		 posx = (container.getWidth()/tiles * x);
+		 posy = (container.getHeight()/tiles * y);
 
 
 		if(img!=null){
@@ -51,6 +63,12 @@ public class FloorTile implements Square {
 	public boolean collides(Player p) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	public Vector2f getMiddle(){
+		return new Vector2f(posx+(sizex/2f), posy+(sizey/2f));
+	}
+	public String toString(){
+		return "[" + gridx + "," + gridy + "]";
 	}
 }
 

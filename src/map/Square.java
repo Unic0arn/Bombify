@@ -4,6 +4,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Vector2f;
 
 import entities.Player;
 
@@ -34,4 +35,6 @@ public interface Square {
 	 * @return true - If the player "touches" the square false - if not
 	 */
 	public boolean collides(Player p);
+	
+	
 }
