@@ -27,7 +27,7 @@ public class Player implements Renderable {
 	}
 
 	public boolean update(GameContainer c, int delta, PlayState p) {
-		if(!moving){
+		if(!moving) {
 			if(!accel.equals(new Vector2f(0,0))){
 				if(p.getTiles()[(int) (tile.getGridx() + accel.x)][(int) (tile.getGridy() + accel.y)] instanceof FloorTile){
 					goal = (FloorTile) p.getTiles()[(int) (tile.getGridx() + accel.x)][(int) (tile.getGridy() + accel.y)];

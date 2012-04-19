@@ -36,7 +36,7 @@ public class PlayState extends BasicGameState {
 	int players; // The amount of players 1-4
 	int hitCounter = 0;
 
-	private Image outerBrick = null, concrete = null,floorTile = null, bomb = null;
+	private Image outerBrick = null, concrete = null,floorTile = null; 
 	int nrtiles = 15; // must be odd otherwise map is weird.
 	
 	/**
@@ -56,7 +56,7 @@ public class PlayState extends BasicGameState {
 	private void parseSettings() {
 		players = Integer.parseInt(gameSettings.get("PLAYERS"));
 		playerControls = new HashMap<String,Integer>();
-		for(int i = 0; i < players;i++){
+		for(int i = 0; i < players;i++) {
 			playerControls.put("P"+(i+1)+"N",Integer.parseInt(gameSettings.get("P"+(i+1)+"N")));
 			playerControls.put("P"+(i+1)+"S",Integer.parseInt(gameSettings.get("P"+(i+1)+"S")));
 			playerControls.put("P"+(i+1)+"W",Integer.parseInt(gameSettings.get("P"+(i+1)+"W")));
@@ -79,10 +79,9 @@ public class PlayState extends BasicGameState {
 		parseSettings(); // Start by parsing all the settings.
 		
 		//Assign the images.
-		outerBrick = new Image("res/brick.png");
+		outerBrick = new Image("res/wall.png");
 		floorTile = new Image("res/metal.png");
-		concrete = new Image("res/brick2.png");
-		bomb = new Image("/res/bomb.png");
+		concrete = new Image("res/concrete.png");
 		
 		
 		//Creates the players and gives them positions.
@@ -105,13 +104,8 @@ public class PlayState extends BasicGameState {
 					tiles[x][y] = new Block();
 					tiles[x][y].setImg(concrete);
 				}else{
-
-
-
-
-
 					tiles[x][y] = new FloorTile(x,y);
-					//tiles[x][y].setImg(floorTile);
+					tiles[x][y].setImg(floorTile);
 
 				}
 			}
