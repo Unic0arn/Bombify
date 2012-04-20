@@ -1,8 +1,7 @@
 package game;
 
 import guiParts.Button;
-
-import org.newdawn.slick.Color;
+//import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -11,7 +10,6 @@ import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.gui.MouseOverArea;
 /**
  * A lobby to welcome the player when first starting the application.
  * Contains buttons with shortcuts to the game or settings.
@@ -22,7 +20,6 @@ import org.newdawn.slick.gui.MouseOverArea;
 public class Lobby extends BasicGameState {
 	Button[] b; // An array of buttons.
 	private Image menu = null, start=null, main=null, settings=null; 
-	private MouseOverArea m; 
 
 	public Lobby(){
 
@@ -32,16 +29,13 @@ public class Lobby extends BasicGameState {
 			throws SlickException {
 		menu = new Image("res/menu.png");
 		start = new Image("res/start.png");
-		main = new Image("res/main.png");
 		settings = new Image("res/settings.png");
 		
-		b = new Button[3];
-		b[0] =  new Button(100, 200, 200, 100, main);
-		b[1] = new Button(100, 300, 200, 100, start);
-		b[2] = new Button(100,400,200,100,settings);		
-		b[1].setShortCut(Constants.GAME);
-		b[2].setShortCut(Constants.SETTINGMENU);
-		b[2].setButtonColor(Color.red);
+		b = new Button[2];
+		b[0] = new Button(50, 250, 200, 100, start);
+		b[1] = new Button(50,350,200,100,settings);		
+		b[0].setShortCut(Constants.GAME);
+		b[1].setShortCut(Constants.SETTINGMENU);
 	}
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)

@@ -84,11 +84,11 @@ public class PlayState extends BasicGameState {
 		parseSettings(); // Start by parsing all the settings.
 
 		//Assign the images.
-		outerBrick = new Image("res/wall3.png");
-		floorTile = new Image("res/metal.png");
+		outerBrick = new Image("res/pyrWall.png");
+		floorTile = new Image("res/ground.png");
 		concrete = new Image("res/concrete.png");
 		removableWall = new Image("res/rock.png");
-		bomb = new Image("res/metalBomb.png");
+		bomb = new Image("res/sandBomb.png");
 
 
 		//Creates the players and gives them positions.
