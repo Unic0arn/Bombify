@@ -1,5 +1,6 @@
 package game;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -14,6 +15,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.Image; 
 import settings.SettingsContainer;
 
+import entities.Bomb;
 import entities.Player;
 import map.Block; 
 import map.OuterWall;
@@ -35,9 +37,10 @@ public class PlayState extends BasicGameState {
 	HashMap<String,Integer> playerControls; //Store the player controls in a hashmap.
 	Player[] player; //A vector of the players.
 	Square[][] tiles; //A grid of all the "tiles" in the game.
+	ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 	int players; // The amount of players 1-4
 	int hitCounter = 0;
-
+	
 	private Image outerBrick = null, concrete = null,floorTile = null, 
 			removableWall = null, bomb = null; 
 	int nrtiles = 15; // Odd number = nice field 
@@ -163,8 +166,9 @@ public class PlayState extends BasicGameState {
 	public void render(GameContainer c, StateBasedGame game, Graphics g)
 			throws SlickException {
 		renderBackground(c,g);
-		renderItems(c,g);
+		
 		renderMap(c,g);
+		renderItems(c,g);
 		renderPlayers(c,g);
 	}
 
@@ -190,8 +194,7 @@ public class PlayState extends BasicGameState {
 
 	}
 	private void updateItems(GameContainer c, int delta, Input in) {
-		// TODO Auto-generated method stub
-
+		
 	}
 	private void updatePlayers(GameContainer c, int delta, Input in) {
 		for(int i = 0; i < player.length; i++){
@@ -212,12 +215,18 @@ public class PlayState extends BasicGameState {
 				player[i].hit();
 			}
 			player[i].setDirection(direction);
-			player[i].update(c, delta, this);
+			try {
+				player[i].update(c, delta, this);
+			} catch (SlickException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	private void updateBombs(GameContainer c, int delta, Input in) {
-		//TODO
-
+		for(int i = 0; i < bombs.size();i++){
+			bombs.get(i).update(c, this, delta);
+		}
 	}
 	private void renderBackground(GameContainer c, Graphics g) {
 		g.setBackground(Color.black);
@@ -244,12 +253,36 @@ public class PlayState extends BasicGameState {
 		}
 	}
 	private void renderItems(GameContainer c, Graphics g) {
-		// TODO Auto-generated method stub
+		for(int i = 0; i < bombs.size();i++){
+			bombs.get(i).render(c, g);
+		}
 	}
 	public Square[][] getTiles(){
 		return tiles;
 	}
+	public ArrayList<Bomb> getBombs(){
+		return bombs;
+	}
 	public void removeWall(Block b) {
 		tiles[b.getGridx()][b.getGridy()] = new FloorTile(b.getGridx(),b.getGridy(),gamecont,nrtiles).setImg(floorTile);
+	}
+	public void createBomb(Player p, FloorTile tile) {
+		
+		bombs.add(new Bomb(gamecont, p, bomb, tile, nrtiles));
+		
+	}
+	public void removeBomb(Bomb b) {
+		bombs.remove(b);
+		int tilex = b.getTile().getGridx();
+		int tiley = b.getTile().getGridy();
+		int bombSize = b.getPlayer().getBombSize();
+		for (int i = bombSize*-1;i<bombSize+1;i++){
+			for (int j = bombSize*-1;j<bombSize+1;j++){
+				if(tiles[tilex+i][tiley+j] instanceof Block){
+					Block block = (Block)tiles[tilex+i][tiley+j];	
+					block.destroy(this);
+				}
+			}
+		}
 	}
 }
