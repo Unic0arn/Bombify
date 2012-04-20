@@ -39,7 +39,7 @@ public class BombifyGame extends StateBasedGame {
 		app.setDisplayMode(
 				Integer.parseInt(gameSettings.get("GAME_SIZE_X")),
 				Integer.parseInt(gameSettings.get("GAME_SIZE_Y")), 
-				Integer.parseInt(gameSettings.get("FULLSCREEN"))==1);
+				Integer.parseInt(gameSettings.get("FULLSCREEN"))==0);
 		//app.setSmoothDeltas(true);
 		//app.setTargetFrameRate(Integer.parseInt(gameSettings.get("MAX_FPS")));
 		app.setTargetFrameRate(60);

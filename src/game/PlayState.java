@@ -87,7 +87,7 @@ public class PlayState extends BasicGameState {
 		outerBrick = new Image("res/wall.png");
 		floorTile = new Image("res/metal.png");
 		concrete = new Image("res/concrete.png");
-		bomb = new Image("res/bomb.png");
+		bomb = new Image("res/wall.png");
 		
 
 		//Creates the players and gives them positions.
