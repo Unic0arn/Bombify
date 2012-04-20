@@ -87,8 +87,8 @@ public class PlayState extends BasicGameState {
 		outerBrick = new Image("res/wall.png");
 		floorTile = new Image("res/metal.png");
 		concrete = new Image("res/concrete.png");
-		removableWall = new Image("res/wall2.png");
-		bomb = new Image("res/bomb.png");
+		removableWall = new Image("res/rock.png");
+		bomb = new Image("res/metalBomb.png");
 
 
 		//Creates the players and gives them positions.
@@ -155,6 +155,8 @@ public class PlayState extends BasicGameState {
 				}
 			}
 		}
+		// Tempbomb!!! :)
+		tiles[1][4] = new Block(1,4,gamecont,nrtiles).setImmovable(false).setImg(bomb);
 	}
 
 	@Override
