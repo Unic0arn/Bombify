@@ -30,7 +30,7 @@ import map.FloorTile;
 
 public class PlayState extends BasicGameState {
 	Boolean paused =false; //Maybe for pausing the game not used at the moment!
-	SettingsContainer gameSettings; //An object to conatin all settings.
+	SettingsContainer gameSettings; //An object to contain all settings.
 	GameContainer gamecont;
 	HashMap<String,Integer> playerControls; //Store the player controls in a hashmap.
 	Player[] player; //A vector of the players.
@@ -38,7 +38,7 @@ public class PlayState extends BasicGameState {
 	int players; // The amount of players 1-4
 	int hitCounter = 0;
 
-	private Image outerBrick = null, concrete = null,floorTile = null, bomb = null; 
+	private Image outerBrick = null, concrete = null,floorTile = null, removableWall = null; 
 	int nrtiles = 15; // must be odd otherwise map is weird.
 
 	/**
@@ -64,7 +64,7 @@ public class PlayState extends BasicGameState {
 			playerControls.put("P"+(i+1)+"W",Integer.parseInt(gameSettings.get("P"+(i+1)+"W")));
 			playerControls.put("P"+(i+1)+"E",Integer.parseInt(gameSettings.get("P"+(i+1)+"E")));
 			playerControls.put("P"+(i+1)+"B",Integer.parseInt(gameSettings.get("P"+(i+1)+"B")));
-			
+
 
 		}
 	}
@@ -87,8 +87,8 @@ public class PlayState extends BasicGameState {
 		outerBrick = new Image("res/wall.png");
 		floorTile = new Image("res/metal.png");
 		concrete = new Image("res/concrete.png");
-		bomb = new Image("res/wall2.png");
-		
+		removableWall = new Image("res/wall2.png");
+
 
 		//Creates the players and gives them positions.
 		player = new Player[players];
@@ -120,28 +120,35 @@ public class PlayState extends BasicGameState {
 		//Creates the players and gives them positions.
 		player = new Player[players];
 		System.out.println(tiles[1][1]);
-		System.out.println(tiles[1][1]);
 		FloorTile ft = (FloorTile) tiles[1][1];
+		System.out.println(tiles[1][1]);
 
-		System.out.println(ft.getGridx());
+
+		System.out.println(ft.getGridx());		
 		player[0] = new Player(ft);
 		ft = (FloorTile) tiles[nrtiles - 2][nrtiles-2];
-		player[1] = new Player(ft);
-		Random r = new Random();
+		player[1] = new Player(ft);	
 
+		Random dice = new Random();
+		/**
+		 * Adds random walls instead of a FloorTile. 
+		 */
 		for(int i = 0; i< nrtiles;i++){
-			for(int j = 0; j< nrtiles;j++){
-				if(tiles[i][j] instanceof FloorTile){
-					if (r.nextInt(10) < 6){
-
-						tiles[i][j] = new Block(i,j,gamecont,nrtiles).setImmovable(false).setImg(bomb);
+			for(int j = 0; j< nrtiles;j++){				
+				if(tiles[i][j] instanceof FloorTile){					
+					if (dice.nextInt(10) < 6){						
+						// Avoid corners. 
+						if (i==1 && j==1 || i==1 && j==2 || i==2 && j==1 || i==13 && j==2 || i==12 && j==1 || i==13 && j==1 
+							|| i==13 && j==12 || i==13 && j==13 || i==12 && j==13 || i==1 && j==12 || i==1 & j==13 || i==2 && j==13){
+							//Do nothing. 
+						}else {
+							tiles[i][j] = new Block(i,j,gamecont,nrtiles).setImmovable(false).setImg(removableWall);
+						}
 					}
 				}
 			}
 		}
 	}
-
-
 
 	@Override
 	public void render(GameContainer c, StateBasedGame game, Graphics g)
@@ -197,7 +204,6 @@ public class PlayState extends BasicGameState {
 				player[i].hit();
 			}
 			player[i].setAccel(accel);
-
 			player[i].update(c, delta, this);
 		}
 

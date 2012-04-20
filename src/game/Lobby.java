@@ -39,6 +39,7 @@ public class Lobby extends BasicGameState {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
+		
 		menu.draw(0,0);
 		for(int i= 0; i < b.length;i++){
 			b[i].render(container, game, g);

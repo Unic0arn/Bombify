@@ -36,6 +36,8 @@ public class Block implements Square{
 		posy = container.getHeight()/tiles * y;
 
 	}
+	
+	//Block that can't move. 
 	public Block setImmovable(boolean b){
 		immovable = b;
 		return this;
