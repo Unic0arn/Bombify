@@ -42,14 +42,9 @@ public class OuterWall implements Square {
 	}
 
 	@Override
-	public void setImg(Image i) {
+	public OuterWall setImg(Image i) {
 		img = i;
-	}
-
-	@Override
-	public boolean collides(Player p) {
-		// TODO Auto-generated method stub
-		return false;
+		return this;
 	}
 
 }
