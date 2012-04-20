@@ -84,7 +84,7 @@ public class PlayState extends BasicGameState {
 		parseSettings(); // Start by parsing all the settings.
 
 		//Assign the images.
-		outerBrick = new Image("res/wall.png");
+		outerBrick = new Image("res/wall3.png");
 		floorTile = new Image("res/metal.png");
 		concrete = new Image("res/concrete.png");
 		removableWall = new Image("res/rock.png");

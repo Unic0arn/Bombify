@@ -20,7 +20,7 @@ import org.newdawn.slick.Image;
  */
 public class Lobby extends BasicGameState {
 	Button[] b; // An array of buttons.
-	private Image menu = null; 
+	private Image menu = null, start=null, settings=null; 
 
 	public Lobby(){
 
@@ -29,21 +29,26 @@ public class Lobby extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		menu = new Image("res/menu.png");
+		start = new Image("res/start.png");
+		settings = new Image("res/settings.png");
 		
-		b = new Button[2];
-		b[0] = new Button(200,250,100,50,"Game");
-		b[1] = new Button(200,300,100,50,"Menu");
-		b[0].setShortCut(Constants.GAME);
-		b[1].setShortCut(Constants.SETTINGMENU);
-		b[1].setButtonColor(Color.red);
+//		b = new Button[3];
+//		b[0] = new Button(200,150,100,50, "MAIN");
+//		b[1] = new Button(200,250,100,50,"Game");
+//		b[2] = new Button(200,300,100,50,"Settings");		
+//		b[1].setShortCut(Constants.GAME);
+//		b[2].setShortCut(Constants.SETTINGMENU);
+//		b[2].setButtonColor(Color.red);
 	}
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {		
 		menu.draw(0,0);
-		for(int i= 0; i < b.length;i++){
-			b[i].render(container, game, g);
-		}
+		start.draw(100, 150);
+		settings.draw(100, 250);
+//		for(int i= 0; i < b.length;i++){
+//			b[i].render(container, game, g);
+//		}
 	}
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
@@ -51,14 +56,14 @@ public class Lobby extends BasicGameState {
 		
 		Input in = container.getInput();
 
-		if(in.isMousePressed(0)){
-			Vector2f mousePos = new Vector2f( in.getAbsoluteMouseX(), in.getAbsoluteMouseY());
-			for(int i= 0; i < b.length;i++){
-				if(b[i].isClicked(mousePos)){
-					game.enterState(b[i].getShortCut());
-				}
-			}
-		}
+//		if(in.isMousePressed(0)){
+//			Vector2f mousePos = new Vector2f( in.getAbsoluteMouseX(), in.getAbsoluteMouseY());
+//			for(int i= 0; i < b.length;i++){
+//				if(b[i].isClicked(mousePos)){
+//					game.enterState(b[i].getShortCut());
+//				}
+//			}
+//		}
 	}
 	@Override
 	public int getID() {

@@ -7,6 +7,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.Image;
 
 /**
  * This is going to be a settings panel!
@@ -14,6 +15,8 @@ import org.newdawn.slick.state.StateBasedGame;
  *
  */
 public class SettingsMenu extends BasicGameState{
+	private Image menu = null; 
+	
 	public int getID() {
 		return Constants.SETTINGMENU;
 	}
@@ -21,21 +24,18 @@ public class SettingsMenu extends BasicGameState{
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		// TODO Auto-generated method stub
-
+		menu = new Image("res/menu.png");
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
-		// TODO Auto-generated method stub
-
+		menu.draw(0,0);
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
 		// TODO Auto-generated method stub
-
 	}
 }
