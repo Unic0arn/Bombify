@@ -11,6 +11,7 @@ import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.gui.MouseOverArea;
 /**
  * A lobby to welcome the player when first starting the application.
  * Contains buttons with shortcuts to the game or settings.
@@ -20,7 +21,8 @@ import org.newdawn.slick.Image;
  */
 public class Lobby extends BasicGameState {
 	Button[] b; // An array of buttons.
-	private Image menu = null, start=null, settings=null; 
+	private Image menu = null, start=null, main=null, settings=null; 
+	private MouseOverArea m; 
 
 	public Lobby(){
 
@@ -30,40 +32,38 @@ public class Lobby extends BasicGameState {
 			throws SlickException {
 		menu = new Image("res/menu.png");
 		start = new Image("res/start.png");
+		main = new Image("res/main.png");
 		settings = new Image("res/settings.png");
 		
-//		b = new Button[3];
-//		b[0] = new Button(200,150,100,50, "MAIN");
-//		b[1] = new Button(200,250,100,50,"Game");
-//		b[2] = new Button(200,300,100,50,"Settings");		
-//		b[1].setShortCut(Constants.GAME);
-//		b[2].setShortCut(Constants.SETTINGMENU);
-//		b[2].setButtonColor(Color.red);
+		b = new Button[3];
+		b[0] =  new Button(100, 200, 200, 100, main);
+		b[1] = new Button(100, 300, 200, 100, start);
+		b[2] = new Button(100,400,200,100,settings);		
+		b[1].setShortCut(Constants.GAME);
+		b[2].setShortCut(Constants.SETTINGMENU);
+		b[2].setButtonColor(Color.red);
 	}
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {		
 		menu.draw(0,0);
-		start.draw(100, 150);
-		settings.draw(100, 250);
-//		for(int i= 0; i < b.length;i++){
-//			b[i].render(container, game, g);
-//		}
+		for(int i= 0; i < b.length;i++){
+			b[i].render(container, game, g);
+		}
 	}
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
-		
 		Input in = container.getInput();
-
-//		if(in.isMousePressed(0)){
-//			Vector2f mousePos = new Vector2f( in.getAbsoluteMouseX(), in.getAbsoluteMouseY());
-//			for(int i= 0; i < b.length;i++){
-//				if(b[i].isClicked(mousePos)){
-//					game.enterState(b[i].getShortCut());
-//				}
-//			}
-//		}
+		
+		if(in.isMousePressed(0)){
+			Vector2f mousePos = new Vector2f( in.getAbsoluteMouseX(), in.getAbsoluteMouseY());
+			for(int i= 0; i < b.length;i++){
+				if(b[i].isClicked(mousePos)){
+					game.enterState(b[i].getShortCut());
+				}
+			}
+		}
 	}
 	@Override
 	public int getID() {
