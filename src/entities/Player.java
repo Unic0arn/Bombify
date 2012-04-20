@@ -3,6 +3,8 @@ package entities;
 import game.PlayState;
 import map.FloorTile;
 import map.Block;
+import map.Square;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -17,9 +19,10 @@ public class Player implements Renderable {
 	FloorTile goal;
 	Vector2f pos;
 	Vector2f velo = new Vector2f(0, 0);
-	Vector2f accel = new Vector2f(0, 0);
+	Vector2f direction = new Vector2f(0, 0);
 	boolean hitting = false;
 	boolean moving = true;
+	
 
 	public Player(FloorTile tile) {
 		this.tile = tile;
@@ -29,15 +32,19 @@ public class Player implements Renderable {
 
 	public boolean update(GameContainer c, int delta, PlayState p) {
 		if(!moving) {
-			if(!accel.equals(new Vector2f(0,0))){
-				if(p.getTiles()[(int) (tile.getGridx() + accel.x)][(int) (tile.getGridy() + accel.y)] instanceof FloorTile){
-					goal = (FloorTile) p.getTiles()[(int) (tile.getGridx() + accel.x)][(int) (tile.getGridy() + accel.y)];
+			if(!direction.equals(new Vector2f(0,0))){
+				int destinationx = (int) (tile.getGridx() +  direction.x);
+				int destinationy = (int) (tile.getGridy() + direction.y); 
+				Square s = p.getTiles()[destinationx][destinationy];
+				
+				
+				if(isFloor(s)){
+					goal = (FloorTile)s;
 					moving = true;
 				}
 				if(hitting){
-					if(p.getTiles()[(int) (tile.getGridx() + accel.x)][(int) (tile.getGridy() + accel.y)] instanceof Block){
-						Block b = (Block) p.getTiles()[(int) (tile.getGridx() + accel.x)][(int) (tile.getGridy() + accel.y)];	
-						
+					if(isBlock(s)){
+						Block b = (Block)s;	
 						b.destroy(p);
 					}
 					hitting = false;
@@ -45,31 +52,36 @@ public class Player implements Renderable {
 			}
 			
 		}else{
-			if(goal.getMiddle().copy().sub(pos).scale(0.1f).length()<0.1){
+			if(goal.getMiddle().copy().sub(pos).length()<0.1){
 				moving  = false;
 				tile = goal;
 			}
 			else{
-				velo = (goal.getMiddle().copy().sub(pos).scale(0.5f));
+				velo = (goal.getMiddle().copy().sub(pos).scale(0.3f));
 				pos.add(velo);
 			}
 		}
 		return true;
 	}
+	
+	private boolean isFloor(Square s){
+		return s instanceof FloorTile; 
+	}
+	
+	private boolean isBlock(Square s){
+		return s instanceof Block; 
+	}
 
 	@Override
 	public void render(GameContainer c, Graphics g) {
 		g.setColor(Color.green);
-
 		g.fill(new Circle(pos.x, pos.y, 10));
 	}
 
-	public void setAccel(Vector2f a) {
-		accel = a;
+	public void setDirection(Vector2f a) {
+		direction = a;
 	}
-	public void setSpeed(Vector2f a){
-		velo = a;
-	}
+	
 	public Vector2f getPos() {
 		return pos;
 	}

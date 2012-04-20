@@ -38,8 +38,9 @@ public class PlayState extends BasicGameState {
 	int players; // The amount of players 1-4
 	int hitCounter = 0;
 
-	private Image outerBrick = null, concrete = null,floorTile = null, removableWall = null; 
-	int nrtiles = 15; // must be odd otherwise map is weird.
+	private Image outerBrick = null, concrete = null,floorTile = null, 
+			removableWall = null, bomb = null; 
+	int nrtiles = 15; // Odd number = nice field 
 
 	/**
 	 * Creates a new game with the desired settings.
@@ -64,10 +65,9 @@ public class PlayState extends BasicGameState {
 			playerControls.put("P"+(i+1)+"W",Integer.parseInt(gameSettings.get("P"+(i+1)+"W")));
 			playerControls.put("P"+(i+1)+"E",Integer.parseInt(gameSettings.get("P"+(i+1)+"E")));
 			playerControls.put("P"+(i+1)+"B",Integer.parseInt(gameSettings.get("P"+(i+1)+"B")));
-
-
 		}
 	}
+	
 
 	@Override
 	public int getID() {
@@ -88,6 +88,7 @@ public class PlayState extends BasicGameState {
 		floorTile = new Image("res/metal.png");
 		concrete = new Image("res/concrete.png");
 		removableWall = new Image("res/wall2.png");
+		bomb = new Image("res/bomb.png");
 
 
 		//Creates the players and gives them positions.
@@ -96,10 +97,11 @@ public class PlayState extends BasicGameState {
 		//Defines the tiles.
 		tiles = new Square[nrtiles][nrtiles];
 
-		/*
-		 * Quite complex "algorithm" to decide where walls and tiles 
-		 * should be placed.
-		 * 
+		
+		/**********************************************
+		 * This algorithm decides where walls, concrete
+		 * and floor should be in a xy-coordinate where
+		 * x is x-axis and y is y-axis. 
 		 */
 		for(int x = 0;x<nrtiles;x++){
 			for(int y = 0;y<nrtiles;y++){
@@ -117,7 +119,10 @@ public class PlayState extends BasicGameState {
 				}
 			}
 		}
-		//Creates the players and gives them positions.
+		
+		/************************************************
+		 *  Creates the players and gives them positions.
+		 */
 		player = new Player[players];
 		System.out.println(tiles[1][1]);
 		FloorTile ft = (FloorTile) tiles[1][1];
@@ -130,13 +135,15 @@ public class PlayState extends BasicGameState {
 		player[1] = new Player(ft);	
 
 		Random dice = new Random();
-		/**
+		
+		/*******************************************
 		 * Adds random walls instead of a FloorTile. 
 		 */
 		for(int i = 0; i< nrtiles;i++){
 			for(int j = 0; j< nrtiles;j++){				
 				if(tiles[i][j] instanceof FloorTile){					
 					if (dice.nextInt(10) < 6){						
+						
 						// Avoid corners. 
 						if (i==1 && j==1 || i==1 && j==2 || i==2 && j==1 || i==13 && j==2 || i==12 && j==1 || i==13 && j==1 
 							|| i==13 && j==12 || i==13 && j==13 || i==12 && j==13 || i==1 && j==12 || i==1 & j==13 || i==2 && j==13){
@@ -159,8 +166,7 @@ public class PlayState extends BasicGameState {
 		renderPlayers(c,g);
 	}
 
-
-
+	
 	@Override
 	public void update(GameContainer c, StateBasedGame game, int delta)
 			throws SlickException {
@@ -187,33 +193,24 @@ public class PlayState extends BasicGameState {
 	}
 	private void updatePlayers(GameContainer c, int delta, Input in) {
 		for(int i = 0; i < player.length; i++){
-			Vector2f accel = new Vector2f(0, 0);
+			Vector2f direction = new Vector2f(0, 0);
 			if (in.isKeyDown(playerControls.get("P"+(i+1)+"N"))) {
-				accel.add(new Vector2f(0, -1));
+				direction.add(new Vector2f(0, -1));
 			}
 			else if (in.isKeyDown(playerControls.get("P"+(i+1)+"S"))) {
-				accel.add(new Vector2f(0, 1));
+				direction.add(new Vector2f(0, 1));
 			}
 			else if (in.isKeyDown(playerControls.get("P"+(i+1)+"W"))) {
-				accel.add(new Vector2f(-1, 0));
+				direction.add(new Vector2f(-1, 0));
 			}
 			else if (in.isKeyDown(playerControls.get("P"+(i+1)+"E"))) {
-				accel.add(new Vector2f(1, 0));
+				direction.add(new Vector2f(1, 0));
 			}
 			if (in.isKeyDown(playerControls.get("P"+(i+1)+"B"))) {
 				player[i].hit();
 			}
-			player[i].setAccel(accel);
+			player[i].setDirection(direction);
 			player[i].update(c, delta, this);
-		}
-
-		for(int i = 0; i < player.length; i++){
-			for(int j = 0; j < player.length; j++){
-				if(player[0].intersects(player[1].getEllipse())){
-					hitCounter++;
-					System.out.println("OMG YOU HIT HIM!!! " + hitCounter);
-				}
-			}
 		}
 	}
 	private void updateBombs(GameContainer c, int delta, Input in) {

@@ -29,6 +29,7 @@ public class Lobby extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		menu = new Image("res/menu.png");
+		
 		b = new Button[2];
 		b[0] = new Button(200,250,100,50,"Game");
 		b[1] = new Button(200,300,100,50,"Menu");
@@ -38,8 +39,7 @@ public class Lobby extends BasicGameState {
 	}
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
-			throws SlickException {
-		
+			throws SlickException {		
 		menu.draw(0,0);
 		for(int i= 0; i < b.length;i++){
 			b[i].render(container, game, g);
