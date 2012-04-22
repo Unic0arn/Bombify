@@ -1,18 +1,20 @@
 package guiParts;
 
 
-import org.newdawn.slick.Color;
+//import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Rectangle;
+//import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.StateBasedGame;
 /**
- * A button that can either have an image or a string
- * @author Fredrik
+ * This is a helper class for Lobby and SettingsMenu
+ * to navigate the user for the right option. 
+ * @author Fredrik & Victor
+ * @version 2012-04-22
  *
  */
 public class Button {
@@ -20,8 +22,8 @@ public class Button {
 	private  String buttonString; //What should be written on the button.
 	private int shortcut; //Where this button leads, the constants are in the Constants class.
 	private Image img; // The image on the button.
-	private Color buttonColor = Color.blue,
-			stringColor = Color.black; // Colors in case an image is missing.
+//	private Color buttonColor = Color.blue,
+//			stringColor = Color.black; // Colors in case an image is missing.
 	/**
 	 * Creates a button at the specified location with the specified size.
 	 * @param x - The x-Position of the button relative to the game-window
@@ -96,13 +98,13 @@ public class Button {
 					img.getWidth(),
 					img.getHeight());
 		}
-		else{
-			g.setColor(buttonColor);	
-			g.fill(new Rectangle(posx,posy,sizex,sizey));
-			g.setColor(stringColor);
-
-			g.drawString(buttonString, posx, posy);
-		}
+//		else{
+//			g.setColor(buttonColor);	
+//			g.fill(new Rectangle(posx,posy,sizex,sizey));
+//			g.setColor(stringColor);
+//
+//			g.drawString(buttonString, posx, posy);
+//		}
 	}
 	/**
 	 * Set the shortcut to where this button leads.
@@ -138,12 +140,12 @@ public class Button {
 	public void setImage(Image im) {
 		img = im;
 	}
-	public void setButtonColor(Color c){
-		buttonColor = c;
-	}
-	public void setStringColor(Color c){
-		stringColor = c;
-	}
+//	public void setButtonColor(Color c){
+//		buttonColor = c;
+//	}
+//	public void setStringColor(Color c){
+//		stringColor = c;
+//	}
 	
 	public void quit(GameContainer c) {
 		Input in = c.getInput();

@@ -56,6 +56,7 @@ public class Lobby extends BasicGameState {
 		if(in.isMousePressed(0)){
 			Vector2f mousePos = new Vector2f( in.getAbsoluteMouseX(), in.getAbsoluteMouseY());
 			for(int i= 0; i < b.length;i++){
+				
 				if(b[i].isClicked(mousePos)){
 					game.enterState(b[i].getShortCut());
 				}
