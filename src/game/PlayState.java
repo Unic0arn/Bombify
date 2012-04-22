@@ -265,6 +265,11 @@ public class PlayState extends BasicGameState {
 
 
 	}
+	
+	/**
+	 * Removes temporary bricks. 
+	 * @param b
+	 */
 	public void removeBomb(Bomb b) { 
 		bombs.remove(b);
 		int tilex = b.getTile().getGridx();
@@ -272,11 +277,14 @@ public class PlayState extends BasicGameState {
 		int bombSize = b.getPlayer().getBombSize();
 		
 		for (int i = bombSize*-1;i<bombSize+1;i++){
-			for (int j = bombSize*1;j<bombSize+1;j++){
-				if(tiles[tilex+i][tiley+j] instanceof Block){
-					Block block = (Block)tiles[tilex+1][tiley+1];
-					block.destroy(this);
-				}
+			if(tiles[tilex+i][tiley] instanceof Block){
+				Block block = (Block)tiles[tilex+i][tiley];	
+				block.destroy(this);
+			}
+			
+			if(tiles[tilex][tiley+i] instanceof Block){
+				Block block = (Block)tiles[tilex][tiley+i];	
+				block.destroy(this);
 			}
 		}
 	}
