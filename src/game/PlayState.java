@@ -276,13 +276,14 @@ public class PlayState extends BasicGameState {
 		int bombSize = b.getPlayer().getBombSize();
 		
 		Random dice = new Random(); 
+		int a = dice.nextInt(15);
 		
 		for (int i = bombSize*-1;i<bombSize+1;i++){
 			if(tiles[tilex+i][tiley] instanceof Block){
 				Block block = (Block)tiles[tilex+i][tiley];	
 				block.destroy(this);
 				
-				if (dice.nextInt(10) == 2) {
+				if (a == 2) {
 					tiles[tilex][tiley] = new FloorTile(tilex,tiley,gamecont,nrtiles).setImg(slow);
 				}
 			}
@@ -291,7 +292,7 @@ public class PlayState extends BasicGameState {
 				Block block = (Block)tiles[tilex][tiley+i];	
 				block.destroy(this);
 				
-				if (dice.nextInt(10) == 2) {
+				if (a == 2) {
 					tiles[tilex][tiley] = new FloorTile(tilex,tiley, gamecont,nrtiles).setImg(slow);	
 				}
 				

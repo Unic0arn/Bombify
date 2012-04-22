@@ -5,13 +5,11 @@ import map.FloorTile;
 import map.Square;
 
 import org.newdawn.slick.Animation;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Vector2f;
 
 public class Player implements Renderable {
@@ -20,7 +18,6 @@ public class Player implements Renderable {
 	int bombTime = 1; //in seconds
 	int bombSize = 1;
 	int lives = 1;
-	int playerNumber = 1;
 	FloorTile tile, goal;
 	Vector2f pos, velo = new Vector2f(0, 0),direction = new Vector2f(0, 0);
 	boolean hitting = false,
@@ -28,22 +25,21 @@ public class Player implements Renderable {
 
 	Image bomberman;
 	int posx,posy,sizex,sizey;
-	ResourceManager test;
 	SpriteSheet ss;
 	Animation anime; 
 
-	public Player(FloorTile tile) {//throws SlickException {		
+	public Player(FloorTile tile){
 		this.tile = tile;
 		pos = tile.getMiddle();
 		goal = tile;
 		
 		try {
-			ss = new SpriteSheet("/res/Bomberman.gif", 30, 30);
+			ss = new SpriteSheet("/res/b.png", 20, 30);
+			anime = new Animation(ss,0,0,0,0,true,300,true);
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		anime = new Animation(ss,0,0,0,0,true,10,true);
+		}	
 	}
 
 	public boolean update(GameContainer c, int delta, PlayState p) throws SlickException {		
@@ -70,39 +66,28 @@ public class Player implements Renderable {
 				p.createBomb(this,tile);
 				hitting = false;
 			}
-			anime = new Animation(ss,0,0,0,0,true,120,true);
-		}else{
+		}
+		else{
+			//Right
 			if(direction.equals(new Vector2f(1,0))){
-				anime = new Animation(ss,
-						0+(playerNumber -1)*3,
-						2+(playerNumber -1)*4 ,
-						0+2+(playerNumber -1)*3,
-						2+4+(playerNumber -1)*4 ,
-						true,120,true);
+				anime = new Animation(ss,9,0,9,0,true, 300,true);
 			}
+			
+			//Left
 			else if(direction.equals(new Vector2f(-1,0))){
-				anime = new Animation(ss,
-						0+(playerNumber -1)*3,
-						1+(playerNumber -1)*4 ,
-						0+2+(playerNumber -1)*3,
-						1+4+(playerNumber -1)*4 ,
-						true,120,true);
+				anime = new Animation(ss,6,0,8,0,true,300,true);
 			}
+
+			//Down
 			else if(direction.equals(new Vector2f(0,1))){
-				anime = new Animation(ss,
-						0+(playerNumber -1)*3,
-						0+(playerNumber -1)*4 ,
-						0+2+(playerNumber -1)*3,
-						0+4+(playerNumber -1)*4 ,
-						true,120,true);
+				anime = new Animation(ss,0,0,1,0,true,300,true);
+
 			}
+			
+			//Up
 			else if(direction.equals(new Vector2f(0,-1))){
-				anime = new Animation(ss,
-						0+(playerNumber -1)*3,
-						3+(playerNumber -1)*4 ,
-						0+2+(playerNumber -1)*3,
-						3+4+(playerNumber -1)*4 ,
-						true,120,true);
+				anime = new Animation(ss,3,0,4,0,true,300,true);
+
 			}
 			
 			if(goal.getMiddle().copy().sub(pos).length()<0.1){
