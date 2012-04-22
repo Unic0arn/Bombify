@@ -17,8 +17,9 @@ import org.newdawn.slick.geom.Vector2f;
 public class Player implements Renderable {
 	int placeableBombs = 1;
 	int speed = 3;
-	int bombTime = 1; //in seconds
+	int bombTime = 2; //in seconds
 	int bombSize = 1;
+	int animationspeed = 500; 
 	int lives = 1;
 	int playerNumber = 1;
 	FloorTile tile, goal;
@@ -34,7 +35,7 @@ public class Player implements Renderable {
 
 	public Player(FloorTile tile) {//throws SlickException {		
 		this.tile = tile;
-		pos = tile.getMiddle();
+		pos = tile.getCorner();
 		goal = tile;
 		try {
 			ss = new SpriteSheet("/res/lol.png",32,32);
@@ -43,24 +44,22 @@ public class Player implements Renderable {
 			e.printStackTrace();
 		}
 		anime = new Animation(ss,0,0,0,0,true,200,true);
+		
 	}
 
 	public boolean update(GameContainer c, int delta, PlayState p) throws SlickException {
-//		sizex = (c.getWidth()/tiles);
-//		sizey = (c.getHeight()/tiles);
-//		posx = (c.getWidth()/tiles * tile.getGridx());
-//		posy = (c.getHeight()/tiles *tile.getGridy());
+		sizex = (c.getWidth()/p.getTiles().length);
+		sizey = (c.getHeight()/p.getTiles().length);
+		//posx = (c.getWidth()/p.getTiles().length * tile.getGridx());
+		//posy = (c.getHeight()/p.getTiles().length *tile.getGridy());
 
-		//tileSheet = new SpriteSheet("res/Bomberman.gif", tile.getGridx(), tile.getGridy(), 100);
-		//anime = new Animation(tileSheet, 0, 0, 10, 10, false, 100, false);
-		
 		if(!moving) {
 			if(!direction.equals(new Vector2f(0,0))){
 				int destinationx = (int) (tile.getGridx() +  direction.x);
 				int destinationy = (int) (tile.getGridy() + direction.y); 
 				Square s = p.getTiles()[destinationx][destinationy];
 
-
+			
 				if(isFloor(s)){					
 					goal = (FloorTile)s;					
 					moving = true;
@@ -76,16 +75,19 @@ public class Player implements Renderable {
 			}else if(hitting){
 				p.createBomb(this,tile);
 				hitting = false;
+			
 			}
-			anime = new Animation(ss,0,0,0,0,true,120,true);
+			anime.stop();
+			//anime = new Animation(ss,0,0,0,0,true,animationspeed,true);
 		}else{
+			anime.start();
 			if(direction.equals(new Vector2f(1,0))){
 				anime = new Animation(ss,
 						0+(playerNumber -1)*3,
 						2+(playerNumber -1)*4 ,
 						0+2+(playerNumber -1)*3,
 						2+4+(playerNumber -1)*4 ,
-						true,120,true);
+						true,animationspeed,true);
 			}
 			else if(direction.equals(new Vector2f(-1,0))){
 				anime = new Animation(ss,
@@ -93,7 +95,7 @@ public class Player implements Renderable {
 						1+(playerNumber -1)*4 ,
 						0+2+(playerNumber -1)*3,
 						1+4+(playerNumber -1)*4 ,
-						true,120,true);
+						true,animationspeed,true);
 			}
 			else if(direction.equals(new Vector2f(0,1))){
 				anime = new Animation(ss,
@@ -101,7 +103,7 @@ public class Player implements Renderable {
 						0+(playerNumber -1)*4 ,
 						0+2+(playerNumber -1)*3,
 						0+4+(playerNumber -1)*4 ,
-						true,120,true);
+						true,animationspeed,true);
 			}
 			else if(direction.equals(new Vector2f(0,-1))){
 				anime = new Animation(ss,
@@ -109,7 +111,7 @@ public class Player implements Renderable {
 						3+(playerNumber -1)*4 ,
 						0+2+(playerNumber -1)*3,
 						3+4+(playerNumber -1)*4 ,
-						true,120,true);
+						true,animationspeed,true);
 			}
 			
 			if(goal.getMiddle().copy().sub(pos).length()<0.1){
@@ -134,22 +136,11 @@ public class Player implements Renderable {
 
 	@Override
 	public void render(GameContainer c, Graphics g) {		
-//		g.drawImage(img,
-//				posx,
-//				posy,
-//				posx+sizex,
-//				posy+sizey,
-//				0,
-//				0,
-//				img.getWidth(),
-//				img.getHeight());
-			
-		//anime = test.getAnimation("1");
-		g.drawAnimation(anime, pos.x, pos.y);
-		//g.setColor(Color.green);
-		//g.fill(new Circle(pos.x, pos.y, 10));
+		g.drawAnimation(anime, pos.x-sizex/2f, pos.y-sizey/2f);
 	}
-
+	public Vector2f getMiddle(){
+		return new Vector2f(posx+(sizex/2f), posy+(sizey/2f));
+	}
 	public void setDirection(Vector2f a) {
 		direction = a;
 	}
