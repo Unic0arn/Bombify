@@ -255,23 +255,26 @@ public class PlayState extends BasicGameState {
 	public ArrayList<Bomb> getBombs(){
 		return bombs;
 	}
-	public void removeWall(Block b) {
-		tiles[b.getGridx()][b.getGridy()] = new FloorTile(b.getGridx(),b.getGridy(),gamecont,nrtiles).setImg(floorTile);
-	}
-	public void createBomb(Player p, FloorTile tile) {
 
+	public void removeWall(Block b) {
+		tiles[b.getGridx()][b.getGridy()] = new FloorTile(b.getGridx(),b.getGridy(),gamecont,nrtiles).setImg(floorTile);		
+	}
+
+	public void createBomb(Player p, FloorTile tile) {
 		bombs.add(new Bomb(gamecont, p, bomb, tile, nrtiles));
 
+
 	}
-	public void removeBomb(Bomb b) {
+	public void removeBomb(Bomb b) { 
 		bombs.remove(b);
 		int tilex = b.getTile().getGridx();
 		int tiley = b.getTile().getGridy();
 		int bombSize = b.getPlayer().getBombSize();
+		
 		for (int i = bombSize*-1;i<bombSize+1;i++){
-			for (int j = bombSize*-1;j<bombSize+1;j++){
+			for (int j = bombSize*1;j<bombSize+1;j++){
 				if(tiles[tilex+i][tiley+j] instanceof Block){
-					Block block = (Block)tiles[tilex+i][tiley+j];	
+					Block block = (Block)tiles[tilex+1][tiley+1];
 					block.destroy(this);
 				}
 			}

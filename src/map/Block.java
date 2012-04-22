@@ -36,6 +36,14 @@ public class Block implements Square{
 		posy = container.getHeight()/tiles * y;
 	}
 	
+	/**
+	 * Checks for immovable walls or noth. 
+	 * @return true/false. 
+	 */
+	public boolean isImmovable() {
+		return immovable;
+	}
+	
 	//Block that can't move. 
 	public Block setImmovable(boolean b){
 		immovable = b;
