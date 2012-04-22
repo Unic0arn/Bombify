@@ -41,7 +41,7 @@ public class PlayState extends BasicGameState {
 	Square[][] tiles; //A grid of all the "tiles" in the game.
 	ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 	ArrayList<Item> item = new ArrayList<Item>();
-	ArrayList<Player> players = new ArrayList<Player>();
+	Player[] players;
 	int nrplayers; // The amount of players 1-4
 	int hitCounter = 0;
 	private Image outerBrick, concrete, floorTile, removableWall, bomb, slow; 
@@ -103,15 +103,22 @@ public class PlayState extends BasicGameState {
 		/************************************************
 		 *  Creates the players and gives them positions.
 		 */
-		//System.out.println(tiles[1][1]);
+		players = new Player[nrplayers];
 		FloorTile ft = (FloorTile) tiles[1][1];
-		//System.out.println(tiles[1][1]);
+		players[0] = new Player(ft);
+		if(nrplayers > 1){
+			ft = (FloorTile) tiles[nrtiles-2][nrtiles-2];
+			players[1] = new Player(ft);	
+		}
+		if(nrplayers > 2){
+			ft = (FloorTile) tiles[1][nrtiles-2];
+			players[2] = new Player(ft);	
+		}
+		if(nrplayers > 3){
+			ft = (FloorTile) tiles[nrtiles-2][1];
+			players[3] = new Player(ft);	
+		}
 
-
-		//System.out.println(ft.getGridx());		
-		players.add(new Player(ft));
-		ft = (FloorTile) tiles[nrtiles-2][nrtiles-2];
-		players.add(new Player(ft));	
 
 		Random dice = new Random();
 
@@ -169,35 +176,37 @@ public class PlayState extends BasicGameState {
 		}
 	}
 	private void updatePlayers(GameContainer c, int delta, Input in) {
-		for(int i = 0; i < players.size(); i++){
-			Vector2f direction = new Vector2f(0, 0);
-			if (in.isKeyDown(playerControls.get("P"+(i+1)+"N"))) {
-				direction.add(new Vector2f(0, -1));
-			}
-			else if (in.isKeyDown(playerControls.get("P"+(i+1)+"S"))) {
-				direction.add(new Vector2f(0, 1));
-			}
-			else if (in.isKeyDown(playerControls.get("P"+(i+1)+"W"))) {
-				direction.add(new Vector2f(-1, 0));
-			}
-			else if (in.isKeyDown(playerControls.get("P"+(i+1)+"E"))) {
-				direction.add(new Vector2f(1, 0));
-			}
-			if (in.isKeyDown(playerControls.get("P"+(i+1)+"B"))) {
-				players.get(i).hit();
-			}
-			players.get(i).setDirection(direction);
-			try {
-				players.get(i).update(c, delta, this);
-			} catch (SlickException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		for(int i = 0; i < players.length; i++){
+			if(players[i].isAlive()){
+				Vector2f direction = new Vector2f(0, 0);
+				if (in.isKeyDown(playerControls.get("P"+(i+1)+"N"))) {
+					direction.add(new Vector2f(0, -1));
+				}
+				else if (in.isKeyDown(playerControls.get("P"+(i+1)+"S"))) {
+					direction.add(new Vector2f(0, 1));
+				}
+				else if (in.isKeyDown(playerControls.get("P"+(i+1)+"W"))) {
+					direction.add(new Vector2f(-1, 0));
+				}
+				else if (in.isKeyDown(playerControls.get("P"+(i+1)+"E"))) {
+					direction.add(new Vector2f(1, 0));
+				}
+				if (in.isKeyDown(playerControls.get("P"+(i+1)+"B"))) {
+					players[i].hit();
+				}
+				players[i].setDirection(direction);
+				try {
+					players[i].update(c, delta, this);
+				} catch (SlickException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}
 	private void renderPlayers(GameContainer c, Graphics g) {
-		for(int i = 0; i < players.size(); i++){
-			players.get(i).render(c, g);
+		for(int i = 0; i < players.length; i++){
+			if(players[i].isAlive())players[i].render(c, g);
 		}
 	}
 	private void updateBombs(GameContainer c, int delta, Input in) {
@@ -304,8 +313,5 @@ public class PlayState extends BasicGameState {
 			playerControls.put("P"+(i+1)+"E",Integer.parseInt(gameSettings.get("P"+(i+1)+"E")));
 			playerControls.put("P"+(i+1)+"B",Integer.parseInt(gameSettings.get("P"+(i+1)+"B")));
 		}
-	}
-	public void removePlayer(Player player2) {
-		players.remove(player2);
 	}
 }
