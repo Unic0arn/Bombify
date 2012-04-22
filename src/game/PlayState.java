@@ -95,7 +95,6 @@ public class PlayState extends BasicGameState {
 		bomb = new Image("res/sandBomb.png");
 		slow = new Image("res/slow.png");
 
-
 		//Creates the players and gives them positions.
 		player = new Player[players];
 
@@ -283,18 +282,18 @@ public class PlayState extends BasicGameState {
 				Block block = (Block)tiles[tilex+i][tiley];	
 				block.destroy(this);
 				
-				if (dice.nextInt(10) == 2) {
-					tiles[block.getGridx()][block.getGridy()] = new FloorTile(block.getGridx(),block.getGridy(),gamecont,nrtiles).setImg(slow);	
-				}
+//				if (dice.nextInt(10) == 2) {
+//					tiles[block.getGridx()][block.getGridy()] = new FloorTile(block.getGridx(),block.getGridy(),gamecont,nrtiles).setImg(slow);	
+//				}
 			}
 			
 			if(tiles[tilex][tiley+i] instanceof Block){
 				Block block = (Block)tiles[tilex][tiley+i];	
 				block.destroy(this);
 				
-				if (dice.nextInt(10) == 2) {
-					tiles[block.getGridx()][block.getGridy()] = new FloorTile(block.getGridx(),block.getGridy(),gamecont,nrtiles).setImg(slow);	
-				}
+//				if (dice.nextInt(10) == 2) {
+//					tiles[block.getGridx()][block.getGridy()] = new FloorTile(block.getGridx(),block.getGridy(),gamecont,nrtiles).setImg(slow);	
+//				}
 				
 			}			
 		}	

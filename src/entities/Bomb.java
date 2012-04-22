@@ -24,6 +24,11 @@ public class Bomb implements Renderable {
 
 		posx = (gc.getWidth()/tiles * ft.getGridx());
 		posy = (gc.getHeight()/tiles *ft.getGridy());
+		
+		System.out.println(tile.getGridx());
+		System.out.println(tile.getGridy());
+		System.out.println(sizex);
+		System.out.println(sizey);
 	}
 	@Override
 	public void render(GameContainer c, Graphics g) {

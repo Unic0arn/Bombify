@@ -37,14 +37,15 @@ public class Player implements Renderable {
 		this.tile = tile;
 		pos = tile.getCorner();
 		goal = tile;
+		
 		try {
-			ss = new SpriteSheet("/res/lol.png",32,32);
+			ss = new SpriteSheet("/res/Bomberman.gif", 15, 15);
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		anime = new Animation(ss,0,0,0,0,true,200,true);
-		
+		anime = new Animation(ss,0,0,0,0,true,animationspeed,true);
+	
 	}
 
 	public boolean update(GameContainer c, int delta, PlayState p) throws SlickException {
