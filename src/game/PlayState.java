@@ -269,11 +269,15 @@ public class PlayState extends BasicGameState {
 		int tiley = b.getTile().getGridy();
 		int bombSize = b.getPlayer().getBombSize();
 		for (int i = bombSize*-1;i<bombSize+1;i++){
-			for (int j = bombSize*-1;j<bombSize+1;j++){
-				if(tiles[tilex+i][tiley+j] instanceof Block){
-					Block block = (Block)tiles[tilex+i][tiley+j];	
-					block.destroy(this);
-				}
+			if(tiles[tilex+i][tiley] instanceof Block){
+				Block block = (Block)tiles[tilex+i][tiley];	
+				block.destroy(this);
+			}
+		}
+		for (int i = bombSize*-1;i<bombSize+1;i++){
+			if(tiles[tilex][tiley+i] instanceof Block){
+				Block block = (Block)tiles[tilex][tiley+i];	
+				block.destroy(this);
 			}
 		}
 	}
