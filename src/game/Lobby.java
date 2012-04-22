@@ -19,7 +19,8 @@ import org.newdawn.slick.Image;
  */
 public class Lobby extends BasicGameState {
 	Button[] b; // An array of buttons.
-	private Image menu = null, start=null, main=null, settings=null; 
+	private Image menu, start, settings, quit; 
+	//menu = null, start=null, main=null, settings=null; 
 
 	public Lobby(){
 
@@ -30,10 +31,12 @@ public class Lobby extends BasicGameState {
 		menu = new Image("res/menu.png");
 		start = new Image("res/start.png");
 		settings = new Image("res/settings.png");
+		quit = new Image("res/quit.png");
 		
-		b = new Button[2];
+		b = new Button[3];
 		b[0] = new Button(50, 250, 200, 100, start);
-		b[1] = new Button(50,350,200,100,settings);		
+		b[1] = new Button(50,350,200,100,settings);	
+		b[2] = new Button(50, 450, 200, 100, quit);
 		b[0].setShortCut(Constants.GAME);
 		b[1].setShortCut(Constants.SETTINGMENU);
 	}
@@ -55,6 +58,10 @@ public class Lobby extends BasicGameState {
 			for(int i= 0; i < b.length;i++){
 				if(b[i].isClicked(mousePos)){
 					game.enterState(b[i].getShortCut());
+				}
+				
+				if(b[2].isClicked(mousePos)){
+					b[2].quit(container);
 				}
 			}
 		}

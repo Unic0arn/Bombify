@@ -6,37 +6,53 @@ import map.Block;
 import map.Square;
 
 import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
+ import org.newdawn.slick.GameContainer;
+ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Ellipse;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 public class Player implements Renderable {
-	Ellipse player;
 	int placeableBombs = 1;
 	int speed = 3;
-	int bombTime = 3; //in seconds
+	int bombTime = 2; //in seconds
 	int bombSize = 1;
-	FloorTile tile;
-	FloorTile goal;
+	
+	FloorTile tile, goal;
 	Vector2f pos;
 	Vector2f velo = new Vector2f(0, 0);
 	Vector2f direction = new Vector2f(0, 0);
 	boolean hitting = false;
 	boolean moving = true;
+	
+	//---------TEMP---------
+	Image bomberman;
+	private int tiles = 15; 
+	int posx,posy,sizex,sizey;
+	ResourceManager test;
+	SpriteSheet tileSheet = null;
+	//----------------------------
 
-
-	public Player(FloorTile tile) {
+	public Player(FloorTile tile) throws SlickException {		
 		this.tile = tile;
 		pos = tile.getMiddle();
 		goal = tile;
+		
+		
 	}
 
 	public boolean update(GameContainer c, int delta, PlayState p) throws SlickException {
+		sizex = (c.getWidth()/tiles);
+		sizey = (c.getHeight()/tiles);
+		posx = (c.getWidth()/tiles * tile.getGridx());
+		posy = (c.getHeight()/tiles *tile.getGridy());
+
+	
+		
 		if(!moving) {
 			if(!direction.equals(new Vector2f(0,0))){
 				int destinationx = (int) (tile.getGridx() +  direction.x);
@@ -44,24 +60,25 @@ public class Player implements Renderable {
 				Square s = p.getTiles()[destinationx][destinationy];
 
 
-				if(isFloor(s)){
-					goal = (FloorTile)s;
+				if(isFloor(s)){					
+					goal = (FloorTile)s;					
 					moving = true;
 				}
-				if(hitting){
-					
-					if(isBlock(s)){
-						Block b = (Block)s;	
-						b.destroy(p);
-					}
-					hitting = false;
-				}
+//				if(hitting){
+//					
+//					if(isBlock(s)){
+//						Block b = (Block)s;	
+//						b.destroy(p);
+//					}
+//					hitting = false;
+//				}
 			}else if(hitting){
 				p.createBomb(this,tile);
 				hitting = false;
 			}
 			
 		}else{
+			
 			if(goal.getMiddle().copy().sub(pos).length()<0.1){
 				moving  = false;
 				tile = goal;
@@ -94,17 +111,6 @@ public class Player implements Renderable {
 
 	public Vector2f getPos() {
 		return pos;
-	}
-
-	public Ellipse getEllipse() {
-		return player;
-	}
-
-	public boolean intersects(Shape s) {
-		/*if (player.intersects(s)) {
-			return true;
-		}*/
-		return false;
 	}
 
 	public void hit() {

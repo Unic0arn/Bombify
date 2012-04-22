@@ -20,6 +20,8 @@ public class Block implements Square{
 	boolean immovable =true;
 	private Image img;
 	int gridx,gridy,posx,posy,sizex,sizey;
+	
+	
 	public int getGridx() {
 		return gridx;
 	}

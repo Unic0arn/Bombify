@@ -9,6 +9,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -40,10 +41,9 @@ public class PlayState extends BasicGameState {
 	ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 	int players; // The amount of players 1-4
 	int hitCounter = 0;
-	
 	private Image outerBrick = null, concrete = null,floorTile = null, 
-			removableWall = null, bomb = null; 
-	int nrtiles = 15; // Odd number = nice field 
+			removableWall = null, bomb = null, anim = null; 
+	int nrtiles = 15; // Odd number = nice field
 
 	/**
 	 * Creates a new game with the desired settings.
@@ -87,10 +87,10 @@ public class PlayState extends BasicGameState {
 		parseSettings(); // Start by parsing all the settings.
 
 		//Assign the images.
-		outerBrick = new Image("res/pyrWall.png");
+		outerBrick = new Image("res/wall.png");
 		floorTile = new Image("res/ground.png");
 		concrete = new Image("res/concrete.png");
-		removableWall = new Image("res/rock.png");
+		removableWall = new Image("res/rock.png");		
 		bomb = new Image("res/sandBomb.png");
 
 
@@ -118,7 +118,6 @@ public class PlayState extends BasicGameState {
 
 					tiles[x][y] = new FloorTile(x,y,gc,nrtiles);
 					tiles[x][y].setImg(floorTile);
-
 				}
 			}
 		}
@@ -127,16 +126,16 @@ public class PlayState extends BasicGameState {
 		 *  Creates the players and gives them positions.
 		 */
 		player = new Player[players];
-		System.out.println(tiles[1][1]);
+		//System.out.println(tiles[1][1]);
 		FloorTile ft = (FloorTile) tiles[1][1];
-		System.out.println(tiles[1][1]);
+		//System.out.println(tiles[1][1]);
 
 
-		System.out.println(ft.getGridx());		
+		//System.out.println(ft.getGridx());		
 		player[0] = new Player(ft);
-		ft = (FloorTile) tiles[nrtiles - 2][nrtiles-2];
+		ft = (FloorTile) tiles[nrtiles-2][nrtiles-2];
 		player[1] = new Player(ft);	
-
+		
 		Random dice = new Random();
 		
 		/*******************************************
@@ -157,16 +156,13 @@ public class PlayState extends BasicGameState {
 					}
 				}
 			}
-		}
-		// Tempbomb!!! :)
-		tiles[1][4] = new Block(1,4,gamecont,nrtiles).setImmovable(false).setImg(bomb);
+		}		
 	}
 
 	@Override
 	public void render(GameContainer c, StateBasedGame game, Graphics g)
 			throws SlickException {
-		renderBackground(c,g);
-		
+		renderBackground(c,g);		
 		renderMap(c,g);
 		renderItems(c,g);
 		renderPlayers(c,g);
@@ -237,12 +233,6 @@ public class PlayState extends BasicGameState {
 			player[i].render(c, g);
 		}
 	}
-	/**
-	 * Fixed walls soon to be pictures.
-	 * @param gc
-	 * @param g
-	 * @throws SlickException 
-	 */
 
 	private void renderMap(GameContainer gc, Graphics g) throws SlickException {
 

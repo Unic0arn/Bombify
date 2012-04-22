@@ -13,6 +13,7 @@ public class Bomb implements Renderable {
 	Image img;
 	double timeTil;
 	int posx,posy,sizex,sizey;
+	
 	public Bomb(GameContainer gc, Player player, Image image,FloorTile ft,int tiles){
 		img = image;
 		p = player;
