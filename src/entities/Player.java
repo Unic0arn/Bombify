@@ -38,23 +38,15 @@ public class Player implements Renderable {
 		goal = tile;
 		
 		try {
-			ss = new SpriteSheet("/res/Bomberman.gif", 15, 15);
+			ss = new SpriteSheet("/res/Bomberman.gif", 30, 30);
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		anime = new Animation(ss,0,0,2,0,true,10,false);
+		anime = new Animation(ss,0,0,0,0,true,10,true);
 	}
 
-	public boolean update(GameContainer c, int delta, PlayState p) throws SlickException {
-//		sizex = (c.getWidth()/tiles);
-//		sizey = (c.getHeight()/tiles);
-//		posx = (c.getWidth()/tiles * tile.getGridx());
-//		posy = (c.getHeight()/tiles *tile.getGridy());
-
-		//tileSheet = new SpriteSheet("res/Bomberman.gif", tile.getGridx(), tile.getGridy(), 100);
-		//anime = new Animation(tileSheet, 0, 0, 10, 10, false, 100, false);
-		
+	public boolean update(GameContainer c, int delta, PlayState p) throws SlickException {		
 		if(!moving) {
 			if(!direction.equals(new Vector2f(0,0))){
 				int destinationx = (int) (tile.getGridx() +  direction.x);
@@ -134,18 +126,7 @@ public class Player implements Renderable {
 //	}
 
 	@Override
-	public void render(GameContainer c, Graphics g) {		
-//		g.drawImage(img,
-//				posx,
-//				posy,
-//				posx+sizex,
-//				posy+sizey,
-//				0,
-//				0,
-//				img.getWidth(),
-//				img.getHeight());
-			
-		//anime = test.getAnimation("1");
+	public void render(GameContainer c, Graphics g) {
 		g.drawAnimation(anime, pos.x, pos.y);
 		//g.setColor(Color.green);
 		//g.fill(new Circle(pos.x, pos.y, 10));

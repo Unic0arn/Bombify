@@ -282,18 +282,18 @@ public class PlayState extends BasicGameState {
 				Block block = (Block)tiles[tilex+i][tiley];	
 				block.destroy(this);
 				
-//				if (dice.nextInt(10) == 2) {
-//					tiles[block.getGridx()][block.getGridy()] = new FloorTile(block.getGridx(),block.getGridy(),gamecont,nrtiles).setImg(slow);	
-//				}
+				if (dice.nextInt(10) == 2) {
+					tiles[tilex][tiley] = new FloorTile(tilex,tiley,gamecont,nrtiles).setImg(slow);
+				}
 			}
 			
 			if(tiles[tilex][tiley+i] instanceof Block){
 				Block block = (Block)tiles[tilex][tiley+i];	
 				block.destroy(this);
 				
-//				if (dice.nextInt(10) == 2) {
-//					tiles[block.getGridx()][block.getGridy()] = new FloorTile(block.getGridx(),block.getGridy(),gamecont,nrtiles).setImg(slow);	
-//				}
+				if (dice.nextInt(10) == 2) {
+					tiles[tilex][tiley] = new FloorTile(tilex,tiley, gamecont,nrtiles).setImg(slow);	
+				}
 				
 			}			
 		}	

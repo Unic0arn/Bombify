@@ -24,12 +24,8 @@ public class Bomb implements Renderable {
 
 		posx = (gc.getWidth()/tiles * ft.getGridx());
 		posy = (gc.getHeight()/tiles *ft.getGridy());
-		
-		System.out.println(tile.getGridx());
-		System.out.println(tile.getGridy());
-		System.out.println(sizex);
-		System.out.println(sizey);
 	}
+	
 	@Override
 	public void render(GameContainer c, Graphics g) {
 			
@@ -44,6 +40,7 @@ public class Bomb implements Renderable {
 					img.getHeight());
 		
 	}
+	
 	public void update(GameContainer c, PlayState game, int delta){
 		timeTil = timeTil - delta;
 		//System.out.println(timeTil);
@@ -52,9 +49,11 @@ public class Bomb implements Renderable {
 			//explode();
 		}
 	}
+	
 	public FloorTile getTile(){
 		return tile;
 	}
+	
 	public Player getPlayer(){
 		return p;
 	}
