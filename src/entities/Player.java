@@ -83,7 +83,7 @@ public class Player implements Renderable {
 				anime = new Animation(ss,
 						0+(playerNumber -1)*3,
 						2+(playerNumber -1)*4 ,
-						0+3+(playerNumber -1)*3,
+						0+2+(playerNumber -1)*3,
 						2+4+(playerNumber -1)*4 ,
 						true,120,true);
 			}
@@ -91,7 +91,7 @@ public class Player implements Renderable {
 				anime = new Animation(ss,
 						0+(playerNumber -1)*3,
 						1+(playerNumber -1)*4 ,
-						0+3+(playerNumber -1)*3,
+						0+2+(playerNumber -1)*3,
 						1+4+(playerNumber -1)*4 ,
 						true,120,true);
 			}
@@ -99,7 +99,7 @@ public class Player implements Renderable {
 				anime = new Animation(ss,
 						0+(playerNumber -1)*3,
 						0+(playerNumber -1)*4 ,
-						0+3+(playerNumber -1)*3,
+						0+2+(playerNumber -1)*3,
 						0+4+(playerNumber -1)*4 ,
 						true,120,true);
 			}
@@ -107,7 +107,7 @@ public class Player implements Renderable {
 				anime = new Animation(ss,
 						0+(playerNumber -1)*3,
 						3+(playerNumber -1)*4 ,
-						0+3+(playerNumber -1)*3,
+						0+2+(playerNumber -1)*3,
 						3+4+(playerNumber -1)*4 ,
 						true,120,true);
 			}
