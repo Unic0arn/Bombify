@@ -46,34 +46,25 @@ public class Player implements Renderable {
 
 	public boolean update(GameContainer c, int delta, PlayState p) throws SlickException {		
 
-		//sizex = (c.getWidth()/p.getTiles().length);
-		//sizey = (c.getHeight()/p.getTiles().length);
-		//posx = (c.getWidth()/p.getTiles().length * tile.getGridx());
-		//posy = (c.getHeight()/p.getTiles().length *tile.getGridy());
-
+		sizex = (c.getWidth()/p.getTiles().length);
+		sizey = (c.getHeight()/p.getTiles().length);
 		if(!moving) {
 			if(!direction.equals(new Vector2f(0,0))){
 				int destinationx = (int) (tile.getGridx() +  direction.x);
 				int destinationy = (int) (tile.getGridy() + direction.y); 
 				Square s = p.getTiles()[destinationx][destinationy];
-
-			
-				if(isFloor(s)){					
-					goal = (FloorTile)s;					
-					moving = true;
+				if(isFloor(s)){
+					FloorTile temp = (FloorTile)s;
+					if(!temp.hasPlayer()){
+						goal = (FloorTile)s;					
+						moving = true;
+						tile.setPlayer(null);
+						goal.setPlayer(this);
+					}
 				}
-//				if(hitting){
-//					
-//					if(isBlock(s)){
-//						Block b = (Block)s;	
-//						b.destroy(p);
-//					}
-//					hitting = false;
-//				}
 			}else if(hitting){
 				p.createBomb(this,tile);
 				hitting = false;
-			
 			}
 
 		}
@@ -114,18 +105,13 @@ public class Player implements Renderable {
 	private boolean isFloor(Square s){
 		return s instanceof FloorTile; 
 	}
-
-//	private boolean isBlock(Square s){
-//		return s instanceof Block; 
-//	}
-
 	@Override
 	public void render(GameContainer c, Graphics g) {
-		g.drawAnimation(anime, pos.x, pos.y);
+		g.drawAnimation(anime, pos.x-(sizex/2f), pos.y-(sizey/2f));
 	}
 	
 	public Vector2f getMiddle(){
-		return new Vector2f(posx+(sizex/2f), posy+(sizey/2f));
+		return new Vector2f(posx+(sizex/8f), posy+(sizey/8f));
 	}
 	public void setDirection(Vector2f a) {
 		direction = a;
@@ -145,6 +131,14 @@ public class Player implements Renderable {
 	public double getBombTime() {
 
 		return bombTime;
+	}
+
+	public void hurt(PlayState p) {
+		lives =- 1;
+		if(lives <= 0){
+			System.out.println("I died");
+			p.removePlayer(this);
+		}
 	}
 
 }
