@@ -14,7 +14,7 @@ import org.newdawn.slick.Image;
  * A lobby to welcome the player when first starting the application.
  * Contains buttons with shortcuts to the game or settings.
  * @author Fredrik Hallberg & Victor Dahlin
- * @version 2012-04-19
+ * @version 2012-04-22
  *
  */
 public class Lobby extends BasicGameState {

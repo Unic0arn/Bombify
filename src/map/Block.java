@@ -9,12 +9,10 @@ import org.newdawn.slick.geom.Rectangle;
 import game.PlayState;
 import entities.Player;
 
-
-
 /**
  * A class that contains information about a block in the map.
  * @author Fredrik Hallberg & Victor Dahlin
- * @version 2012-04-16
+ * @version 2012-04-22
  */
 public class Block implements Square{
 	boolean immovable =true;
@@ -36,7 +34,6 @@ public class Block implements Square{
 		sizey=container.getHeight()/tiles;
 		posx = container.getWidth()/tiles * x;
 		posy = container.getHeight()/tiles * y;
-
 	}
 	
 	//Block that can't move. 

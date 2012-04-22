@@ -11,6 +11,9 @@ import settings.*;
 /**
  * The main game container! Distributes all the effort across different
  * "gameStates" which basically are different "windows".
+ * 
+ * @author Fredrik & Victor
+ * @version 2012-04-22
  */
 public class BombifyGame extends StateBasedGame {
 	static SettingsContainer gameSettings; // All the settings of the game stored in a HashMap

@@ -27,7 +27,7 @@ import map.FloorTile;
  * A game that is based on players trying to blow each other up.
  * 
  * @author Fredrik Hallberg & Victor Dahlin
- * @version 2012-04-16
+ * @version 2012-04-22
  *
  */
 

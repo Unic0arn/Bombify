@@ -12,9 +12,11 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.Image;
 
 /**
- * This is going to be a settings panel!
+ *  This SettingsMenu will change state of the screen
+ *  like resolution etc.   
  * 
- * @author Fredrik
+ * @author Fredrik & Victor
+ * @version 2012-04-22
  * 
  */
 public class SettingsMenu extends BasicGameState {
