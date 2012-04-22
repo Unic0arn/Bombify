@@ -59,6 +59,11 @@ public class FloorTile implements Square {
 	public Vector2f getMiddle(){
 		return new Vector2f(posx+(sizex/2f), posy+(sizey/2f));
 	}
+
+	public Vector2f getCorner(){
+		return new Vector2f(posx, posy);
+	}
+	
 	public String toString(){
 		return "[" + gridx + "," + gridy + "]";
 	}
