@@ -2,7 +2,6 @@ package entities;
 
 import game.PlayState;
 import map.FloorTile;
-import map.Block;
 import map.Square;
 
 import org.newdawn.slick.Animation;
@@ -13,8 +12,6 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Circle;
-import org.newdawn.slick.geom.Ellipse;
-import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 public class Player implements Renderable {
@@ -22,27 +19,30 @@ public class Player implements Renderable {
 	int speed = 3;
 	int bombTime = 1; //in seconds
 	int bombSize = 1;
-	
+	int lives = 1;
+	int playerNumber = 1;
 	FloorTile tile, goal;
-	Vector2f pos;
-	Vector2f velo = new Vector2f(0, 0);
-	Vector2f direction = new Vector2f(0, 0);
-	boolean hitting = false;
-	boolean moving = true;
-	
-	//---------TEMP---------
+	Vector2f pos, velo = new Vector2f(0, 0),direction = new Vector2f(0, 0);
+	boolean hitting = false,
+			moving = true;
+
 	Image bomberman;
-	private int tiles = 15; 
 	int posx,posy,sizex,sizey;
 	ResourceManager test;
-	SpriteSheet tileSheet = null;
+	SpriteSheet ss;
 	Animation anime; 
-	//----------------------------
 
 	public Player(FloorTile tile) {//throws SlickException {		
 		this.tile = tile;
 		pos = tile.getMiddle();
 		goal = tile;
+		try {
+			ss = new SpriteSheet("/res/lol.png",32,32);
+		} catch (SlickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		anime = new Animation(ss,0,0,0,0,true,200,true);
 	}
 
 	public boolean update(GameContainer c, int delta, PlayState p) throws SlickException {
@@ -77,8 +77,40 @@ public class Player implements Renderable {
 				p.createBomb(this,tile);
 				hitting = false;
 			}
-			
+			anime = new Animation(ss,0,0,0,0,true,120,true);
 		}else{
+			if(direction.equals(new Vector2f(1,0))){
+				anime = new Animation(ss,
+						0+(playerNumber -1)*3,
+						2+(playerNumber -1)*4 ,
+						0+2+(playerNumber -1)*3,
+						2+4+(playerNumber -1)*4 ,
+						true,120,true);
+			}
+			else if(direction.equals(new Vector2f(-1,0))){
+				anime = new Animation(ss,
+						0+(playerNumber -1)*3,
+						1+(playerNumber -1)*4 ,
+						0+2+(playerNumber -1)*3,
+						1+4+(playerNumber -1)*4 ,
+						true,120,true);
+			}
+			else if(direction.equals(new Vector2f(0,1))){
+				anime = new Animation(ss,
+						0+(playerNumber -1)*3,
+						0+(playerNumber -1)*4 ,
+						0+2+(playerNumber -1)*3,
+						0+4+(playerNumber -1)*4 ,
+						true,120,true);
+			}
+			else if(direction.equals(new Vector2f(0,-1))){
+				anime = new Animation(ss,
+						0+(playerNumber -1)*3,
+						3+(playerNumber -1)*4 ,
+						0+2+(playerNumber -1)*3,
+						3+4+(playerNumber -1)*4 ,
+						true,120,true);
+			}
 			
 			if(goal.getMiddle().copy().sub(pos).length()<0.1){
 				moving  = false;
@@ -111,11 +143,11 @@ public class Player implements Renderable {
 //				0,
 //				img.getWidth(),
 //				img.getHeight());
-		
+			
 		//anime = test.getAnimation("1");
-		//g.drawAnimation(anime, pos.x, pos.y);
-		g.setColor(Color.green);
-		g.fill(new Circle(pos.x, pos.y, 10));
+		g.drawAnimation(anime, pos.x, pos.y);
+		//g.setColor(Color.green);
+		//g.fill(new Circle(pos.x, pos.y, 10));
 	}
 
 	public void setDirection(Vector2f a) {

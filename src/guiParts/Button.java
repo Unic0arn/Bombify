@@ -1,13 +1,13 @@
 package guiParts;
 
 
-//import org.newdawn.slick.Color;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-//import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.StateBasedGame;
 /**
@@ -22,8 +22,8 @@ public class Button {
 	private  String buttonString; //What should be written on the button.
 	private int shortcut; //Where this button leads, the constants are in the Constants class.
 	private Image img; // The image on the button.
-//	private Color buttonColor = Color.blue,
-//			stringColor = Color.black; // Colors in case an image is missing.
+	private Color buttonColor = Color.blue,
+			stringColor = Color.black; // Colors in case an image is missing.
 	/**
 	 * Creates a button at the specified location with the specified size.
 	 * @param x - The x-Position of the button relative to the game-window
@@ -98,13 +98,13 @@ public class Button {
 					img.getWidth(),
 					img.getHeight());
 		}
-//		else{
-//			g.setColor(buttonColor);	
-//			g.fill(new Rectangle(posx,posy,sizex,sizey));
-//			g.setColor(stringColor);
-//
-//			g.drawString(buttonString, posx, posy);
-//		}
+		else{
+			g.setColor(buttonColor);	
+			g.fill(new Rectangle(posx,posy,sizex,sizey));
+			g.setColor(stringColor);
+
+			g.drawString(buttonString, posx, posy);
+		}
 	}
 	/**
 	 * Set the shortcut to where this button leads.
