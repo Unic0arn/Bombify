@@ -46,6 +46,7 @@ public class BombifyGame extends StateBasedGame {
 		//app.setSmoothDeltas(true);
 		//app.setTargetFrameRate(Integer.parseInt(gameSettings.get("MAX_FPS")));
 		app.setTargetFrameRate(60);
+		app.setShowFPS(false);
 		app.setVSync(true);
 		app.start();
 	}

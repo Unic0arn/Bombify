@@ -1,5 +1,4 @@
 package settings;
-
 import guiParts.Button;
 import game.Constants;
 import org.newdawn.slick.GameContainer;

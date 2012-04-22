@@ -17,6 +17,7 @@ import org.newdawn.slick.Image;
 import settings.SettingsContainer;
 
 import entities.Bomb;
+import entities.Item;
 import entities.Player;
 import map.Block; 
 import map.OuterWall;
@@ -39,10 +40,10 @@ public class PlayState extends BasicGameState {
 	Player[] player; //A vector of the players.
 	Square[][] tiles; //A grid of all the "tiles" in the game.
 	ArrayList<Bomb> bombs = new ArrayList<Bomb>();
+	ArrayList<Item> item = new ArrayList<Item>();
 	int players; // The amount of players 1-4
 	int hitCounter = 0;
-	private Image outerBrick = null, concrete = null,floorTile = null, 
-			removableWall = null, bomb = null, anim = null; 
+	private Image outerBrick, concrete, floorTile, removableWall, bomb, slow; 
 	int nrtiles = 15; // Odd number = nice field
 
 	/**
@@ -70,7 +71,7 @@ public class PlayState extends BasicGameState {
 			playerControls.put("P"+(i+1)+"B",Integer.parseInt(gameSettings.get("P"+(i+1)+"B")));
 		}
 	}
-	
+
 
 	@Override
 	public int getID() {
@@ -92,6 +93,7 @@ public class PlayState extends BasicGameState {
 		concrete = new Image("res/concrete.png");
 		removableWall = new Image("res/rock.png");		
 		bomb = new Image("res/sandBomb.png");
+		slow = new Image("res/slow.png");
 
 
 		//Creates the players and gives them positions.
@@ -100,7 +102,7 @@ public class PlayState extends BasicGameState {
 		//Defines the tiles.
 		tiles = new Square[nrtiles][nrtiles];
 
-		
+
 		/**********************************************
 		 * This algorithm decides where walls, concrete
 		 * and floor should be in a xy-coordinate where
@@ -121,7 +123,7 @@ public class PlayState extends BasicGameState {
 				}
 			}
 		}
-		
+
 		/************************************************
 		 *  Creates the players and gives them positions.
 		 */
@@ -135,9 +137,9 @@ public class PlayState extends BasicGameState {
 		player[0] = new Player(ft);
 		ft = (FloorTile) tiles[nrtiles-2][nrtiles-2];
 		player[1] = new Player(ft);	
-		
+
 		Random dice = new Random();
-		
+
 		/*******************************************
 		 * Adds random walls instead of a FloorTile. 
 		 */
@@ -145,10 +147,10 @@ public class PlayState extends BasicGameState {
 			for(int j = 0; j< nrtiles;j++){				
 				if(tiles[i][j] instanceof FloorTile){					
 					if (dice.nextInt(10) < 6){						
-						
+
 						// Avoid corners. 
 						if (i==1 && j==1 || i==1 && j==2 || i==2 && j==1 || i==13 && j==2 || i==12 && j==1 || i==13 && j==1 
-							|| i==13 && j==12 || i==13 && j==13 || i==12 && j==13 || i==1 && j==12 || i==1 & j==13 || i==2 && j==13){
+								|| i==13 && j==12 || i==13 && j==13 || i==12 && j==13 || i==1 && j==12 || i==1 & j==13 || i==2 && j==13){
 							//Do nothing. 
 						}else {
 							tiles[i][j] = new Block(i,j,gamecont,nrtiles).setImmovable(false).setImg(removableWall);
@@ -156,7 +158,8 @@ public class PlayState extends BasicGameState {
 					}
 				}
 			}
-		}		
+		}
+		tiles[1][10] = new Block(1,10,gamecont,nrtiles).setImmovable(true).setImg(bomb);
 	}
 
 	@Override
@@ -168,7 +171,7 @@ public class PlayState extends BasicGameState {
 		renderPlayers(c,g);
 	}
 
-	
+
 	@Override
 	public void update(GameContainer c, StateBasedGame game, int delta)
 			throws SlickException {
@@ -190,7 +193,7 @@ public class PlayState extends BasicGameState {
 
 	}
 	private void updateItems(GameContainer c, int delta, Input in) {
-		
+
 	}
 	private void updatePlayers(GameContainer c, int delta, Input in) {
 		for(int i = 0; i < player.length; i++){
@@ -257,9 +260,9 @@ public class PlayState extends BasicGameState {
 		tiles[b.getGridx()][b.getGridy()] = new FloorTile(b.getGridx(),b.getGridy(),gamecont,nrtiles).setImg(floorTile);
 	}
 	public void createBomb(Player p, FloorTile tile) {
-		
+
 		bombs.add(new Bomb(gamecont, p, bomb, tile, nrtiles));
-		
+
 	}
 	public void removeBomb(Bomb b) {
 		bombs.remove(b);
@@ -275,4 +278,5 @@ public class PlayState extends BasicGameState {
 			}
 		}
 	}
+
 }

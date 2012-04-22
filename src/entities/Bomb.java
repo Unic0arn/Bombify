@@ -41,11 +41,10 @@ public class Bomb implements Renderable {
 	}
 	public void update(GameContainer c, PlayState game, int delta){
 		timeTil = timeTil - delta;
-		System.out.println(timeTil);
+		//System.out.println(timeTil);
 		if(timeTil <= 0){
-
 			game.removeBomb(this);
-			explode();
+			//explode();
 		}
 	}
 	public FloorTile getTile(){
@@ -54,8 +53,8 @@ public class Bomb implements Renderable {
 	public Player getPlayer(){
 		return p;
 	}
-	private void explode() {
-		System.out.println("BOOOM");
-		
-	}
+//	private void explode() {
+//		System.out.println("BOOOM");
+//		
+//	}
 }

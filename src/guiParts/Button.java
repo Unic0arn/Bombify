@@ -147,6 +147,10 @@ public class Button {
 //		stringColor = c;
 //	}
 	
+	/**
+	 * Brute force quitting of the program. 
+	 * @param c
+	 */
 	public void quit(GameContainer c) {
 		Input in = c.getInput();
 		c.exit();		

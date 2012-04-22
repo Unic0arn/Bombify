@@ -5,9 +5,10 @@ import map.FloorTile;
 import map.Block;
 import map.Square;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
- import org.newdawn.slick.GameContainer;
- import org.newdawn.slick.Graphics;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
@@ -35,23 +36,23 @@ public class Player implements Renderable {
 	int posx,posy,sizex,sizey;
 	ResourceManager test;
 	SpriteSheet tileSheet = null;
+	Animation anime; 
 	//----------------------------
 
-	public Player(FloorTile tile) throws SlickException {		
+	public Player(FloorTile tile) {//throws SlickException {		
 		this.tile = tile;
 		pos = tile.getMiddle();
 		goal = tile;
-		
-		
 	}
 
 	public boolean update(GameContainer c, int delta, PlayState p) throws SlickException {
-		sizex = (c.getWidth()/tiles);
-		sizey = (c.getHeight()/tiles);
-		posx = (c.getWidth()/tiles * tile.getGridx());
-		posy = (c.getHeight()/tiles *tile.getGridy());
+//		sizex = (c.getWidth()/tiles);
+//		sizey = (c.getHeight()/tiles);
+//		posx = (c.getWidth()/tiles * tile.getGridx());
+//		posy = (c.getHeight()/tiles *tile.getGridy());
 
-	
+		//tileSheet = new SpriteSheet("res/Bomberman.png", tile.getGridx(), tile.getGridy(), 10);
+		//anime = new Animation(tileSheet, 2, 2, 5, 4, false, 10, false);
 		
 		if(!moving) {
 			if(!direction.equals(new Vector2f(0,0))){
@@ -95,12 +96,25 @@ public class Player implements Renderable {
 		return s instanceof FloorTile; 
 	}
 
-	private boolean isBlock(Square s){
-		return s instanceof Block; 
-	}
+//	private boolean isBlock(Square s){
+//		return s instanceof Block; 
+//	}
 
 	@Override
 	public void render(GameContainer c, Graphics g) {
+		
+//		g.drawImage(img,
+//				posx,
+//				posy,
+//				posx+sizex,
+//				posy+sizey,
+//				0,
+//				0,
+//				img.getWidth(),
+//				img.getHeight());
+		
+		//anime = test.getAnimation("1");
+		//g.drawAnimation(anime, pos.x, pos.y);
 		g.setColor(Color.green);
 		g.fill(new Circle(pos.x, pos.y, 10));
 	}
@@ -108,7 +122,7 @@ public class Player implements Renderable {
 	public void setDirection(Vector2f a) {
 		direction = a;
 	}
-
+	
 	public Vector2f getPos() {
 		return pos;
 	}
