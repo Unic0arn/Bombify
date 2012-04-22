@@ -20,7 +20,7 @@ import org.newdawn.slick.geom.Vector2f;
 public class Player implements Renderable {
 	int placeableBombs = 1;
 	int speed = 3;
-	int bombTime = 2; //in seconds
+	int bombTime = 1; //in seconds
 	int bombSize = 1;
 	
 	FloorTile tile, goal;
@@ -51,8 +51,8 @@ public class Player implements Renderable {
 //		posx = (c.getWidth()/tiles * tile.getGridx());
 //		posy = (c.getHeight()/tiles *tile.getGridy());
 
-		//tileSheet = new SpriteSheet("res/Bomberman.png", tile.getGridx(), tile.getGridy(), 10);
-		//anime = new Animation(tileSheet, 2, 2, 5, 4, false, 10, false);
+		//tileSheet = new SpriteSheet("res/Bomberman.gif", tile.getGridx(), tile.getGridy(), 100);
+		//anime = new Animation(tileSheet, 0, 0, 10, 10, false, 100, false);
 		
 		if(!moving) {
 			if(!direction.equals(new Vector2f(0,0))){

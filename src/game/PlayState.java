@@ -9,7 +9,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
+//import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -276,17 +276,27 @@ public class PlayState extends BasicGameState {
 		int tiley = b.getTile().getGridy();
 		int bombSize = b.getPlayer().getBombSize();
 		
+		Random dice = new Random(); 
+		
 		for (int i = bombSize*-1;i<bombSize+1;i++){
 			if(tiles[tilex+i][tiley] instanceof Block){
 				Block block = (Block)tiles[tilex+i][tiley];	
 				block.destroy(this);
+				
+				if (dice.nextInt(10) == 2) {
+					tiles[block.getGridx()][block.getGridy()] = new FloorTile(block.getGridx(),block.getGridy(),gamecont,nrtiles).setImg(slow);	
+				}
 			}
 			
 			if(tiles[tilex][tiley+i] instanceof Block){
 				Block block = (Block)tiles[tilex][tiley+i];	
 				block.destroy(this);
-			}
-		}
+				
+				if (dice.nextInt(10) == 2) {
+					tiles[block.getGridx()][block.getGridy()] = new FloorTile(block.getGridx(),block.getGridy(),gamecont,nrtiles).setImg(slow);	
+				}
+				
+			}			
+		}	
 	}
-
 }
