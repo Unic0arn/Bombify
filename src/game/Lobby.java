@@ -22,9 +22,9 @@ public class Lobby extends BasicGameState {
 	private Image menu, start, settings, quit; 
 	//menu = null, start=null, main=null, settings=null; 
 
-	public Lobby(){
-
-	}
+	public Lobby(){}
+	
+	
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {

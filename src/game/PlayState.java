@@ -159,7 +159,6 @@ public class PlayState extends BasicGameState {
 				}
 			}
 		}
-		tiles[1][10] = new Block(1,10,gamecont,nrtiles).setImmovable(true).setImg(bomb);
 	}
 
 	@Override

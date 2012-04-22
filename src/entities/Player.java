@@ -101,8 +101,7 @@ public class Player implements Renderable {
 //	}
 
 	@Override
-	public void render(GameContainer c, Graphics g) {
-		
+	public void render(GameContainer c, Graphics g) {		
 //		g.drawImage(img,
 //				posx,
 //				posy,
