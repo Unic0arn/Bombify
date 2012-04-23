@@ -21,14 +21,17 @@ public class Player implements Renderable {
 	FloorTile tile, goal;
 	Vector2f pos, velo = new Vector2f(0, 0),direction = new Vector2f(0, 0);
 	boolean hitting = false,
-			moving = true;
+			//moving = true,
+			moving = false;
+
+	//Image bomberman;
 	int posx,posy,sizex,sizey;
 	SpriteSheet ss;
 	Animation anime; 
 
 	public Player(FloorTile tile){
 		this.tile = tile;
-		pos = tile.getCorner();
+		pos = tile.getMiddle();
 		goal = tile;
 
 		try {
@@ -91,7 +94,9 @@ public class Player implements Renderable {
 				tile = goal;
 			}
 			else{
-				velo = (goal.getMiddle().copy().sub(pos).scale(0.2f));
+				//velo = (goal.getMiddle().copy().sub(pos).scale(0.2f));
+				velo = (goal.getMiddle().copy().sub(pos).scale(0.1f*speed));
+
 				pos.add(velo);
 			}
 		}
@@ -110,6 +115,7 @@ public class Player implements Renderable {
 //	public Vector2f getMiddle(){
 //		return new Vector2f(posx+(sizex/6f), posy+(sizey/6f));
 //	}
+
 	public void setDirection(Vector2f a) {
 		direction = a;
 	}

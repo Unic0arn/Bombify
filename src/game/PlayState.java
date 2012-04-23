@@ -261,8 +261,12 @@ public class PlayState extends BasicGameState {
 		int tiley = b.getTile().getGridy();
 		int bombSize = b.getPlayer().getBombSize();
 		Random dice = new Random(); 
-
-
+		if(tiles[tilex][tiley] instanceof FloorTile){
+			FloorTile ft = (FloorTile)tiles[tilex][tiley];
+			if(ft.hasPlayer()){
+				ft.getPlayer().hurt(this);
+			}
+		}
 		for (int i = bombSize*-1;i<bombSize+1;i++){
 			if(tiles[tilex][tiley+i] instanceof Block){
 				Block block = (Block)tiles[tilex][tiley+i];	
