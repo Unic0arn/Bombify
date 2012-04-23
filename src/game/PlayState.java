@@ -220,7 +220,7 @@ public class PlayState extends BasicGameState {
 		}
 	}
 	
-	private void updateItems(GameContainer c, int delta, Input in) {
+	private void updateItems(GameContainer c, int delta, Input in) {		
 	}
 	private void renderItems(GameContainer c, Graphics g) {
 		for(int i = 0; i < item.size(); i++){
@@ -253,7 +253,6 @@ public class PlayState extends BasicGameState {
 	 * @param b
 	 */
 	public void removeBomb(Bomb b) {
-	
 		bombs.remove(b);
 		int tilex = b.getTile().getGridx();
 		int tiley = b.getTile().getGridy();
