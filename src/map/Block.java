@@ -51,15 +51,6 @@ public class Block implements Square{
 		immovable = b;
 		return this;
 	}
-	public boolean destroy(PlayState gs){
-		if(immovable){
-			return false;
-		}
-		else {
-			gs.removeWall(this);
-			return true;
-		}
-	}
 	public void render(GameContainer container, Graphics g,
 			int x, int y, int tiles)
 					throws SlickException {

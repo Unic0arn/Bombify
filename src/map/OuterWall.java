@@ -16,7 +16,10 @@ import entities.Player;
  */
 public class OuterWall implements Square {
 	private Image img;
-	
+	int gridx,gridy;
+	public OuterWall(int x, int y, GameContainer container, int tiles){
+		
+	}
 	@Override
 	public void render(GameContainer container, Graphics g, int x, int y,
 			int tiles) throws SlickException {
@@ -24,7 +27,6 @@ public class OuterWall implements Square {
 		int sizey = (container.getHeight()/tiles);
 		int posx = (container.getWidth()/tiles * x);
 		int posy = (container.getHeight()/tiles * y);
-
 
 		if(img!=null){
 			g.drawImage(img,
@@ -47,5 +49,15 @@ public class OuterWall implements Square {
 	public OuterWall setImg(Image i) {
 		img = i;
 		return this;
+	}
+
+	@Override
+	public int getGridx() {
+		return gridx;
+	}
+
+	@Override
+	public int getGridy() {
+		return gridy;
 	}
 }

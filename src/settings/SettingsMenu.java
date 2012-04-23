@@ -27,10 +27,11 @@ public class SettingsMenu extends BasicGameState {
 			throws SlickException {
 		menu = new Image("res/menu.png");
 		main = new  Image("res/main.png");
-
-		b = new Button[1];
+		
+		b = new Button[2];
 		b[0] = new Button(50, 250, 200, 100, main);
 		b[0].setShortCut(Constants.LOBBY);
+		
 	}
 
 	@Override

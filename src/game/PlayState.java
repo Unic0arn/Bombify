@@ -87,7 +87,7 @@ public class PlayState extends BasicGameState {
 		for(int x = 0;x<nrtiles;x++){
 			for(int y = 0;y<nrtiles;y++){
 				if(x == 0||x ==nrtiles-1||y==0||y==nrtiles-1){
-					tiles[x][y] = new OuterWall().setImg(outerBrick);
+					tiles[x][y] = new OuterWall(x,y,gamecont,nrtiles).setImg(outerBrick);
 				}else if(y%2==0 && x%2==0){
 					tiles[x][y] = new Block(x,y,gamecont,nrtiles).setImg(concrete);
 				}else{
@@ -249,75 +249,116 @@ public class PlayState extends BasicGameState {
 	}
 
 	/**
-	 * Removes temporary bricks. 
+	 * Removes the bomb from the field and handles the CONSEQUENCES!!!!
 	 * @param b
 	 */
 	public void removeBomb(Bomb b) {
-
+		boolean hitWallNorth = false,hitWallEast= false,hitWallWest= false,hitWallSouth= false;
 		bombs.remove(b);
 		int tilex = b.getTile().getGridx();
 		int tiley = b.getTile().getGridy();
 		int bombSize = b.getPlayer().getBombSize();
-		Random dice = new Random(); 
+		/*
+		 * Handles the situation of the player standing on the bomb.
+		 */
 		if(tiles[tilex][tiley] instanceof FloorTile){
 			FloorTile ft = (FloorTile)tiles[tilex][tiley];
-
 			if(ft.hasPlayer()){
 				ft.getPlayer().hurt(this);
 			}
 		}
-		for (int i = bombSize*-1;i<bombSize+1;i++){
-			if(tilex >= 0 && tilex < nrtiles && tiley+i >= 0 && tiley+i < nrtiles ){
-				Square tempSquare = tiles[tilex][tiley+i];
-
-				if(tempSquare instanceof Block){
-					Block block = (Block)tiles[tilex][tiley+i];	
-
-					if(!block.isImmovable()){
-						block.destroy(this);					
-						tempSquare = new FloorTile(tilex,tiley+i,gamecont,nrtiles).setImg(floorTile);					
-						if (dice.nextInt(10) == 2) {
-							FloorTile tempTile = (FloorTile)tempSquare;
-							Item tempItem = new Item(gamecont,slow,tempTile, nrtiles);
-							item.add(tempItem);
-							tempTile.setItem(tempItem);
-						}					
-					}
-				}else if(tempSquare instanceof FloorTile){
-					FloorTile ft = (FloorTile)tempSquare;
-					if(ft.hasPlayer()){
-						ft.getPlayer().hurt(this);
-					}
-				}
-			}
-			if(tilex+i >= 0 && tilex+i < nrtiles && tiley >= 0 && tiley < nrtiles ){
-				Square tempSquare = tiles[tilex+i][tiley];
-				if(tempSquare instanceof Block){
-					Block block = (Block)tempSquare;	
-
-					if(!block.isImmovable()){
-						block.destroy(this);
-						tempSquare = new FloorTile(tilex+i,tiley,gamecont,nrtiles).setImg(floorTile);
-
-						if (dice.nextInt(10) == 2) {
-							FloorTile tempTile = (FloorTile)tempSquare;
-							Item tempItem = new Item(gamecont,slow,tempTile, nrtiles);
-							item.add(tempItem);
-							tempTile.setItem(tempItem);
-						}
-					}
-				}
-
-				else if(tempSquare instanceof FloorTile){
-					FloorTile ft = (FloorTile)tempSquare;
-					if(ft.hasPlayer()){
-						ft.getPlayer().hurt(this);
-					}
-				}
-			}
+		/*
+		 * Handles the blaswave in all directions.
+		 */
+		for (int i = 1; i<=bombSize;i++){
+			if(!hitWallNorth)hitWallNorth=checkNorth(i,tilex,tiley);
+			if(!hitWallEast)hitWallEast=checkEast(i,tilex,tiley);
+			if(!hitWallWest)hitWallWest=checkWest(i,tilex,tiley);
+			if(!hitWallSouth)hitWallSouth=checkSouth(i,tilex,tiley);
 		}
 	}
 
+	/**
+	 * Checks the path of the blastwave to the south with a distance of i.
+	 * @param i - The distance from the origin.
+	 * @param tilex - The origin x
+	 * @param tiley - The origin y
+	 * @return true - if anything were in the way of the blastway false - otherwise
+	 */
+	private boolean checkSouth(int i, int tilex, int tiley) {
+		if(tiley+i >= nrtiles)return false;
+		Square tempSquare = tiles[tilex][tiley+i];
+		return checkPath(tempSquare);
+	}
+	/**
+	 * Checks the path of the blastwave to the West with a distance of i.
+	 * @param i - The distance from the origin.
+	 * @param tilex - The origin x
+	 * @param tiley - The origin y
+	 * @return true - if anything were in the way of the blastway false - otherwise
+	 */
+	private boolean checkWest(int i, int tilex, int tiley) {
+		if(tilex-i < 0)return false;
+		Square tempSquare = tiles[tilex-i][tiley];
+		return checkPath(tempSquare);
+	}
+	/**
+	 * Checks the path of the blastwave to the East with a distance of i.
+	 * @param i - The distance from the origin.
+	 * @param tilex - The origin x
+	 * @param tiley - The origin y
+	 * @return true - if anything were in the way of the blastway false - otherwise
+	 */
+	private boolean checkEast(int i, int tilex, int tiley) {
+		if(tilex+i >=nrtiles)return false;
+		Square tempSquare = tiles[tilex+i][tiley];
+		return checkPath(tempSquare);
+	}
+	/**
+	 * Checks the path of the blastwave to the North with a distance of i.
+	 * @param i - The distance from the origin.
+	 * @param tilex - The origin x
+	 * @param tiley - The origin y
+	 * @return true - if anything were in the way of the blastway false - otherwise
+	 */
+	private boolean checkNorth(int i, int tilex, int tiley) {
+		if(tiley-i <0)return false;
+		Square tempSquare = tiles[tilex][tiley-i];
+		return checkPath(tempSquare);
+	}
+	/**
+	 * Check the tile to find what happens when the blastway reach it.
+	 * @param tempSquare - The tile to check.
+	 * @return true - if the tile is obstructing the blastway false - otherwise.
+	 */
+	private boolean checkPath(Square tempSquare){
+		Random dice = new Random(); 
+		if(tempSquare instanceof Block){
+			Block block = (Block)tiles[tempSquare.getGridx()][tempSquare.getGridy()];	
+			if(!block.isImmovable()){
+				removeWall(block);					
+				tempSquare = new FloorTile(block.getGridx(),block.getGridy(),gamecont,nrtiles).setImg(floorTile);					
+				if (dice.nextInt(10) == 2) {
+					FloorTile tempTile = (FloorTile)tempSquare;
+					Item tempItem = new Item(gamecont,slow,tempTile, nrtiles);
+					item.add(tempItem);
+					tempTile.setItem(tempItem);
+				}					
+			}else{
+				return true;
+			}
+		}else if(tempSquare instanceof FloorTile){
+			FloorTile ft = (FloorTile)tempSquare;
+			if(ft.hasPlayer()){
+				ft.getPlayer().hurt(this);
+			}
+			
+		}else if(tempSquare instanceof OuterWall){
+			return true;
+		}
+
+		return false;
+	}
 	/**
 	 * Parses the most used settings from the hashmap.
 	 * This is to avoid constant parsing and ParseInts which are

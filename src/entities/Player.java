@@ -15,7 +15,7 @@ public class Player implements Renderable {
 	int placeableBombs = 1;
 	static int SPEED = 3;
 	int bombTime = 3; //in seconds
-	int bombSize = 10;
+	int bombSize = 5;
 	int animationspeed = 500; 
 	int lives = 1;
 	FloorTile tile, goal;
