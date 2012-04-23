@@ -6,7 +6,7 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.Sound;
+import org.newdawn.slick.Music;
 
 import settings.*;
 /**
@@ -43,7 +43,8 @@ public class BombifyGame extends StateBasedGame {
 	public static void main(String[] args) throws SlickException
 	{
 		AppGameContainer app = new AppGameContainer(new BombifyGame());
-		Sound s = new Sound("res/belikeyou.wav");
+		Music s = new Music("res/movinout.wav");
+		s.loop();
 		s.play();
 
 		// Application properties
@@ -56,6 +57,6 @@ public class BombifyGame extends StateBasedGame {
 		app.setTargetFrameRate(60);
 		app.setShowFPS(true);
 		app.setVSync(true);
-		app.start();
+		app.start();		
 	}
 }
