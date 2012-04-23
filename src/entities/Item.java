@@ -13,11 +13,9 @@ public class Item implements Renderable {
 	double timeTil;
 	int posx,posy,sizex,sizey;
 	
-	public Item(GameContainer gc, Player player, Image image,FloorTile ft,int tiles){
+	public Item(GameContainer gc, Image image,FloorTile ft,int tiles){
 		img = image;
-		p = player;
 		tile = ft;
-		timeTil = player.getBombTime() * 1000;
 		sizex = (gc.getWidth()/tiles);
 		sizey = (gc.getHeight()/tiles);
 

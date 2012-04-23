@@ -37,11 +37,12 @@ public class PlayState extends BasicGameState {
 	SettingsContainer gameSettings; //An object to contain all settings.
 	GameContainer gamecont;
 	HashMap<String,Integer> playerControls; //Store the player controls in a hashmap.
-	Player[] player; //A vector of the players.
+	//Player[] player; //A vector of the players.
 	Square[][] tiles; //A grid of all the "tiles" in the game.
 	ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 	ArrayList<Item> item = new ArrayList<Item>();
-	int players; // The amount of players 1-4
+	Player[] players;
+	int nrplayers; // The amount of players 1-4
 	int hitCounter = 0;
 	private Image outerBrick, concrete, floorTile, removableWall, bomb, slow; 
 	int nrtiles = 15; // Odd number = nice field
@@ -55,29 +56,6 @@ public class PlayState extends BasicGameState {
 		super();
 		gameSettings = gs;
 	}
-	/**
-	 * Parses the most used settings from the hashmap.
-	 * This is to avoid constant parsing and ParseInts which are
-	 * time consuming.
-	 */
-	private void parseSettings() {
-		players = Integer.parseInt(gameSettings.get("PLAYERS"));
-		playerControls = new HashMap<String,Integer>();
-		for(int i = 0; i < players;i++) {
-			playerControls.put("P"+(i+1)+"N",Integer.parseInt(gameSettings.get("P"+(i+1)+"N")));
-			playerControls.put("P"+(i+1)+"S",Integer.parseInt(gameSettings.get("P"+(i+1)+"S")));
-			playerControls.put("P"+(i+1)+"W",Integer.parseInt(gameSettings.get("P"+(i+1)+"W")));
-			playerControls.put("P"+(i+1)+"E",Integer.parseInt(gameSettings.get("P"+(i+1)+"E")));
-			playerControls.put("P"+(i+1)+"B",Integer.parseInt(gameSettings.get("P"+(i+1)+"B")));
-		}
-	}
-
-
-	@Override
-	public int getID() {
-		return Constants.GAME;
-	}
-
 	/**
 	 * Starting position for field and players. 
 	 */
@@ -96,7 +74,6 @@ public class PlayState extends BasicGameState {
 		slow = new Image("res/slow.png");
 
 		//Creates the players and gives them positions.
-		player = new Player[players];
 
 		//Defines the tiles.
 		tiles = new Square[nrtiles][nrtiles];
@@ -126,16 +103,22 @@ public class PlayState extends BasicGameState {
 		/************************************************
 		 *  Creates the players and gives them positions.
 		 */
-		player = new Player[players];
-		//System.out.println(tiles[1][1]);
+		players = new Player[nrplayers];
 		FloorTile ft = (FloorTile) tiles[1][1];
-		//System.out.println(tiles[1][1]);
+		players[0] = new Player(ft);
+		if(nrplayers > 1){
+			ft = (FloorTile) tiles[nrtiles-2][nrtiles-2];
+			players[1] = new Player(ft);	
+		}
+		if(nrplayers > 2){
+			ft = (FloorTile) tiles[1][nrtiles-2];
+			players[2] = new Player(ft);	
+		}
+		if(nrplayers > 3){
+			ft = (FloorTile) tiles[nrtiles-2][1];
+			players[3] = new Player(ft);	
+		}
 
-
-		//System.out.println(ft.getGridx());		
-		player[0] = new Player(ft);
-		ft = (FloorTile) tiles[nrtiles-2][nrtiles-2];
-		player[1] = new Player(ft);	
 
 		Random dice = new Random();
 
@@ -163,8 +146,8 @@ public class PlayState extends BasicGameState {
 	@Override
 	public void render(GameContainer c, StateBasedGame game, Graphics g)
 			throws SlickException {
-		renderBackground(c,g);		
 		renderMap(c,g);
+		renderBombs(c,g);
 		renderItems(c,g);
 		renderPlayers(c,g);
 	}
@@ -182,57 +165,6 @@ public class PlayState extends BasicGameState {
 		updatePlayers(c,delta,in);
 		updateBombs(c,delta,in);
 		updateItems(c,delta,in);
-		updateWalls(c,delta,in);
-	}
-
-
-	private void updateWalls(GameContainer c, int delta, Input in) {
-		// TODO Auto-generated method stub
-
-	}
-	private void updateItems(GameContainer c, int delta, Input in) {
-
-	}
-	private void updatePlayers(GameContainer c, int delta, Input in) {
-		for(int i = 0; i < player.length; i++){
-			Vector2f direction = new Vector2f(0, 0);
-			if (in.isKeyDown(playerControls.get("P"+(i+1)+"N"))) {
-				direction.add(new Vector2f(0, -1));
-			}
-			else if (in.isKeyDown(playerControls.get("P"+(i+1)+"S"))) {
-				direction.add(new Vector2f(0, 1));
-			}
-			else if (in.isKeyDown(playerControls.get("P"+(i+1)+"W"))) {
-				direction.add(new Vector2f(-1, 0));
-			}
-			else if (in.isKeyDown(playerControls.get("P"+(i+1)+"E"))) {
-				direction.add(new Vector2f(1, 0));
-			}
-			if (in.isKeyDown(playerControls.get("P"+(i+1)+"B"))) {
-				player[i].hit();
-			}
-			player[i].setDirection(direction);
-			try {
-				player[i].update(c, delta, this);
-			} catch (SlickException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-	private void updateBombs(GameContainer c, int delta, Input in) {
-		for(int i = 0; i < bombs.size();i++){
-			bombs.get(i).update(c, this, delta);
-		}
-	}
-	private void renderBackground(GameContainer c, Graphics g) {
-		g.setBackground(Color.black);
-		g.setAntiAlias(true);		
-	}
-	private void renderPlayers(GameContainer c, Graphics g) {
-		for(int i = 0; i < player.length; i++){
-			player[i].render(c, g);
-		}
 	}
 
 	private void renderMap(GameContainer gc, Graphics g) throws SlickException {
@@ -243,10 +175,60 @@ public class PlayState extends BasicGameState {
 			}
 		}
 	}
-	private void renderItems(GameContainer c, Graphics g) {
+	private void updatePlayers(GameContainer c, int delta, Input in) {
+		for(int i = 0; i < players.length; i++){
+			if(players[i].isAlive()){
+				Vector2f direction = new Vector2f(0, 0);
+				if (in.isKeyDown(playerControls.get("P"+(i+1)+"N"))) {
+					direction.add(new Vector2f(0, -1));
+				}
+				else if (in.isKeyDown(playerControls.get("P"+(i+1)+"S"))) {
+					direction.add(new Vector2f(0, 1));
+				}
+				else if (in.isKeyDown(playerControls.get("P"+(i+1)+"W"))) {
+					direction.add(new Vector2f(-1, 0));
+				}
+				else if (in.isKeyDown(playerControls.get("P"+(i+1)+"E"))) {
+					direction.add(new Vector2f(1, 0));
+				}
+				if (in.isKeyDown(playerControls.get("P"+(i+1)+"B"))) {
+					players[i].hit();
+				}
+				players[i].setDirection(direction);
+				try {
+					players[i].update(c, delta, this);
+				} catch (SlickException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	private void renderPlayers(GameContainer c, Graphics g) {
+		for(int i = 0; i < players.length; i++){
+			if(players[i].isAlive())players[i].render(c, g);
+		}
+	}
+	private void updateBombs(GameContainer c, int delta, Input in) {
+		for(int i = 0; i < bombs.size();i++){
+			bombs.get(i).update(c, this, delta);
+		}
+	}
+	private void renderBombs(GameContainer c, Graphics g) {
 		for(int i = 0; i < bombs.size();i++){
 			bombs.get(i).render(c, g);
 		}
+	}
+	private void updateItems(GameContainer c, int delta, Input in) {
+	}
+	private void renderItems(GameContainer c, Graphics g) {
+		for(int i = 0; i < item.size(); i++){
+			item.get(i).render(c, g);
+		}
+	}
+	@Override
+	public int getID() {
+		return Constants.GAME;
 	}
 	public Square[][] getTiles(){
 		return tiles;
@@ -264,7 +246,7 @@ public class PlayState extends BasicGameState {
 
 
 	}
-	
+
 	/**
 	 * Removes temporary bricks. 
 	 * @param b
@@ -274,29 +256,62 @@ public class PlayState extends BasicGameState {
 		int tilex = b.getTile().getGridx();
 		int tiley = b.getTile().getGridy();
 		int bombSize = b.getPlayer().getBombSize();
-		
 		Random dice = new Random(); 
-		int a = dice.nextInt(15);
-		
+
+
 		for (int i = bombSize*-1;i<bombSize+1;i++){
-			if(tiles[tilex+i][tiley] instanceof Block){
-				Block block = (Block)tiles[tilex+i][tiley];	
-				block.destroy(this);
-				
-				if (a == 2) {
-					tiles[tilex][tiley] = new FloorTile(tilex,tiley,gamecont,nrtiles).setImg(slow);
-				}
-			}
-			
 			if(tiles[tilex][tiley+i] instanceof Block){
 				Block block = (Block)tiles[tilex][tiley+i];	
-				block.destroy(this);
-				
-				if (a == 2) {
-					tiles[tilex][tiley] = new FloorTile(tilex,tiley, gamecont,nrtiles).setImg(slow);	
+				if(!block.isImmovable()){
+					block.destroy(this);
+					tiles[tilex][tiley+i] = new FloorTile(tilex,tiley+i,gamecont,nrtiles).setImg(floorTile);
+					if (dice.nextInt(10) == 2) {
+						FloorTile tempTile = (FloorTile)tiles[tilex][tiley+i];
+						Item tempItem = new Item(gamecont,slow,tempTile, nrtiles);
+						item.add(tempItem);
+						tempTile.setItem(tempItem);
+					}
 				}
-				
+			}else if(tiles[tilex][tiley+i] instanceof FloorTile){
+				FloorTile ft = (FloorTile)tiles[tilex][tiley+i];
+				if(ft.hasPlayer()){
+					ft.getPlayer().hurt(this);
+				}
+			}
+			if(tiles[tilex+i][tiley] instanceof Block){
+				Block block = (Block)tiles[tilex+i][tiley];	
+				if(!block.isImmovable()){
+					block.destroy(this);
+					tiles[tilex+i][tiley] = new FloorTile(tilex+i,tiley,gamecont,nrtiles).setImg(floorTile);
+					if (dice.nextInt(10) == 2) {
+						FloorTile tempTile = (FloorTile)tiles[tilex+i][tiley];
+						Item tempItem = new Item(gamecont,slow,tempTile, nrtiles);
+						item.add(tempItem);
+						tempTile.setItem(tempItem);
+					}
+				}
+			}else if(tiles[tilex+i][tiley] instanceof FloorTile){
+				FloorTile ft = (FloorTile)tiles[tilex+i][tiley];
+				if(ft.hasPlayer()){
+					ft.getPlayer().hurt(this);
+				}
 			}			
 		}	
+	}
+	/**
+	 * Parses the most used settings from the hashmap.
+	 * This is to avoid constant parsing and ParseInts which are
+	 * time consuming.
+	 */
+	private void parseSettings() {
+		nrplayers = Integer.parseInt(gameSettings.get("PLAYERS"));
+		playerControls = new HashMap<String,Integer>();
+		for(int i = 0; i < nrplayers;i++) {
+			playerControls.put("P"+(i+1)+"N",Integer.parseInt(gameSettings.get("P"+(i+1)+"N")));
+			playerControls.put("P"+(i+1)+"S",Integer.parseInt(gameSettings.get("P"+(i+1)+"S")));
+			playerControls.put("P"+(i+1)+"W",Integer.parseInt(gameSettings.get("P"+(i+1)+"W")));
+			playerControls.put("P"+(i+1)+"E",Integer.parseInt(gameSettings.get("P"+(i+1)+"E")));
+			playerControls.put("P"+(i+1)+"B",Integer.parseInt(gameSettings.get("P"+(i+1)+"B")));
+		}
 	}
 }

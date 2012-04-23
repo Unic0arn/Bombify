@@ -8,6 +8,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
+import entities.Item;
 import entities.Player;
 /**
  * A class that contains information about a tile on the floor.
@@ -16,8 +17,16 @@ import entities.Player;
  */
 public class FloorTile implements Square {
 	private Image img;
+	private Item item;
+	private Player player;
 	int posx,posy,sizex,sizey;
 	int gridx,gridy;
+	public boolean hasPlayer(){
+		return player != null;
+	}
+	public boolean hasItem(){
+		return item != null;
+	}
 	public int getGridx() {
 		return gridx;
 	}
@@ -64,6 +73,18 @@ public class FloorTile implements Square {
 		return new Vector2f(posx, posy);
 	}
 	
+	public Item getItem() {
+		return item;
+	}
+	public void setItem(Item item) {
+		this.item = item;
+	}
+	public Player getPlayer() {
+		return player;
+	}
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
 	public String toString(){
 		return "[" + gridx + "," + gridy + "]";
 	}
