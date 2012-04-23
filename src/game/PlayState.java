@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import org.newdawn.slick.Color;
+//import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -28,7 +28,7 @@ import map.FloorTile;
  * A game that is based on players trying to blow each other up.
  * 
  * @author Fredrik Hallberg & Victor Dahlin
- * @version 2012-04-22
+ * @version 2012-04-23
  *
  */
 
@@ -43,7 +43,7 @@ public class PlayState extends BasicGameState {
 	ArrayList<Item> item = new ArrayList<Item>();
 	Player[] players;
 	int nrplayers; // The amount of players 1-4
-	int hitCounter = 0;
+	//int hitCounter = 0;
 	private Image outerBrick, concrete, floorTile, removableWall, bomb, slow; 
 	int nrtiles = 15; // Odd number = nice field
 
@@ -175,6 +175,7 @@ public class PlayState extends BasicGameState {
 			}
 		}
 	}
+	
 	private void updatePlayers(GameContainer c, int delta, Input in) {
 		for(int i = 0; i < players.length; i++){
 			if(players[i].isAlive()){
@@ -204,21 +205,25 @@ public class PlayState extends BasicGameState {
 			}
 		}
 	}
+	
 	private void renderPlayers(GameContainer c, Graphics g) {
 		for(int i = 0; i < players.length; i++){
 			if(players[i].isAlive())players[i].render(c, g);
 		}
 	}
+	
 	private void updateBombs(GameContainer c, int delta, Input in) {
 		for(int i = 0; i < bombs.size();i++){
 			bombs.get(i).update(c, this, delta);
 		}
 	}
+	
 	private void renderBombs(GameContainer c, Graphics g) {
 		for(int i = 0; i < bombs.size();i++){
 			bombs.get(i).render(c, g);
 		}
 	}
+	
 	private void updateItems(GameContainer c, int delta, Input in) {
 	}
 	private void renderItems(GameContainer c, Graphics g) {
@@ -226,6 +231,7 @@ public class PlayState extends BasicGameState {
 			item.get(i).render(c, g);
 		}
 	}
+	
 	@Override
 	public int getID() {
 		return Constants.GAME;
@@ -243,8 +249,6 @@ public class PlayState extends BasicGameState {
 
 	public void createBomb(Player p, FloorTile tile) {
 		bombs.add(new Bomb(gamecont, p, bomb, tile, nrtiles));
-
-
 	}
 
 	/**
@@ -280,9 +284,11 @@ public class PlayState extends BasicGameState {
 			}
 			if(tiles[tilex+i][tiley] instanceof Block){
 				Block block = (Block)tiles[tilex+i][tiley];	
+				
 				if(!block.isImmovable()){
 					block.destroy(this);
 					tiles[tilex+i][tiley] = new FloorTile(tilex+i,tiley,gamecont,nrtiles).setImg(floorTile);
+					
 					if (dice.nextInt(10) == 2) {
 						FloorTile tempTile = (FloorTile)tiles[tilex+i][tiley];
 						Item tempItem = new Item(gamecont,slow,tempTile, nrtiles);
@@ -298,6 +304,7 @@ public class PlayState extends BasicGameState {
 			}			
 		}	
 	}
+	
 	/**
 	 * Parses the most used settings from the hashmap.
 	 * This is to avoid constant parsing and ParseInts which are

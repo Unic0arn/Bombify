@@ -7,7 +7,6 @@ import map.Square;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Vector2f;
@@ -15,16 +14,14 @@ import org.newdawn.slick.geom.Vector2f;
 public class Player implements Renderable {
 	int placeableBombs = 1;
 	int speed = 3;
-	int bombTime = 1; //in seconds
+	int bombTime = 3; //in seconds
 	int bombSize = 1;
-	int animationspeed = 500; 
+	int animationspeed = 300; 
 	int lives = 1;
 	FloorTile tile, goal;
 	Vector2f pos, velo = new Vector2f(0, 0),direction = new Vector2f(0, 0);
 	boolean hitting = false,
 			moving = true;
-
-	Image bomberman;
 	int posx,posy,sizex,sizey;
 	SpriteSheet ss;
 	Animation anime; 
@@ -33,7 +30,7 @@ public class Player implements Renderable {
 		this.tile = tile;
 		pos = tile.getCorner();
 		goal = tile;
-		
+
 		try {
 			ss = new SpriteSheet("/res/b.png", 20, 30);
 			anime = new Animation(ss,0,0,0,0,true,animationspeed,true);
@@ -60,8 +57,7 @@ public class Player implements Renderable {
 						moving = true;
 						tile.setPlayer(null);
 						goal.setPlayer(this);
-					}
-				}
+					}}
 			}else if(hitting){
 				p.createBomb(this,tile);
 				hitting = false;
@@ -73,7 +69,7 @@ public class Player implements Renderable {
 			if(direction.equals(new Vector2f(1,0))){
 				anime = new Animation(ss,9,0,9,0,true, animationspeed,true);
 			}
-			
+
 			//Left
 			else if(direction.equals(new Vector2f(-1,0))){
 				anime = new Animation(ss,4,0,7,0,true,animationspeed,true);
@@ -84,18 +80,18 @@ public class Player implements Renderable {
 			else if(direction.equals(new Vector2f(0,1))){
 				anime = new Animation(ss,0,0,1,0,true,animationspeed,true);
 			}
-			
+
 			//Up
 			else if(direction.equals(new Vector2f(0,-1))){
 				anime = new Animation(ss,3,0,4,0,true,animationspeed,true);
 			}
-			
+
 			if(goal.getMiddle().copy().sub(pos).length()<0.1){
 				moving  = false;
 				tile = goal;
 			}
 			else{
-				velo = (goal.getMiddle().copy().sub(pos).scale(0.1f));
+				velo = (goal.getMiddle().copy().sub(pos).scale(0.2f));
 				pos.add(velo);
 			}
 		}
@@ -107,13 +103,13 @@ public class Player implements Renderable {
 	}
 	@Override
 	public void render(GameContainer c, Graphics g) {
-		//g.drawAnimation(anime, pos.x-sizex/2f, pos.y-sizey/2f);
-		g.drawAnimation(anime, pos.x-(sizex/2f), pos.y-(sizey/2f));
+		g.drawAnimation(anime, pos.x-(sizex/6f), pos.y-(sizey/6f));
+		//g.drawAnimation(anime, pos.x, pos.y);
 	}
-	
-	public Vector2f getMiddle(){
-		return new Vector2f(posx+(sizex/8f), posy+(sizey/8f));
-	}
+
+//	public Vector2f getMiddle(){
+//		return new Vector2f(posx+(sizex/6f), posy+(sizey/6f));
+//	}
 	public void setDirection(Vector2f a) {
 		direction = a;
 	}

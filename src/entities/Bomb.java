@@ -1,5 +1,11 @@
 package entities;
 
+/**
+ * Bomb counts down and by zero it has disappeared. 
+ * 
+ * @author Fredrik
+ * @version 2012-04-23
+ */
 import game.PlayState;
 import map.FloorTile;
 
@@ -43,10 +49,8 @@ public class Bomb implements Renderable {
 	
 	public void update(GameContainer c, PlayState game, int delta){
 		timeTil = timeTil - delta;
-		//System.out.println(timeTil);
 		if(timeTil <= 0){
 			game.removeBomb(this);
-			//explode();
 		}
 	}
 	
@@ -57,8 +61,4 @@ public class Bomb implements Renderable {
 	public Player getPlayer(){
 		return p;
 	}
-//	private void explode() {
-//		System.out.println("BOOOM");
-//		
-//	}
 }
