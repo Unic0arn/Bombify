@@ -43,7 +43,7 @@ public class PlayState extends BasicGameState {
 	ArrayList<Item> item = new ArrayList<Item>();
 	Player[] players;
 	int nrplayers; // The amount of players 1-4
-	int nrtiles = 15; // Odd number = nice field
+	int nrtiles = 16; // Odd number = nice field
 	
 	private Animation outerWall, removableBrick, floorTile;
 	private int animationspeed = 500;
@@ -90,18 +90,18 @@ public class PlayState extends BasicGameState {
 		 */
 		for(int x = 0;x<nrtiles;x++){
 			for(int y = 0;y<nrtiles;y++){
-				if(x == 0||x ==nrtiles-1||y==0||y==nrtiles-1){
-					outerWall = new Animation(ss,0,0,0,0,true, animationspeed,true);
+				if(x == 0||x ==nrtiles-1||y==0||y==nrtiles-1 || y%2==0 && x%2==0){
+					outerWall = new Animation(ss,1,0,1,0,true, animationspeed,true);
 					tiles[x][y] = new OuterWall().setAnimation(outerWall);
  					//tiles[x][y] = new OuterWall();
 					//tiles[x][y].setImg(outerBrick);
-				}else if(y%2==0 && x%2==0){
-					outerWall = new Animation(ss,0,0,0,0,true, animationspeed,true);
-					tiles[x][y] = new Block(x,y,gamecont,nrtiles).setAnimation(outerWall);
+//				}else if(y%2==0 && x%2==0){
+//					outerWall = new Animation(ss,1,0,1,0,true, animationspeed,true);
+//					tiles[x][y] = new Block(x,y,gamecont,nrtiles).setAnimation(outerWall);
 //					tiles[x][y] = new Block(x,y,gamecont,nrtiles);
 //					tiles[x][y].setImg(concrete);
 				}else{
-					floorTile =  new Animation(ss,0,0,0,0,true, animationspeed,true);
+					floorTile =  new Animation(ss,2,0,2, 0,true, animationspeed,true);
 					tiles[x][y] = new FloorTile(x,y,gc,nrtiles).setAnimation(floorTile);
 //					tiles[x][y] = new FloorTile(x,y,gc,nrtiles);
 //					tiles[x][y].setImg(floorTile);
@@ -116,7 +116,7 @@ public class PlayState extends BasicGameState {
 		FloorTile ft = (FloorTile) tiles[1][1];
 		players[0] = new Player(ft);
 		if(nrplayers > 1){
-			ft = (FloorTile) tiles[nrtiles-2][nrtiles-2];
+			ft = (FloorTile) tiles[nrtiles-3][nrtiles-3];
 			players[1] = new Player(ft);	
 		}
 		if(nrplayers > 2){
@@ -144,7 +144,8 @@ public class PlayState extends BasicGameState {
 								|| i==13 && j==12 || i==13 && j==13 || i==12 && j==13 || i==1 && j==12 || i==1 & j==13 || i==2 && j==13){
 							//Do nothing. 
 						}else {
-							//anime = new Animation(ss,0,0,0,0,true,animationspeed,true);
+							removableBrick = new Animation(ss,0,0,0,0,true,animationspeed,true);
+							tiles[i][j] = new Block(i,j,gamecont,nrtiles).setImmovable(false).setAnimation(removableBrick);
 							//tiles[i][j] = new Block(i,j,gamecont,nrtiles).setImmovable(false).setImg(removableWall);
 						}
 					}
