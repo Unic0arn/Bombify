@@ -6,6 +6,7 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.Sound;
 
 import settings.*;
 /**
@@ -16,15 +17,20 @@ import settings.*;
  * @version 2012-04-23
  */
 public class BombifyGame extends StateBasedGame {
+	
+	
+	
 	static SettingsContainer gameSettings; // All the settings of the game stored in a HashMap
 	public BombifyGame() {
 		super("Bombify");
 		try{
+			
 			gameSettings = new SettingsContainer("res/Bombify.cfg");
 		} catch(ParseException e){
 			System.out.println("Error in config file on line " + e.getErrorOffset());
 			System.exit(0);
 		}
+		
 	}
 
 	@Override
@@ -37,6 +43,8 @@ public class BombifyGame extends StateBasedGame {
 	public static void main(String[] args) throws SlickException
 	{
 		AppGameContainer app = new AppGameContainer(new BombifyGame());
+		Sound s = new Sound("res/belikeyou.wav");
+		s.play();
 
 		// Application properties
 		app.setDisplayMode(
