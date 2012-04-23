@@ -13,7 +13,7 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.state.StateBasedGame;
+//import org.newdawn.slick.state.StateBasedGame;
 
 
 public class Bomb implements Renderable {
@@ -22,10 +22,10 @@ public class Bomb implements Renderable {
 	Image img;
 	double timeTil;
 	int posx,posy,sizex,sizey;
-	private Animation anime; 
+	Animation anime;
 	
-	public Bomb(GameContainer gc, Player player, Image image,FloorTile ft,int tiles){
-		img = image;
+	public Bomb(GameContainer gc, Player player, Animation b,FloorTile ft,int tiles){
+		anime = b;
 		p = player;
 		tile = ft;
 		timeTil = player.getBombTime() * 1000;
@@ -34,20 +34,22 @@ public class Bomb implements Renderable {
 
 		posx = (gc.getWidth()/tiles * ft.getGridx());
 		posy = (gc.getHeight()/tiles *ft.getGridy());
+		
+		
 	}
 	
 	@Override
 	public void render(GameContainer c, Graphics g) {
-			
-			g.drawImage(img,
-					posx,
-					posy,
-					posx+sizex,
-					posy+sizey,
-					0,
-					0,
-					img.getWidth(),
-					img.getHeight());
+		g.drawAnimation(anime, posx-(sizex/10), posy-(sizey/10f));
+//			g.drawImage(img,
+//					posx,
+//					posy,
+//					posx+sizex,
+//					posy+sizey,
+//					0,
+//					0,
+//					img.getWidth(),
+//					img.getHeight());
 	}
 	
 	public void update(GameContainer c, PlayState game, int delta){

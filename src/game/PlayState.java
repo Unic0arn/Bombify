@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-//import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-//import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.Image; 
 import settings.SettingsContainer;
+import org.newdawn.slick.Animation;
 
 import entities.Bomb;
 import entities.Item;
@@ -44,8 +44,10 @@ public class PlayState extends BasicGameState {
 	Player[] players;
 	int nrplayers; // The amount of players 1-4
 	int hitCounter = 0;
-	private Image outerBrick, concrete, floorTile, removableWall, bomb, slow; 
+	private Image outerBrick, concrete, floorTile, removableWall, slow; 
 	int nrtiles = 15; // Odd number = nice field
+	Animation bomb;
+	SpriteSheet ss;
 
 	/**
 	 * Creates a new game with the desired settings.
@@ -66,36 +68,31 @@ public class PlayState extends BasicGameState {
 		parseSettings(); // Start by parsing all the settings.
 
 		//Assign the images.
-		outerBrick = new Image("res/wall.png");
+		outerBrick = new Image("res/pyrWall.png");
 		floorTile = new Image("res/ground.png");
 		concrete = new Image("res/concrete.png");
 		removableWall = new Image("res/rock.png");		
-		bomb = new Image("res/sandBomb.png");
+		//bomb = new Image("res/sandBomb.png");
 		slow = new Image("res/slow.png");
-
-		//Creates the players and gives them positions.
 
 		//Defines the tiles.
 		tiles = new Square[nrtiles][nrtiles];
+		ss = new SpriteSheet("res/test2.png",25 , 25);
 
 
 		/**********************************************
 		 * This algorithm decides where walls, concrete
-		 * and floor should be in a xy-coordinate where
-		 * x is x-axis and y is y-axis. 
+		 * and floor should be in a Tiled Map. 
 		 */
 		for(int x = 0;x<nrtiles;x++){
 			for(int y = 0;y<nrtiles;y++){
 				if(x == 0||x ==nrtiles-1||y==0||y==nrtiles-1){
-					tiles[x][y] = new OuterWall();
-					tiles[x][y].setImg(outerBrick);
+					tiles[x][y] = new OuterWall().setImg(outerBrick);
 				}else if(y%2==0 && x%2==0){
-					tiles[x][y] = new Block(x,y,gamecont,nrtiles);
-					tiles[x][y].setImg(concrete);
+					tiles[x][y] = new Block(x,y,gamecont,nrtiles).setImg(concrete);
 				}else{
 
-					tiles[x][y] = new FloorTile(x,y,gc,nrtiles);
-					tiles[x][y].setImg(floorTile);
+					tiles[x][y] = new FloorTile(x,y,gc,nrtiles).setImg(floorTile);
 				}
 			}
 		}
@@ -120,15 +117,14 @@ public class PlayState extends BasicGameState {
 		}
 
 
-		Random dice = new Random();
-
 		/*******************************************
 		 * Adds random walls instead of a FloorTile. 
 		 */
 		for(int i = 0; i< nrtiles;i++){
+			Random dice = new Random();
 			for(int j = 0; j< nrtiles;j++){				
 				if(tiles[i][j] instanceof FloorTile){					
-					if (dice.nextInt(10) < 6){						
+					if (dice.nextInt(10) < 8){						
 
 						// Avoid corners. 
 						if (i==1 && j==1 || i==1 && j==2 || i==2 && j==1 || i==13 && j==2 || i==12 && j==1 || i==13 && j==1 
@@ -196,10 +192,10 @@ public class PlayState extends BasicGameState {
 					players[i].hit();
 				}
 				players[i].setDirection(direction);
+				
 				try {
 					players[i].update(c, delta, this);
 				} catch (SlickException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -248,6 +244,7 @@ public class PlayState extends BasicGameState {
 	}
 
 	public void createBomb(Player p, FloorTile tile) {
+		bomb = new Animation(ss,0,0,1,0,true,500,true);
 		bombs.add(new Bomb(gamecont, p, bomb, tile, nrtiles));
 	}
 
@@ -255,7 +252,8 @@ public class PlayState extends BasicGameState {
 	 * Removes temporary bricks. 
 	 * @param b
 	 */
-	public void removeBomb(Bomb b) { 
+	public void removeBomb(Bomb b) {
+	
 		bombs.remove(b);
 		int tilex = b.getTile().getGridx();
 		int tiley = b.getTile().getGridy();
@@ -263,6 +261,7 @@ public class PlayState extends BasicGameState {
 		Random dice = new Random(); 
 		if(tiles[tilex][tiley] instanceof FloorTile){
 			FloorTile ft = (FloorTile)tiles[tilex][tiley];
+			
 			if(ft.hasPlayer()){
 				ft.getPlayer().hurt(this);
 			}
@@ -270,23 +269,27 @@ public class PlayState extends BasicGameState {
 		for (int i = bombSize*-1;i<bombSize+1;i++){
 			if(tiles[tilex][tiley+i] instanceof Block){
 				Block block = (Block)tiles[tilex][tiley+i];	
+				
 				if(!block.isImmovable()){
-					block.destroy(this);
-					tiles[tilex][tiley+i] = new FloorTile(tilex,tiley+i,gamecont,nrtiles).setImg(floorTile);
+					block.destroy(this);					
+					tiles[tilex][tiley+i] = new FloorTile(tilex,tiley+i,gamecont,nrtiles).setImg(floorTile);					
 					if (dice.nextInt(10) == 2) {
 						FloorTile tempTile = (FloorTile)tiles[tilex][tiley+i];
 						Item tempItem = new Item(gamecont,slow,tempTile, nrtiles);
 						item.add(tempItem);
 						tempTile.setItem(tempItem);
-					}
+					}					
 				}
-			}else if(tiles[tilex][tiley+i] instanceof FloorTile){
+			}
+			
+			else if(tiles[tilex][tiley+i] instanceof FloorTile){
 				FloorTile ft = (FloorTile)tiles[tilex][tiley+i];
 				if(ft.hasPlayer()){
 					ft.getPlayer().hurt(this);
 				}
 			}
-			if(tiles[tilex+i][tiley] instanceof Block){
+			
+			else if(tiles[tilex+i][tiley] instanceof Block){
 				Block block = (Block)tiles[tilex+i][tiley];	
 				
 				if(!block.isImmovable()){
@@ -300,13 +303,15 @@ public class PlayState extends BasicGameState {
 						tempTile.setItem(tempItem);
 					}
 				}
-			}else if(tiles[tilex+i][tiley] instanceof FloorTile){
+			}
+			
+			else if(tiles[tilex+i][tiley] instanceof FloorTile){
 				FloorTile ft = (FloorTile)tiles[tilex+i][tiley];
 				if(ft.hasPlayer()){
 					ft.getPlayer().hurt(this);
 				}
 			}			
-		}	
+		}
 	}
 	
 	/**

@@ -13,7 +13,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 public class Player implements Renderable {
 	int placeableBombs = 1;
-	int speed = 3;
+	static int SPEED = 3;
 	int bombTime = 3; //in seconds
 	int bombSize = 1;
 	int animationspeed = 500; 
@@ -94,8 +94,7 @@ public class Player implements Renderable {
 			}
 			else{
 				//velo = (goal.getMiddle().copy().sub(pos).scale(0.4f));
-				velo = (goal.getMiddle().copy().sub(pos).scale(0.1f*speed));
-
+				velo = (goal.getMiddle().copy().sub(pos).scale(0.1f*SPEED));
 				pos.add(velo);
 			}
 		}
@@ -142,6 +141,14 @@ public class Player implements Renderable {
 		if(lives <= 0){
 			System.out.println("I died");
 		}
+	}
+	
+	public int decreaseSpeed(int s) {
+		return SPEED -= s;
+	}
+	
+	public int increaseSpeed(int s) {
+		return SPEED -= s;
 	}
 
 }
