@@ -33,7 +33,7 @@ public class Player implements Renderable {
 		this.tile = tile;
 		pos = tile.getMiddle();
 		goal = tile;
-
+		tile.setPlayer(this);
 		try {
 			ss = new SpriteSheet("/res/b.png", 20, 30);
 			anime = new Animation(ss,0,0,0,0,true,animationspeed,true);
