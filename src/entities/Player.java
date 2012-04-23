@@ -17,7 +17,7 @@ public class Player implements Renderable {
 	int bombTime = 3; //in seconds
 	int bombSize = 5;
 	int animationspeed = 500; 
-	int lives = 1;
+	int lives = 100;
 	FloorTile tile, goal;
 	Vector2f pos, velo = new Vector2f(0, 0),direction = new Vector2f(0, 0);
 	boolean hitting = false,
@@ -136,7 +136,8 @@ public class Player implements Renderable {
 	}
 
 	public void hurt(PlayState p) {
-		lives =- 1;
+		lives = lives - 1;
+		System.out.println(lives);
 		if(lives <= 0){
 			System.out.println("I died");
 		}

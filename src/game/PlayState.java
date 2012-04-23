@@ -45,7 +45,7 @@ public class PlayState extends BasicGameState {
 	int nrplayers; // The amount of players 1-4
 	int hitCounter = 0;
 	private Image outerBrick, concrete, floorTile, removableWall, slow
-			,light, dynamite; 
+	,light, dynamite; 
 	int nrtiles = 15; // Odd number = nice field
 	Animation bomb;
 	SpriteSheet ss;
@@ -226,7 +226,7 @@ public class PlayState extends BasicGameState {
 	}
 
 	private void updateItems(GameContainer c, int delta, Input in) {}
-	
+
 	private void renderItems(GameContainer c, Graphics g) {
 		for(int i = 0; i < item.size(); i++){
 			item.get(i).render(c, g);
@@ -281,7 +281,6 @@ public class PlayState extends BasicGameState {
 			if(!hitWallEast)hitWallEast=checkEast(i,tilex,tiley);
 			if(!hitWallWest)hitWallWest=checkWest(i,tilex,tiley);
 			if(!hitWallSouth)hitWallSouth=checkSouth(i,tilex,tiley);
-
 		}
 	}
 
@@ -359,7 +358,7 @@ public class PlayState extends BasicGameState {
 			if(ft.hasPlayer()){
 				ft.getPlayer().hurt(this);
 			}
-			
+
 		}else if(tempSquare instanceof OuterWall){
 			return true;
 		}
