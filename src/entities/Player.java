@@ -132,7 +132,6 @@ public class Player implements Renderable {
 		return bombSize;
 	}
 	public double getBombTime() {
-
 		return bombTime;
 	}
 

@@ -44,7 +44,8 @@ public class PlayState extends BasicGameState {
 	Player[] players;
 	int nrplayers; // The amount of players 1-4
 	int hitCounter = 0;
-	private Image outerBrick, concrete, floorTile, removableWall, slow; 
+	private Image outerBrick, concrete, floorTile, removableWall, slow
+			,light, dynamite; 
 	int nrtiles = 15; // Odd number = nice field
 	Animation bomb;
 	SpriteSheet ss;
@@ -72,12 +73,13 @@ public class PlayState extends BasicGameState {
 		floorTile = new Image("res/ground.png");
 		concrete = new Image("res/concrete.png");
 		removableWall = new Image("res/rock.png");		
-		//bomb = new Image("res/sandBomb.png");
+		light= new Image("res/lightning.png");
 		slow = new Image("res/slow.png");
+		dynamite= new Image("res/dynamite.png");
 
 		//Defines the tiles.
 		tiles = new Square[nrtiles][nrtiles];
-		ss = new SpriteSheet("res/test2.png",25 , 25);
+		ss = new SpriteSheet("res/bomb.png",50 , 50);
 
 
 		/**********************************************
@@ -96,6 +98,9 @@ public class PlayState extends BasicGameState {
 				}
 			}
 		}
+		// Test
+		tiles[2][10] = new FloorTile(1,10,gc,nrtiles).setImg(slow);
+		tiles[2][7] = new FloorTile(1,7,gc,nrtiles).setImg(dynamite);
 
 		/************************************************
 		 *  Creates the players and gives them positions.
@@ -124,7 +129,7 @@ public class PlayState extends BasicGameState {
 			Random dice = new Random();
 			for(int j = 0; j< nrtiles;j++){				
 				if(tiles[i][j] instanceof FloorTile){					
-					if (dice.nextInt(10) < 8){						
+					if (dice.nextInt(10) < 6){						
 
 						// Avoid corners. 
 						if (i==1 && j==1 || i==1 && j==2 || i==2 && j==1 || i==13 && j==2 || i==12 && j==1 || i==13 && j==1 
@@ -220,8 +225,8 @@ public class PlayState extends BasicGameState {
 		}
 	}
 
-	private void updateItems(GameContainer c, int delta, Input in) {
-	}
+	private void updateItems(GameContainer c, int delta, Input in) {}
+	
 	private void renderItems(GameContainer c, Graphics g) {
 		for(int i = 0; i < item.size(); i++){
 			item.get(i).render(c, g);
@@ -254,6 +259,7 @@ public class PlayState extends BasicGameState {
 	 */
 	public void removeBomb(Bomb b) {
 		boolean hitWallNorth = false,hitWallEast= false,hitWallWest= false,hitWallSouth= false;
+
 		bombs.remove(b);
 		int tilex = b.getTile().getGridx();
 		int tiley = b.getTile().getGridy();
@@ -275,6 +281,7 @@ public class PlayState extends BasicGameState {
 			if(!hitWallEast)hitWallEast=checkEast(i,tilex,tiley);
 			if(!hitWallWest)hitWallWest=checkWest(i,tilex,tiley);
 			if(!hitWallSouth)hitWallSouth=checkSouth(i,tilex,tiley);
+
 		}
 	}
 
