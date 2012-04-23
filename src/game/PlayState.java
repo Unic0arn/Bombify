@@ -23,6 +23,7 @@ import map.Block;
 import map.OuterWall;
 import map.Square;
 import map.FloorTile;
+
 /**
  * This is the playing part of the game.
  * A game that is based on players trying to blow each other up.
@@ -163,6 +164,10 @@ public class PlayState extends BasicGameState {
 		if (in.isKeyDown(Input.KEY_ESCAPE)) {
 			c.exit();
 		}		
+		
+//		s = new Music("res/movinout.wav");
+//		s.play();
+		
 		updatePlayers(c,delta,in);
 		updateBombs(c,delta,in);
 		updateItems(c,delta,in);
