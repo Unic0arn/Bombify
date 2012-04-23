@@ -77,7 +77,7 @@ public class PlayState extends BasicGameState {
 
 		//Defines the tiles.
 		tiles = new Square[nrtiles][nrtiles];
-		ss = new SpriteSheet("res/test2.png",25 , 25);
+		ss = new SpriteSheet("res/bomb.png",50 , 50);
 
 
 		/**********************************************
