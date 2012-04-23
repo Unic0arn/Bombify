@@ -1,5 +1,5 @@
 package entities;
-import game.PlayState2;
+import game.PlayState;
 import map.FloorTile;
 
 import org.newdawn.slick.GameContainer;
@@ -38,7 +38,7 @@ public class Item implements Renderable {
 					img.getHeight());
 		
 	}
-	public void update(GameContainer c, PlayState2 game, int delta){}
+	public void update(GameContainer c, PlayState game, int delta){}
 
 
 	public FloorTile getTile(){

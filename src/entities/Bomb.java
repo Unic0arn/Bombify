@@ -12,21 +12,20 @@ import map.FloorTile;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-//import org.newdawn.slick.Image;
-//import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.state.StateBasedGame;
 
 
 public class Bomb implements Renderable {
 	Player p;
 	FloorTile tile;
-	//Image img;
+	Image img;
 	double timeTil;
 	int posx,posy,sizex,sizey;
 	private Animation anime; 
 	
-	public Bomb(GameContainer gc, Player player, Animation a,FloorTile ft,int tiles){
-		//img = image;
-		anime = a;
+	public Bomb(GameContainer gc, Player player, Image image,FloorTile ft,int tiles){
+		img = image;
 		p = player;
 		tile = ft;
 		timeTil = player.getBombTime() * 1000;
@@ -39,18 +38,16 @@ public class Bomb implements Renderable {
 	
 	@Override
 	public void render(GameContainer c, Graphics g) {
-		g.drawAnimation(anime, posx-(sizex/6f), posy-(sizey/6f));
 			
-//			g.drawImage(img,
-//					posx,
-//					posy,
-//					posx+sizex,
-//					posy+sizey,
-//					0,
-//					0,
-//					img.getWidth(),
-//					img.getHeight());
-//		
+			g.drawImage(img,
+					posx,
+					posy,
+					posx+sizex,
+					posy+sizey,
+					0,
+					0,
+					img.getWidth(),
+					img.getHeight());
 	}
 	
 	public void update(GameContainer c, PlayState game, int delta){
