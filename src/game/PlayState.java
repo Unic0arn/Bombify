@@ -171,7 +171,7 @@ public class PlayState extends BasicGameState {
 			}
 		}
 	}
-	
+
 	private void updatePlayers(GameContainer c, int delta, Input in) {
 		for(int i = 0; i < players.length; i++){
 			if(players[i].isAlive()){
@@ -192,7 +192,7 @@ public class PlayState extends BasicGameState {
 					players[i].hit();
 				}
 				players[i].setDirection(direction);
-				
+
 				try {
 					players[i].update(c, delta, this);
 				} catch (SlickException e) {
@@ -201,33 +201,33 @@ public class PlayState extends BasicGameState {
 			}
 		}
 	}
-	
+
 	private void renderPlayers(GameContainer c, Graphics g) {
 		for(int i = 0; i < players.length; i++){
 			if(players[i].isAlive())players[i].render(c, g);
 		}
 	}
-	
+
 	private void updateBombs(GameContainer c, int delta, Input in) {
 		for(int i = 0; i < bombs.size();i++){
 			bombs.get(i).update(c, this, delta);
 		}
 	}
-	
+
 	private void renderBombs(GameContainer c, Graphics g) {
 		for(int i = 0; i < bombs.size();i++){
 			bombs.get(i).render(c, g);
 		}
 	}
+
+	private void updateItems(GameContainer c, int delta, Input in) {}
 	
-	private void updateItems(GameContainer c, int delta, Input in) {		
-	}
 	private void renderItems(GameContainer c, Graphics g) {
 		for(int i = 0; i < item.size(); i++){
 			item.get(i).render(c, g);
 		}
 	}
-	
+
 	@Override
 	public int getID() {
 		return Constants.GAME;
@@ -260,59 +260,63 @@ public class PlayState extends BasicGameState {
 		Random dice = new Random(); 
 		if(tiles[tilex][tiley] instanceof FloorTile){
 			FloorTile ft = (FloorTile)tiles[tilex][tiley];
-			
+
 			if(ft.hasPlayer()){
 				ft.getPlayer().hurt(this);
 			}
 		}
 		for (int i = bombSize*-1;i<bombSize+1;i++){
-			if(tiles[tilex][tiley+i] instanceof Block){
-				Block block = (Block)tiles[tilex][tiley+i];	
-				
-				if(!block.isImmovable()){
-					block.destroy(this);					
-					tiles[tilex][tiley+i] = new FloorTile(tilex,tiley+i,gamecont,nrtiles).setImg(floorTile);					
-					if (dice.nextInt(10) == 2) {
-						FloorTile tempTile = (FloorTile)tiles[tilex][tiley+i];
-						Item tempItem = new Item(gamecont,slow,tempTile, nrtiles);
-						item.add(tempItem);
-						tempTile.setItem(tempItem);
-					}					
-				}
-			}
-			
-			else if(tiles[tilex][tiley+i] instanceof FloorTile){
-				FloorTile ft = (FloorTile)tiles[tilex][tiley+i];
-				if(ft.hasPlayer()){
-					ft.getPlayer().hurt(this);
-				}
-			}
-			
-			else if(tiles[tilex+i][tiley] instanceof Block){
-				Block block = (Block)tiles[tilex+i][tiley];	
-				
-				if(!block.isImmovable()){
-					block.destroy(this);
-					tiles[tilex+i][tiley] = new FloorTile(tilex+i,tiley,gamecont,nrtiles).setImg(floorTile);
-					
-					if (dice.nextInt(10) == 2) {
-						FloorTile tempTile = (FloorTile)tiles[tilex+i][tiley];
-						Item tempItem = new Item(gamecont,slow,tempTile, nrtiles);
-						item.add(tempItem);
-						tempTile.setItem(tempItem);
+			if(tilex >= 0 && tilex < nrtiles && tiley+i >= 0 && tiley+i < nrtiles ){
+				Square tempSquare = tiles[tilex][tiley+i];
+
+				if(tempSquare instanceof Block){
+					Block block = (Block)tiles[tilex][tiley+i];	
+
+					if(!block.isImmovable()){
+						block.destroy(this);					
+						tempSquare = new FloorTile(tilex,tiley+i,gamecont,nrtiles).setImg(floorTile);					
+						if (dice.nextInt(10) == 2) {
+							FloorTile tempTile = (FloorTile)tempSquare;
+							Item tempItem = new Item(gamecont,slow,tempTile, nrtiles);
+							item.add(tempItem);
+							tempTile.setItem(tempItem);
+						}					
+					}
+				}else if(tempSquare instanceof FloorTile){
+					FloorTile ft = (FloorTile)tempSquare;
+					if(ft.hasPlayer()){
+						ft.getPlayer().hurt(this);
 					}
 				}
 			}
-			
-			else if(tiles[tilex+i][tiley] instanceof FloorTile){
-				FloorTile ft = (FloorTile)tiles[tilex+i][tiley];
-				if(ft.hasPlayer()){
-					ft.getPlayer().hurt(this);
+			if(tilex+i >= 0 && tilex+i < nrtiles && tiley >= 0 && tiley < nrtiles ){
+				Square tempSquare = tiles[tilex+i][tiley];
+				if(tempSquare instanceof Block){
+					Block block = (Block)tempSquare;	
+
+					if(!block.isImmovable()){
+						block.destroy(this);
+						tempSquare = new FloorTile(tilex+i,tiley,gamecont,nrtiles).setImg(floorTile);
+
+						if (dice.nextInt(10) == 2) {
+							FloorTile tempTile = (FloorTile)tempSquare;
+							Item tempItem = new Item(gamecont,slow,tempTile, nrtiles);
+							item.add(tempItem);
+							tempTile.setItem(tempItem);
+						}
+					}
 				}
-			}			
+
+				else if(tempSquare instanceof FloorTile){
+					FloorTile ft = (FloorTile)tempSquare;
+					if(ft.hasPlayer()){
+						ft.getPlayer().hurt(this);
+					}
+				}
+			}
 		}
 	}
-	
+
 	/**
 	 * Parses the most used settings from the hashmap.
 	 * This is to avoid constant parsing and ParseInts which are
