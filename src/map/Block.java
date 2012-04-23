@@ -1,11 +1,13 @@
 package map;
 
-import org.newdawn.slick.Color;
+import org.newdawn.slick.Animation;
+//import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
+//import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Rectangle;
+//import org.newdawn.slick.geom.Rectangle;
+
 import game.PlayState;
 import entities.Player;
 
@@ -16,8 +18,9 @@ import entities.Player;
  */
 public class Block implements Square{
 	boolean immovable =true;
-	private Image img;
+	//private Image img;
 	int gridx,gridy,posx,posy,sizex,sizey;
+	private Animation anime;
 	
 	
 	public int getGridx() {
@@ -62,25 +65,31 @@ public class Block implements Square{
 			int x, int y, int tiles)
 					throws SlickException {
 		
-		if(img!=null){
-			g.drawImage(img,
-					posx,
-					posy,
-					posx+sizex,
-					posy+sizey,
-					0,
-					0,
-					img.getWidth(),
-					img.getHeight());
+		if(anime!=null){
+			g.drawAnimation(anime, posx-(sizex/6f), posy-(sizey/6f));
+//			g.drawImage(img,
+//					posx,
+//					posy,
+//					posx+sizex,
+//					posy+sizey,
+//					0,
+//					0,
+//					img.getWidth(),
+//					img.getHeight());
 		}
-		else{
-			g.setColor(Color.darkGray);
-			g.fill(new Rectangle(posx,posy,sizex,sizey));
-		}
+//		else{
+//			g.setColor(Color.darkGray);
+//			g.fill(new Rectangle(posx,posy,sizex,sizey));
+//		}
 	}
+//	@Override
+//	public Block setImg(Image i) {
+//		img = i;
+//		return this;
+//	}
 	@Override
-	public Block setImg(Image i) {
-		img = i;
+	public Square setAnimation(Animation a) {
+		anime = a;
 		return this;
 	}
 

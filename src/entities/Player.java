@@ -16,7 +16,7 @@ public class Player implements Renderable {
 	int speed = 3;
 	int bombTime = 3; //in seconds
 	int bombSize = 1;
-	int animationspeed = 300; 
+	int animationspeed = 500; 
 	int lives = 1;
 	FloorTile tile, goal;
 	Vector2f pos, velo = new Vector2f(0, 0),direction = new Vector2f(0, 0);

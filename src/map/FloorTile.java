@@ -1,26 +1,30 @@
 package map;
 
-import org.newdawn.slick.Color;
+import org.newdawn.slick.Animation;
+//import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
+//import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Rectangle;
+//import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 import entities.Item;
 import entities.Player;
 /**
  * A class that contains information about a tile on the floor.
- * @author Fredrik
+ * @author Fredrik & Victor
+ * @version 2012-04-23
  *
  */
 public class FloorTile implements Square {
-	private Image img;
+	//private Image img;
 	private Item item;
 	private Player player;
-	int posx,posy,sizex,sizey;
-	int gridx,gridy;
+	int posx,posy,sizex,sizey,gridx,gridy;
+	private Animation anime; 
+	
+	
 	public boolean hasPlayer(){
 		return player != null;
 	}
@@ -44,27 +48,28 @@ public class FloorTile implements Square {
 	@Override
 	public void render(GameContainer container, Graphics g, int x, int y,
 			int tiles) throws SlickException {
-		if(img!=null){
-			g.drawImage(img,
-					posx,
-					posy,
-					posx+sizex,
-					posy+sizey,
-					0,
-					0,
-					img.getWidth(),
-					img.getHeight());
+		if(anime!=null){
+			g.drawAnimation(anime, posx-(sizex/6f), posy-(sizey/6f));
+//			g.drawImage(img,
+//					posx,
+//					posy,
+//					posx+sizex,
+//					posy+sizey,
+//					0,
+//					0,
+//					img.getWidth(),
+//					img.getHeight());
 		}
-		else{
-			g.setColor(Color.black);
-			g.fill(new Rectangle(posx,posy,sizex,sizey));
-		}
+//		else{
+//			g.setColor(Color.black);
+//			g.fill(new Rectangle(posx,posy,sizex,sizey));
+//		}
 	}
-	@Override
-	public FloorTile setImg(Image i){
-		img = i;
-		return this;
-	}
+//	@Override
+//	public FloorTile setImg(Image i){
+//		img = i;
+//		return this;
+//	}
 	public Vector2f getMiddle(){
 		return new Vector2f(posx+(sizex/2f), posy+(sizey/2f));
 	}
@@ -87,6 +92,11 @@ public class FloorTile implements Square {
 	}
 	public String toString(){
 		return "[" + gridx + "," + gridy + "]";
+	}
+	@Override
+	public Square setAnimation(Animation a) {
+		anime = a; 
+		return this;
 	}
 }
 

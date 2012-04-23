@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import org.newdawn.slick.Animation;
+//import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
+//import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-//import org.newdawn.slick.Image; 
+import org.newdawn.slick.Image; 
 import settings.SettingsContainer;
 
 import entities.Bomb;
@@ -23,7 +23,6 @@ import map.Block;
 import map.OuterWall;
 import map.Square;
 import map.FloorTile;
-
 /**
  * This is the playing part of the game.
  * A game that is based on players trying to blow each other up.
@@ -33,28 +32,27 @@ import map.FloorTile;
  *
  */
 
-public class PlayState extends BasicGameState {
+public class PlayState2 extends BasicGameState {
 	Boolean paused =false; //Maybe for pausing the game not used at the moment!
 	SettingsContainer gameSettings; //An object to contain all settings.
 	GameContainer gamecont;
 	HashMap<String,Integer> playerControls; //Store the player controls in a hashmap.
+	//Player[] player; //A vector of the players.
 	Square[][] tiles; //A grid of all the "tiles" in the game.
 	ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 	ArrayList<Item> item = new ArrayList<Item>();
 	Player[] players;
 	int nrplayers; // The amount of players 1-4
+	//int hitCounter = 0;
+	private Image outerBrick, concrete, floorTile, removableWall, bomb, slow; 
 	int nrtiles = 15; // Odd number = nice field
-	
-	private Animation outerWall, removableBrick, floorTile;
-	private int animationspeed = 500;
-	private SpriteSheet ss; 
 
 	/**
 	 * Creates a new game with the desired settings.
 	 * @param gs - The settings file.
 	 * @throws SlickException
 	 */
-	public PlayState(SettingsContainer gs) throws SlickException {
+	public PlayState2(SettingsContainer gs) throws SlickException {
 		super();
 		gameSettings = gs;
 	}
@@ -66,16 +64,14 @@ public class PlayState extends BasicGameState {
 			throws SlickException {
 		gamecont = gc;
 		parseSettings(); // Start by parsing all the settings.
-		
-		ss = new SpriteSheet("res/Bricks.png", 30, 30);
 
 		//Assign the images.
-//		outerBrick = new Image("res/wall.png");
-//		floorTile = new Image("res/ground.png");
-//		concrete = new Image("res/concrete.png");
-//		removableWall = new Image("res/rock.png");		
-//		bomb = new Image("res/sandBomb.png");
-//		slow = new Image("res/slow.png");
+		outerBrick = new Image("res/wall.png");
+		floorTile = new Image("res/ground.png");
+		concrete = new Image("res/concrete.png");
+		removableWall = new Image("res/rock.png");		
+		bomb = new Image("res/sandBomb.png");
+		slow = new Image("res/slow.png");
 
 		//Creates the players and gives them positions.
 
@@ -91,20 +87,15 @@ public class PlayState extends BasicGameState {
 		for(int x = 0;x<nrtiles;x++){
 			for(int y = 0;y<nrtiles;y++){
 				if(x == 0||x ==nrtiles-1||y==0||y==nrtiles-1){
-					outerWall = new Animation(ss,0,0,0,0,true, animationspeed,true);
-					tiles[x][y] = new OuterWall().setAnimation(outerWall);
- 					//tiles[x][y] = new OuterWall();
-					//tiles[x][y].setImg(outerBrick);
+					tiles[x][y] = new OuterWall();
+					tiles[x][y].setImg(outerBrick);
 				}else if(y%2==0 && x%2==0){
-					outerWall = new Animation(ss,0,0,0,0,true, animationspeed,true);
-					tiles[x][y] = new Block(x,y,gamecont,nrtiles).setAnimation(outerWall);
-//					tiles[x][y] = new Block(x,y,gamecont,nrtiles);
-//					tiles[x][y].setImg(concrete);
+					tiles[x][y] = new Block(x,y,gamecont,nrtiles);
+					tiles[x][y].setImg(concrete);
 				}else{
-					floorTile =  new Animation(ss,0,0,0,0,true, animationspeed,true);
-					tiles[x][y] = new FloorTile(x,y,gc,nrtiles).setAnimation(floorTile);
-//					tiles[x][y] = new FloorTile(x,y,gc,nrtiles);
-//					tiles[x][y].setImg(floorTile);
+
+					tiles[x][y] = new FloorTile(x,y,gc,nrtiles);
+					tiles[x][y].setImg(floorTile);
 				}
 			}
 		}
@@ -144,8 +135,7 @@ public class PlayState extends BasicGameState {
 								|| i==13 && j==12 || i==13 && j==13 || i==12 && j==13 || i==1 && j==12 || i==1 & j==13 || i==2 && j==13){
 							//Do nothing. 
 						}else {
-							//anime = new Animation(ss,0,0,0,0,true,animationspeed,true);
-							//tiles[i][j] = new Block(i,j,gamecont,nrtiles).setImmovable(false).setImg(removableWall);
+							tiles[i][j] = new Block(i,j,gamecont,nrtiles).setImmovable(false).setImg(removableWall);
 						}
 					}
 				}
@@ -254,11 +244,11 @@ public class PlayState extends BasicGameState {
 	}
 
 	public void removeWall(Block b) {
-		//tiles[b.getGridx()][b.getGridy()] = new FloorTile(b.getGridx(),b.getGridy(),gamecont,nrtiles).setImg(floorTile);		
+		tiles[b.getGridx()][b.getGridy()] = new FloorTile(b.getGridx(),b.getGridy(),gamecont,nrtiles).setImg(floorTile);		
 	}
 
 	public void createBomb(Player p, FloorTile tile) {
-		//bombs.add(new Bomb(gamecont, p, bomb, tile, nrtiles));
+		bombs.add(new Bomb(gamecont, p, bomb, tile, nrtiles));
 	}
 
 	/**
@@ -281,13 +271,13 @@ public class PlayState extends BasicGameState {
 			if(tiles[tilex][tiley+i] instanceof Block){
 				Block block = (Block)tiles[tilex][tiley+i];	
 				if(!block.isImmovable()){
-					//block.destroy(this);
-					//tiles[tilex][tiley+i] = new FloorTile(tilex,tiley+i,gamecont,nrtiles).setImg(floorTile);
+					block.destroy(this);
+					tiles[tilex][tiley+i] = new FloorTile(tilex,tiley+i,gamecont,nrtiles).setImg(floorTile);
 					if (dice.nextInt(10) == 2) {
 						FloorTile tempTile = (FloorTile)tiles[tilex][tiley+i];
-						//Item tempItem = new Item(gamecont,slow,tempTile, nrtiles);
-						//item.add(tempItem);
-						//tempTile.setItem(tempItem);
+						Item tempItem = new Item(gamecont,slow,tempTile, nrtiles);
+						item.add(tempItem);
+						tempTile.setItem(tempItem);
 					}
 				}
 			}else if(tiles[tilex][tiley+i] instanceof FloorTile){
@@ -301,13 +291,13 @@ public class PlayState extends BasicGameState {
 				
 				if(!block.isImmovable()){
 					block.destroy(this);
-					//tiles[tilex+i][tiley] = new FloorTile(tilex+i,tiley,gamecont,nrtiles).setImg(floorTile);
+					tiles[tilex+i][tiley] = new FloorTile(tilex+i,tiley,gamecont,nrtiles).setImg(floorTile);
 					
 					if (dice.nextInt(10) == 2) {
 						FloorTile tempTile = (FloorTile)tiles[tilex+i][tiley];
-//						Item tempItem = new Item(gamecont,slow,tempTile, nrtiles);
-//						item.add(tempItem);
-//						tempTile.setItem(tempItem);
+						Item tempItem = new Item(gamecont,slow,tempTile, nrtiles);
+						item.add(tempItem);
+						tempTile.setItem(tempItem);
 					}
 				}
 			}else if(tiles[tilex+i][tiley] instanceof FloorTile){
