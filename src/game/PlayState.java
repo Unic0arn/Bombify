@@ -43,9 +43,9 @@ public class PlayState extends BasicGameState {
 	ArrayList<Item> item = new ArrayList<Item>();
 	Player[] players;
 	int nrplayers; // The amount of players 1-4
-	int nrtiles = 16; // Odd number = nice field
+	int nrtiles = 30;
 	
-	private Animation outerWall, removableBrick, floorTile;
+	private Animation outerWall, removableBrick, floorTile; 
 	private int animationspeed = 500;
 	private SpriteSheet ss; 
 
@@ -67,7 +67,7 @@ public class PlayState extends BasicGameState {
 		gamecont = gc;
 		parseSettings(); // Start by parsing all the settings.
 		
-		ss = new SpriteSheet("res/Bricks.png", 30, 30);
+		ss = new SpriteSheet("res/Bricks.png", 30, 30); 
 
 		//Assign the images.
 //		outerBrick = new Image("res/wall.png");
@@ -84,9 +84,10 @@ public class PlayState extends BasicGameState {
 
 
 		/**********************************************
-		 * This algorithm decides where walls, concrete
-		 * and floor should be in a xy-coordinate where
-		 * x is x-axis and y is y-axis. 
+		 * This algorithm decides where animated Bricks
+		 * should be, removable or not. 
+		 * - outerWall = Fixed
+		 * - FloorTile = removable. 
 		 */
 		for(int x = 0;x<nrtiles;x++){
 			for(int y = 0;y<nrtiles;y++){
@@ -115,8 +116,9 @@ public class PlayState extends BasicGameState {
 		players = new Player[nrplayers];
 		FloorTile ft = (FloorTile) tiles[1][1];
 		players[0] = new Player(ft);
+		
 		if(nrplayers > 1){
-			ft = (FloorTile) tiles[nrtiles-3][nrtiles-3];
+			ft = (FloorTile) tiles[nrtiles-5][nrtiles-5];
 			players[1] = new Player(ft);	
 		}
 		if(nrplayers > 2){
@@ -124,24 +126,29 @@ public class PlayState extends BasicGameState {
 			players[2] = new Player(ft);	
 		}
 		if(nrplayers > 3){
-			ft = (FloorTile) tiles[nrtiles-2][1];
+			ft = (FloorTile) tiles[nrtiles-3][1];
 			players[3] = new Player(ft);	
 		}
+		
+		if(nrplayers > 4){
+			ft = (FloorTile) tiles[nrtiles-1][nrtiles-1];
+			players[4] = new Player(ft);	
+		}
 
-
-		Random dice = new Random();
 
 		/*******************************************
 		 * Adds random walls instead of a FloorTile. 
 		 */
 		for(int i = 0; i< nrtiles;i++){
+			Random dice = new Random();
 			for(int j = 0; j< nrtiles;j++){				
 				if(tiles[i][j] instanceof FloorTile){					
-					if (dice.nextInt(10) < 6){						
+					if (dice.nextInt(10) < 4){						
 
 						// Avoid corners. 
-						if (i==1 && j==1 || i==1 && j==2 || i==2 && j==1 || i==13 && j==2 || i==12 && j==1 || i==13 && j==1 
-								|| i==13 && j==12 || i==13 && j==13 || i==12 && j==13 || i==1 && j==12 || i==1 & j==13 || i==2 && j==13){
+						if(i==1 && j==1 || i==1 && j==2 || i==2 && j==2 || i==29 && j==1 || i==28 || j==1) {
+//						if (i==1 && j==1 || i==1 && j==2 || i==2 && j==1 || i==13 && j==2 || i==12 && j==1 || i==13 && j==1 
+//								|| i==13 && j==12 || i==13 && j==13 || i==12 && j==13 || i==1 && j==12 || i==1 & j==13 || i==2 && j==13){
 							//Do nothing. 
 						}else {
 							removableBrick = new Animation(ss,0,0,0,0,true,animationspeed,true);

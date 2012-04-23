@@ -76,14 +76,13 @@ public class Player implements Renderable {
 			//Left
 			else if(direction.equals(new Vector2f(-1,0))){
 				anime = new Animation(ss,4,0,7,0,true,animationspeed,true);
-
 			}
 
 			//Down
 			else if(direction.equals(new Vector2f(0,1))){
 				anime = new Animation(ss,0,0,1,0,true,animationspeed,true);
 			}
-
+			
 			//Up
 			else if(direction.equals(new Vector2f(0,-1))){
 				anime = new Animation(ss,3,0,4,0,true,animationspeed,true);
@@ -94,7 +93,7 @@ public class Player implements Renderable {
 				tile = goal;
 			}
 			else{
-				//velo = (goal.getMiddle().copy().sub(pos).scale(0.2f));
+				//velo = (goal.getMiddle().copy().sub(pos).scale(0.4f));
 				velo = (goal.getMiddle().copy().sub(pos).scale(0.1f*speed));
 
 				pos.add(velo);
