@@ -61,11 +61,11 @@ public class SettingsMenu extends BasicGameState {
 			if(it.hasNext()){
 				temp = it.next();
 				settingList[i] = temp;
-				b[i] = new Button(50,20*i+50,50,20,temp);
+				b[i] = new Button(200,20*i+50,50,20,temp);
 				b[i].setImage(main);
 			}
 		}
-		returnButton = new Button(200,50,50,50,main);
+		returnButton = new Button(300,50,50,50,main);
 		returnButton.setShortCut(Constants.LOBBY);
 		/*b[0] = new Button(50, 250, 200, 100, main);
 		b[0] = new Button(50, 150, 50, 50, "main");
@@ -81,7 +81,7 @@ public class SettingsMenu extends BasicGameState {
 		menu.draw(0, 0);
 		for (int i = 0; i < b.length; i++) {
 			b[i].render(container, game, g);
-			g.drawString(settingList[i], 20,20*i+50);
+			g.drawString(settingList[i] + ": " + sc.get(settingList[i]), 20,20*i+50);
 		}
 		returnButton.render(container, game, g);
 	}
@@ -104,7 +104,7 @@ public class SettingsMenu extends BasicGameState {
 				//game.enterState(b[i].getShortCut());
 			}
 			if(returnButton.isClicked(mousePos)){
-				sc.writeToFile();
+				//sc.writeToFile();
 				game.enterState(returnButton.getShortCut());
 			}
 //			
