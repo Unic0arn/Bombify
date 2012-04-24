@@ -45,12 +45,11 @@ public class PlayState extends BasicGameState {
 	Player[] players;
 	int nrplayers; // The amount of players 1-4
 	int hitCounter = 0;
-	private Image outerBrick, concrete, floorTile, removableWall, slow,
-			light, dynamite; 
+	private Image outerBrick, concrete, floorTile, removableWall, slow
+	,light, dynamite; 
 	int nrtiles = 15; // Odd number = nice field
 	Animation bomb;
 	SpriteSheet ss;
-
 	/**
 	 * Creates a new game with the desired settings.
 	 * @param gs - The settings file.
@@ -385,5 +384,8 @@ public class PlayState extends BasicGameState {
 			playerControls.put("P"+(i+1)+"E",Integer.parseInt(gameSettings.get("P"+(i+1)+"E")));
 			playerControls.put("P"+(i+1)+"B",Integer.parseInt(gameSettings.get("P"+(i+1)+"B")));
 		}
+	}
+	public GameContainer getGamecontainer(){
+		return gamecont;
 	}
 }

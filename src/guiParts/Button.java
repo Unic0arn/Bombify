@@ -146,7 +146,9 @@ public class Button {
 	public void setStringColor(Color c){
 		stringColor = c;
 	}
-	
+	public String getString(){
+		return buttonString;
+	}
 	/**
 	 * Brute force quitting of the program. 
 	 * @param c

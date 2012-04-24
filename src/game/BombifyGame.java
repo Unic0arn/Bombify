@@ -39,7 +39,7 @@ public class BombifyGame extends StateBasedGame{
 		PlayState state = new PlayState(gameSettings);
 		
 		addState(state);
-		addState(new SettingsMenu());
+		addState(new SettingsMenu(gameSettings,this));
 	}
 	public static void main(String[] args) throws SlickException
 	{

@@ -44,9 +44,5 @@ public class Item implements Renderable {
 	public FloorTile getTile(){
 		return tile;
 	}
-	
-	public Player getPlayer(){
-		return p;
-	}
 }
 
