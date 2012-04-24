@@ -45,8 +45,8 @@ public class PlayState extends BasicGameState {
 	Player[] players;
 	int nrplayers; // The amount of players 1-4
 	int hitCounter = 0;
-	private Image outerBrick, concrete, floorTile, removableWall, slow
-	,light, dynamite; 
+	private Image outerBrick, concrete, floorTile, removableWall, slow,
+			light, dynamite; 
 	int nrtiles = 15; // Odd number = nice field
 	Animation bomb;
 	SpriteSheet ss;

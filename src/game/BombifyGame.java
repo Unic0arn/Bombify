@@ -6,7 +6,7 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.Music;
+//import org.newdawn.slick.Music;
 
 import settings.*;
 /**
@@ -16,7 +16,7 @@ import settings.*;
  * @author Fredrik & Victor
  * @version 2012-04-23
  */
-public class BombifyGame extends StateBasedGame {
+public class BombifyGame extends StateBasedGame{
 	
 	
 	
@@ -37,15 +37,17 @@ public class BombifyGame extends StateBasedGame {
 	public void initStatesList(GameContainer container) throws SlickException {
 		addState(new Lobby());
 		PlayState state = new PlayState(gameSettings);
+		
 		addState(state);
 		addState(new SettingsMenu());
 	}
 	public static void main(String[] args) throws SlickException
 	{
 		AppGameContainer app = new AppGameContainer(new BombifyGame());
-		Music s = new Music("res/movinout.wav");
-		s.loop();
-		s.play();
+		
+//		SettingsMenu s = new SettingsMenu();
+//		app.setDisplayMode(s.getXres(), s.getYres(), false);
+		
 
 		// Application properties
 		app.setDisplayMode(
@@ -55,7 +57,7 @@ public class BombifyGame extends StateBasedGame {
 		app.setSmoothDeltas(true);
 		app.setTargetFrameRate(Integer.parseInt(gameSettings.get("MAX_FPS")));
 		app.setTargetFrameRate(60);
-		app.setShowFPS(true);
+		app.setShowFPS(false);
 		app.setVSync(true);
 		app.start();		
 	}

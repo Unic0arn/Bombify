@@ -23,7 +23,7 @@ public class Button {
 	private int shortcut; //Where this button leads, the constants are in the Constants class.
 	private Image img; // The image on the button.
 	private Color buttonColor = Color.blue,
-			stringColor = Color.black; // Colors in case an image is missing.
+			stringColor = Color.white; // Colors in case an image is missing.
 	/**
 	 * Creates a button at the specified location with the specified size.
 	 * @param x - The x-Position of the button relative to the game-window
@@ -140,12 +140,12 @@ public class Button {
 	public void setImage(Image im) {
 		img = im;
 	}
-//	public void setButtonColor(Color c){
-//		buttonColor = c;
-//	}
-//	public void setStringColor(Color c){
-//		stringColor = c;
-//	}
+	public void setButtonColor(Color c){
+		buttonColor = c;
+	}
+	public void setStringColor(Color c){
+		stringColor = c;
+	}
 	
 	/**
 	 * Brute force quitting of the program. 

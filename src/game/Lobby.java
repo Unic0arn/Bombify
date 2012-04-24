@@ -29,16 +29,17 @@ public class Lobby extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		menu = new Image("res/menu.png");
-		start = new Image("res/start.png");
-		settings = new Image("res/settings.png");
-		quit = new Image("res/quit.png");
+		//start = new Image("res/start.png");
+		//settings = new Image("res/settings.png");
+		//quit = new Image("res/quit.png");
 		
 		b = new Button[3];
-		b[0] = new Button(50, 250, 200, 100, start);
-		b[1] = new Button(50,350,200,100,settings);	
-		b[2] = new Button(50, 450, 200, 100, quit);
-		b[0].setShortCut(Constants.GAME);
-		b[1].setShortCut(Constants.SETTINGMENU);
+		b[0] = new Button(50, 450, 200, 100, "quit");
+		b[1] = new Button(50, 250, 200, 100, "Start Game");
+		b[2] = new Button(50,350,200,100,"settings");	
+		
+		b[1].setShortCut(Constants.GAME);
+		b[2].setShortCut(Constants.SETTINGMENU);
 	}
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
@@ -53,6 +54,8 @@ public class Lobby extends BasicGameState {
 			throws SlickException {
 		Input in = container.getInput();
 		
+	
+		
 		if(in.isMousePressed(0)){
 			Vector2f mousePos = new Vector2f( in.getAbsoluteMouseX(), in.getAbsoluteMouseY());
 			for(int i= 0; i < b.length;i++){
@@ -61,8 +64,8 @@ public class Lobby extends BasicGameState {
 					game.enterState(b[i].getShortCut());
 				}
 				
-				if(b[2].isClicked(mousePos)){
-					b[2].quit(container);
+				if(b[0].isClicked(mousePos)){
+					b[0].quit(container);
 				}
 			}
 		}
