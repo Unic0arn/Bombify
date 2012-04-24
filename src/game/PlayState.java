@@ -160,10 +160,10 @@ public class PlayState extends BasicGameState {
 		if (in.isKeyDown(Input.KEY_ESCAPE)) {
 			c.exit();
 		}		
-		
-//		s = new Music("res/movinout.wav");
-//		s.play();
-		
+
+		//		s = new Music("res/movinout.wav");
+		//		s.play();
+
 		updatePlayers(c,delta,in);
 		updateBombs(c,delta,in);
 		updateItems(c,delta,in);
@@ -251,7 +251,9 @@ public class PlayState extends BasicGameState {
 
 	public void createBomb(Player p, FloorTile tile) {
 		bomb = new Animation(ss,0,0,1,0,true,500,true);
-		bombs.add(new Bomb(gamecont, p, bomb, tile, nrtiles));
+		Bomb tempBomb = new Bomb(gamecont, p, bomb, tile, nrtiles);
+		bombs.add(tempBomb);
+		tile.setBomb(tempBomb);
 	}
 
 	/**
@@ -260,20 +262,21 @@ public class PlayState extends BasicGameState {
 	 */
 	public void removeBomb(Bomb b) {
 		boolean hitWallNorth = false,hitWallEast= false,hitWallWest= false,hitWallSouth= false;
-
+		System.out.println(bombs.size());
 		bombs.remove(b);
+		
 		int tilex = b.getTile().getGridx();
 		int tiley = b.getTile().getGridy();
 		int bombSize = b.getPlayer().getBombSize();
-		
+
 		/*
 		 * Handles the situation of the player standing on the bomb.
 		 */
-		if(tiles[tilex][tiley] instanceof FloorTile){
-			FloorTile ft = (FloorTile)tiles[tilex][tiley];
-			if(ft.hasPlayer()){
-				ft.getPlayer().hurt(this);
-			}
+
+		FloorTile ft = (FloorTile)tiles[tilex][tiley];
+		ft.setBomb(null);
+		if(ft.hasPlayer()){
+			ft.getPlayer().hurt(this);
 		}
 		/*
 		 * Handles the blaswave in all directions.
@@ -359,6 +362,10 @@ public class PlayState extends BasicGameState {
 			FloorTile ft = (FloorTile)tempSquare;
 			if(ft.hasPlayer()){
 				ft.getPlayer().hurt(this);
+			}
+			if(ft.hasBomb()){
+				ft.getBomb().explodeBomb(this);
+				
 			}
 
 		}else if(tempSquare instanceof OuterWall){
