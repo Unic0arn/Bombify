@@ -52,8 +52,7 @@ public class Lobby extends BasicGameState {
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
-		Input in = container.getInput();
-		
+		Input in = container.getInput();		
 	
 		
 		if(in.isMousePressed(0)){

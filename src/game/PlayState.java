@@ -98,9 +98,6 @@ public class PlayState extends BasicGameState {
 				}
 			}
 		}
-		// Test
-		tiles[2][10] = new FloorTile(1,10,gc,nrtiles).setImg(slow);
-		tiles[2][7] = new FloorTile(1,7,gc,nrtiles).setImg(dynamite);
 
 		/************************************************
 		 *  Creates the players and gives them positions.
@@ -268,6 +265,7 @@ public class PlayState extends BasicGameState {
 		int tilex = b.getTile().getGridx();
 		int tiley = b.getTile().getGridy();
 		int bombSize = b.getPlayer().getBombSize();
+		
 		/*
 		 * Handles the situation of the player standing on the bomb.
 		 */

@@ -5,13 +5,14 @@ import map.FloorTile;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.state.StateBasedGame;
+//import org.newdawn.slick.state.StateBasedGame;
 public class Item implements Renderable {
 	Player p;
 	FloorTile tile;
 	Image img;
 	double timeTil;
 	int posx,posy,sizex,sizey;
+
 	
 	public Item(GameContainer gc, Image image,FloorTile ft,int tiles){
 		img = image;
@@ -23,7 +24,6 @@ public class Item implements Renderable {
 		posy = (gc.getHeight()/tiles *ft.getGridy());
 	}
 	
-	//Temporary until we figure out Animations. 
 	@Override
 	public void render(GameContainer c, Graphics g) {
 			
