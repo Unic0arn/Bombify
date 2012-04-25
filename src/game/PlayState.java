@@ -46,11 +46,10 @@ public class PlayState extends BasicGameState {
 	int nrplayers; // The amount of players 1-4
 	int hitCounter = 0;
 	private Image outerBrick, concrete, floorTile, removableWall, slow,
-			light, dynamite; 
+	light, dynamite; 
 	int nrtiles = 15; // Odd number = nice field
 	Animation bomb;
 	SpriteSheet ss;
-	HashMap hm = new HashMap(); 
 
 	/**
 	 * Creates a new game with the desired settings.
@@ -230,6 +229,7 @@ public class PlayState extends BasicGameState {
 
 	private void updateItems(GameContainer c, int delta, Input in) {}
 
+
 	private void renderItems(GameContainer c, Graphics g) {
 		for(int i = 0; i < item.size(); i++){
 			item.get(i).render(c, g);
@@ -258,6 +258,13 @@ public class PlayState extends BasicGameState {
 		tile.setBomb(tempBomb);
 	}
 
+	public void removeItem(FloorTile tile){
+		if(tile.hasPlayer() && tile.hasItem() == true){
+			item.remove(tile.getItem());
+			System.out.println("hej");
+		}
+	}
+
 	/**
 	 * Removes the bomb from the field and handles the CONSEQUENCES!!!!
 	 * @param b
@@ -266,7 +273,7 @@ public class PlayState extends BasicGameState {
 		boolean hitWallNorth = false,hitWallEast= false,hitWallWest= false,hitWallSouth= false;
 		System.out.println(bombs.size());
 		bombs.remove(b);
-		
+
 		int tilex = b.getTile().getGridx();
 		int tiley = b.getTile().getGridy();
 		int bombSize = b.getPlayer().getBombSize();
@@ -279,27 +286,23 @@ public class PlayState extends BasicGameState {
 			if(ft.hasPlayer()){
 				ft.getPlayer().hurt(this);
 			}
-			
-			if(ft.hasItem()) {
-				item.remove(ft.getItem());
-				System.out.println("apa");
+
+			ft.setBomb(null);
+			if(ft.hasPlayer()){
+				ft.getPlayer().hurt(this);
 			}
 
-		//FloorTile ft = (FloorTile)tiles[tilex][tiley];
-		ft.setBomb(null);
-		if(ft.hasPlayer()){
-			ft.getPlayer().hurt(this);
-		}
-		/*
-		 * Handles the blaswave in all directions.
-		 */
-		for (int i = 1; i<=bombSize;i++){
-			if(!hitWallNorth)hitWallNorth=checkNorth(i,tilex,tiley);
-			if(!hitWallEast)hitWallEast=checkEast(i,tilex,tiley);
-			if(!hitWallWest)hitWallWest=checkWest(i,tilex,tiley);
-			if(!hitWallSouth)hitWallSouth=checkSouth(i,tilex,tiley);
-		}
-		
+
+			/*
+			 * Handles the blaswave in all directions.
+			 */
+			for (int i = 1; i<=bombSize;i++){
+				if(!hitWallNorth)hitWallNorth=checkNorth(i,tilex,tiley);
+				if(!hitWallEast)hitWallEast=checkEast(i,tilex,tiley);
+				if(!hitWallWest)hitWallWest=checkWest(i,tilex,tiley);
+				if(!hitWallSouth)hitWallSouth=checkSouth(i,tilex,tiley);
+			}
+
 		}
 	}
 
@@ -379,7 +382,7 @@ public class PlayState extends BasicGameState {
 			}
 			if(ft.hasBomb()){
 				ft.getBomb().explodeBomb(this);
-				
+
 			}
 
 		}else if(tempSquare instanceof OuterWall){
