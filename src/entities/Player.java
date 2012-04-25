@@ -12,18 +12,11 @@ import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Vector2f;
 
 public class Player implements Renderable {
-	int placeableBombs = 1;
-	int speed = 3;
-	int bombTime = 3; //in seconds
-	int maxBombs = 0;
-	int bombSize = 5;
-	int animationspeed = 500; 
-	int lives = 100;
+	int placeableBombs = 1, speed = 3, bombTime = 3, bombs = 0, 
+			bombSize = 5, animationspeed = 500, lives = 100;
 	FloorTile tile, goal;
 	Vector2f pos, velo = new Vector2f(0, 0),direction = new Vector2f(0, 0);
-	boolean hitting = false,
-			//moving = true,
-			moving = false;
+	boolean hitting = false,moving = false;
 
 	int posx,posy,sizex,sizey;
 	SpriteSheet ss;
@@ -54,21 +47,19 @@ public class Player implements Renderable {
 				int destinationy = (int) (tile.getGridy() + direction.y); 
 				Square s = p.getTiles()[destinationx][destinationy];
 				if(isFloor(s)){
-					FloorTile temp = (FloorTile)s;
-					if(!temp.hasPlayer()){
+					FloorTile tempTile = (FloorTile)s;
+					if(!tempTile.hasPlayer()){
 						goal = (FloorTile)s;					
 						moving = true;
 						tile.setPlayer(null);
 						goal.setPlayer(this);
 					}}
 			}else if(hitting){
-				System.out.println("Bomb Player");
 				p.createBomb(this,tile);
+				System.out.println("Bomb in 'player' created.");
 				hitting = false;
 			}
-
-		}
-		else{
+		}else{
 			
 			//Right
 			if(direction.equals(new Vector2f(1,0))){
@@ -121,7 +112,11 @@ public class Player implements Renderable {
 	}
 
 	public void hit() {
-		if(!moving)hitting=true;
+		if(!moving) {
+			if(isBombAllowed()) {
+				hitting=true;
+			}			
+		}
 	}
 	
 	public int getBombSize(){
@@ -133,7 +128,12 @@ public class Player implements Renderable {
 	}
 	
 	public boolean isBombAllowed(){
-		if (maxBombs<=3){maxBombs++;return true;}return false;
+		if (bombs<=3){
+			bombs++;
+			System.out.println("Antal bomber: "+bombs);
+			return true;
+			}
+		return false;
 	}
 
 	public void hurt(PlayState p) {

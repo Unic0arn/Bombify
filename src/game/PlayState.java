@@ -38,7 +38,7 @@ public class PlayState extends BasicGameState {
 	SettingsContainer gameSettings; //An object to contain all settings.
 	GameContainer gamecont;
 	HashMap<String,Integer> playerControls; //Store the player controls in a hashmap.
-	Player[] player; //A vector of the players.
+	//Player[] player; //A vector of the players.
 	Square[][] tiles; //A grid of all the "tiles" in the game.
 	ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 	ArrayList<Item> item = new ArrayList<Item>();
@@ -160,18 +160,13 @@ public class PlayState extends BasicGameState {
 		//Just checking if anyone pressed the escape key to end game.
 		if (in.isKeyDown(Input.KEY_ESCAPE)) {
 			c.exit();
-		}		
-
-		//		s = new Music("res/movinout.wav");
-		//		s.play();
-
+		}
 		updatePlayers(c,delta,in);
 		updateBombs(c,delta,in);
 		updateItems(c,delta,in);
 	}
 
 	private void renderMap(GameContainer gc, Graphics g) throws SlickException {
-
 		for(int i =0;i<nrtiles;i++){
 			for(int j = 0;j<nrtiles;j++){
 				tiles[i][j].render(gc,g, i, j, nrtiles);
@@ -251,12 +246,12 @@ public class PlayState extends BasicGameState {
 		tiles[b.getGridx()][b.getGridy()] = new FloorTile(b.getGridx(),b.getGridy(),gamecont,nrtiles).setImg(floorTile);		
 	}
 
-	public void createBomb(Player p, FloorTile tile){
-		System.out.println("Bomb playstate");
+	public void createBomb(Player p, FloorTile tile){		
 		bomb = new Animation(ss,0,0,1,0,true,500,true);
 		Bomb tempBomb = new Bomb(gamecont, p, bomb, tile, nrtiles);
 		bombs.add(tempBomb);
 		tile.setBomb(tempBomb);
+		System.out.println("Bomb created in 'PlayState'");
 	}
 
 
