@@ -259,11 +259,11 @@ public class PlayState extends BasicGameState {
 	}
 
 	public void removeItem(FloorTile tile){
-		if(tile.hasPlayer() && tile.hasItem() == true){
+		//if(tile.hasPlayer() && tile.hasItem() == true){
 			item.remove(tile.getItem());
 			System.out.println("hej");
 		}
-	}
+	//}
 
 	/**
 	 * Removes the bomb from the field and handles the CONSEQUENCES!!!!
@@ -281,7 +281,7 @@ public class PlayState extends BasicGameState {
 		/*
 		 * Handles the situation of the player standing on the bomb.
 		 */
-		if(tiles[tilex][tiley] instanceof FloorTile){
+		//if(tiles[tilex][tiley] instanceof FloorTile){
 			FloorTile ft = (FloorTile)tiles[tilex][tiley];
 			if(ft.hasPlayer()){
 				ft.getPlayer().hurt(this);
@@ -302,8 +302,6 @@ public class PlayState extends BasicGameState {
 				if(!hitWallWest)hitWallWest=checkWest(i,tilex,tiley);
 				if(!hitWallSouth)hitWallSouth=checkSouth(i,tilex,tiley);
 			}
-
-		}
 	}
 
 	/**
@@ -375,20 +373,20 @@ public class PlayState extends BasicGameState {
 			}else{
 				return true;
 			}
+			
 		}else if(tempSquare instanceof FloorTile){
 			FloorTile ft = (FloorTile)tempSquare;
 			if(ft.hasPlayer()){
 				ft.getPlayer().hurt(this);
 			}
+			
 			if(ft.hasBomb()){
 				ft.getBomb().explodeBomb(this);
-
 			}
 
 		}else if(tempSquare instanceof OuterWall){
 			return true;
 		}
-
 		return false;
 	}
 	/**

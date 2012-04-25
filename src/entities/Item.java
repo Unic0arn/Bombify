@@ -45,8 +45,13 @@ public class Item implements Renderable {
 					img.getHeight());
 		
 	}
-	public void update(GameContainer c, PlayState game, int delta){}
-
+	public void update(GameContainer c, PlayState game, int delta){
+		removeItem(game);
+	}
+	
+	public void removeItem(PlayState p){
+		p.removeItem(tile);
+	}
 
 	public FloorTile getTile(){
 		return tile;
