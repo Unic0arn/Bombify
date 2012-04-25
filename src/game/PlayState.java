@@ -266,7 +266,7 @@ public class PlayState extends BasicGameState {
 	 */
 	public void removeBomb(Bomb b) {
 		boolean hitWallNorth = false,hitWallEast= false,hitWallWest= false,hitWallSouth= false;
-		System.out.println("bomb strl "+ bombs.size());
+		System.out.println("bombs size "+ bombs.size());
 		bombs.remove(b);
 
 		int tilex = b.getTile().getGridx();
@@ -279,11 +279,13 @@ public class PlayState extends BasicGameState {
 		FloorTile ft = (FloorTile)tiles[tilex][tiley];
 		if(ft.hasPlayer()){
 			ft.getPlayer().hurt(this);
+			System.out.println("tilex tiley");
 		}
 
 		ft.setBomb(null);
 		if(ft.hasPlayer()){
 			ft.getPlayer().hurt(this);
+			System.out.println("tilex tiley bomb null");
 		}
 
 
@@ -372,6 +374,7 @@ public class PlayState extends BasicGameState {
 			FloorTile ft = (FloorTile)tempSquare;
 			if(ft.hasPlayer()){
 				ft.getPlayer().hurt(this);
+				System.out.println("hurt checkPath");
 			}
 
 			if(ft.hasBomb()){

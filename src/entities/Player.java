@@ -95,7 +95,6 @@ public class Player implements Renderable {
 				tile = goal;
 			}
 			else{
-				//velo = (goal.getMiddle().copy().sub(pos).scale(0.4f));
 				velo = (goal.getMiddle().copy().sub(pos).scale(0.1f*speed));
 				pos.add(velo);
 			}
@@ -138,7 +137,7 @@ public class Player implements Renderable {
 	}
 
 	public void hurt(PlayState p) {
-		lives =- 1;
+		lives--;
 		System.out.println("Lives: " + lives);
 		if(lives <= 0){
 			System.out.println("I died");
