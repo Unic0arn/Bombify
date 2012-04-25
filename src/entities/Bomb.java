@@ -55,10 +55,12 @@ public class Bomb implements Renderable {
 	public void update(GameContainer c, PlayState game, int delta){
 		timeTil = timeTil - delta;
 		if(timeTil <= 0){
-			game.removeBomb(this);
+			explodeBomb(game);
 		}
 	}
-	
+	public void explodeBomb(PlayState game){
+		game.removeBomb(this);
+	}
 	public FloorTile getTile(){
 		return tile;
 	}

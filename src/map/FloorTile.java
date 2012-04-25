@@ -9,6 +9,7 @@ import org.newdawn.slick.SlickException;
 //import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
+import entities.Bomb;
 import entities.Item;
 import entities.Player;
 /**
@@ -22,20 +23,9 @@ public class FloorTile implements Square {
 	private Item item;
 	private Player player;
 	int posx,posy,sizex,sizey,gridx,gridy;
+	private Bomb bomb;
 	
 	
-	public boolean hasPlayer(){
-		return player != null;
-	}
-	public boolean hasItem(){
-		return item != null;
-	}
-	public int getGridx() {
-		return gridx;
-	}
-	public int getGridy() {
-		return gridy;
-	}
 	public FloorTile(int x, int y, GameContainer container, int tiles){
 		gridx = x;
 		gridy = y;
@@ -75,19 +65,42 @@ public class FloorTile implements Square {
 	public Vector2f getCorner(){
 		return new Vector2f(posx, posy);
 	}
-	
+	//----------------------------------
+	public boolean hasBomb(){
+		return bomb != null;
+	}
+	public Bomb getBomb(){
+		return bomb;
+	}
+	public void setBomb(Bomb bomb) {
+		this.bomb = bomb;
+	}
+	//---------------------------------
+	public boolean hasItem(){
+		return item != null;
+	}
 	public Item getItem() {
 		return item;
 	}
 	public void setItem(Item item) {
 		this.item = item;
 	}
-	
+	//---------------------------------
+	public boolean hasPlayer(){
+		return player != null;
+	}
 	public Player getPlayer() {
 		return player;
 	}
 	public void setPlayer(Player player) {
 		this.player = player;
+	}
+	//---------------------------------
+	public int getGridx() {
+		return gridx;
+	}
+	public int getGridy() {
+		return gridy;
 	}
 	public String toString(){
 		return "[" + gridx + "," + gridy + "]";
