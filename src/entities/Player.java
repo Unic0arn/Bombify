@@ -15,6 +15,7 @@ public class Player implements Renderable {
 	int placeableBombs = 1;
 	int speed = 3;
 	int bombTime = 3; //in seconds
+	int maxBombs = 0;
 	int bombSize = 5;
 	int animationspeed = 500; 
 	int lives = 100;
@@ -33,20 +34,20 @@ public class Player implements Renderable {
 		pos = tile.getMiddle();
 		goal = tile;
 		tile.setPlayer(this);
+		
 		try {
 			ss = new SpriteSheet("/res/b.png", 20, 30);
 			anime = new Animation(ss,0,0,0,0,true,animationspeed,true);
 		} catch (SlickException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-
 		}
 	}
 
 	public boolean update(GameContainer c, int delta, PlayState p) throws SlickException {		
 		sizex = (c.getWidth()/p.getTiles().length);
 		sizey = (c.getHeight()/p.getTiles().length);
-
+		
+		
 		if(!moving) {
 			if(!direction.equals(new Vector2f(0,0))){
 				int destinationx = (int) (tile.getGridx() +  direction.x);
@@ -61,12 +62,14 @@ public class Player implements Renderable {
 						goal.setPlayer(this);
 					}}
 			}else if(hitting){
+				System.out.println("Bomb Player");
 				p.createBomb(this,tile);
 				hitting = false;
 			}
 
 		}
 		else{
+			
 			//Right
 			if(direction.equals(new Vector2f(1,0))){
 				anime = new Animation(ss,9,0,9,0,true, animationspeed,true);
@@ -106,12 +109,7 @@ public class Player implements Renderable {
 	@Override
 	public void render(GameContainer c, Graphics g) {
 		g.drawAnimation(anime, pos.x-(sizex/6f), pos.y-(sizey/6f));
-		//g.drawAnimation(anime, pos.x, pos.y);
 	}
-
-//	public Vector2f getMiddle(){
-//		return new Vector2f(posx+(sizex/6f), posy+(sizey/6f));
-//	}
 
 	public void setDirection(Vector2f a) {
 		direction = a;
@@ -124,19 +122,24 @@ public class Player implements Renderable {
 	}
 
 	public void hit() {
-		if(!moving)
-			hitting=true;
+		if(!moving)hitting=true;
 	}
+	
 	public int getBombSize(){
 		return bombSize;
 	}
+	
 	public double getBombTime() {
 		return bombTime;
 	}
+	
+	public boolean isBombAllowed(){
+		if (maxBombs<=3){maxBombs++;return true;}return false;
+	}
 
 	public void hurt(PlayState p) {
-		lives = lives - 1;
-		System.out.println(lives);
+		lives =- 1;
+		System.out.println("Lives: " + lives);
 		if(lives <= 0){
 			System.out.println("I died");
 		}

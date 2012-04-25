@@ -29,7 +29,7 @@ import map.FloorTile;
  * A game that is based on players trying to blow each other up.
  * 
  * @author Fredrik Hallberg & Victor Dahlin
- * @version 2012-04-23
+ * @version 2012-04-25
  *
  */
 
@@ -251,19 +251,14 @@ public class PlayState extends BasicGameState {
 		tiles[b.getGridx()][b.getGridy()] = new FloorTile(b.getGridx(),b.getGridy(),gamecont,nrtiles).setImg(floorTile);		
 	}
 
-	public void createBomb(Player p, FloorTile tile) {
+	public void createBomb(Player p, FloorTile tile){
+		System.out.println("Bomb playstate");
 		bomb = new Animation(ss,0,0,1,0,true,500,true);
 		Bomb tempBomb = new Bomb(gamecont, p, bomb, tile, nrtiles);
 		bombs.add(tempBomb);
 		tile.setBomb(tempBomb);
 	}
 
-	public void removeItem(FloorTile tile){
-		//if(tile.hasPlayer() && tile.hasItem() == true){
-			item.remove(tile.getItem());
-			System.out.println("hej");
-		}
-	//}
 
 	/**
 	 * Removes the bomb from the field and handles the CONSEQUENCES!!!!
@@ -271,7 +266,7 @@ public class PlayState extends BasicGameState {
 	 */
 	public void removeBomb(Bomb b) {
 		boolean hitWallNorth = false,hitWallEast= false,hitWallWest= false,hitWallSouth= false;
-		System.out.println(bombs.size());
+		System.out.println("bomb strl "+ bombs.size());
 		bombs.remove(b);
 
 		int tilex = b.getTile().getGridx();
@@ -281,27 +276,26 @@ public class PlayState extends BasicGameState {
 		/*
 		 * Handles the situation of the player standing on the bomb.
 		 */
-		//if(tiles[tilex][tiley] instanceof FloorTile){
-			FloorTile ft = (FloorTile)tiles[tilex][tiley];
-			if(ft.hasPlayer()){
-				ft.getPlayer().hurt(this);
-			}
+		FloorTile ft = (FloorTile)tiles[tilex][tiley];
+		if(ft.hasPlayer()){
+			ft.getPlayer().hurt(this);
+		}
 
-			ft.setBomb(null);
-			if(ft.hasPlayer()){
-				ft.getPlayer().hurt(this);
-			}
+		ft.setBomb(null);
+		if(ft.hasPlayer()){
+			ft.getPlayer().hurt(this);
+		}
 
 
-			/*
-			 * Handles the blaswave in all directions.
-			 */
-			for (int i = 1; i<=bombSize;i++){
-				if(!hitWallNorth)hitWallNorth=checkNorth(i,tilex,tiley);
-				if(!hitWallEast)hitWallEast=checkEast(i,tilex,tiley);
-				if(!hitWallWest)hitWallWest=checkWest(i,tilex,tiley);
-				if(!hitWallSouth)hitWallSouth=checkSouth(i,tilex,tiley);
-			}
+		/*
+		 * Handles the blaswave in all directions.
+		 */
+		for (int i = 1; i<=bombSize;i++){
+			if(!hitWallNorth)hitWallNorth=checkNorth(i,tilex,tiley);
+			if(!hitWallEast)hitWallEast=checkEast(i,tilex,tiley);
+			if(!hitWallWest)hitWallWest=checkWest(i,tilex,tiley);
+			if(!hitWallSouth)hitWallSouth=checkSouth(i,tilex,tiley);
+		}
 	}
 
 	/**
@@ -373,13 +367,13 @@ public class PlayState extends BasicGameState {
 			}else{
 				return true;
 			}
-			
+
 		}else if(tempSquare instanceof FloorTile){
 			FloorTile ft = (FloorTile)tempSquare;
 			if(ft.hasPlayer()){
 				ft.getPlayer().hurt(this);
 			}
-			
+
 			if(ft.hasBomb()){
 				ft.getBomb().explodeBomb(this);
 			}

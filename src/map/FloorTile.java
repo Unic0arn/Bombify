@@ -15,7 +15,7 @@ import entities.Player;
 /**
  * A class that contains information about a tile on the floor.
  * @author Fredrik & Victor
- * @version 2012-04-23
+ * @version 2012-04-25
  *
  */
 public class FloorTile implements Square {
@@ -48,10 +48,6 @@ public class FloorTile implements Square {
 					img.getWidth(),
 					img.getHeight());
 		}
-//		else{
-//			g.setColor(Color.black);
-//			g.fill(new Rectangle(posx,posy,sizex,sizey));
-//		}
 	}
 	@Override
 	public FloorTile setImg(Image i){

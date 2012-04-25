@@ -10,7 +10,7 @@ import org.newdawn.slick.Image;
 /**
  * Different Items changes state of players. 
  * @author Fredrik & Victor
- * @version 2012-04-24
+ * @version 2012-04-25
  *
  */
 public class Item implements Renderable {
@@ -50,7 +50,7 @@ public class Item implements Renderable {
 	}
 	
 	public void removeItem(PlayState p){
-		p.removeItem(tile);
+		//p.removeItem(tile);
 	}
 
 	public FloorTile getTile(){
