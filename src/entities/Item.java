@@ -6,6 +6,13 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 //import org.newdawn.slick.state.StateBasedGame;
+
+/**
+ * Different Items changes state of players. 
+ * @author Fredrik & Victor
+ * @version 2012-04-24
+ *
+ */
 public class Item implements Renderable {
 	Player p;
 	FloorTile tile;
@@ -14,7 +21,7 @@ public class Item implements Renderable {
 	int posx,posy,sizex,sizey;
 
 	
-	public Item(GameContainer gc, Image image,FloorTile ft,int tiles){
+	public Item(GameContainer gc, Image image,FloorTile ft,int tiles){		
 		img = image;
 		tile = ft;
 		sizex = (gc.getWidth()/tiles);

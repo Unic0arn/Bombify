@@ -45,11 +45,13 @@ public class PlayState extends BasicGameState {
 	Player[] players;
 	int nrplayers; // The amount of players 1-4
 	int hitCounter = 0;
-	private Image outerBrick, concrete, floorTile, removableWall, slow
-	,light, dynamite; 
+	private Image outerBrick, concrete, floorTile, removableWall, slow,
+			light, dynamite; 
 	int nrtiles = 15; // Odd number = nice field
 	Animation bomb;
 	SpriteSheet ss;
+	HashMap hm = new HashMap(); 
+
 	/**
 	 * Creates a new game with the desired settings.
 	 * @param gs - The settings file.
@@ -274,6 +276,11 @@ public class PlayState extends BasicGameState {
 			if(ft.hasPlayer()){
 				ft.getPlayer().hurt(this);
 			}
+			
+			if(ft.hasItem()) {
+				item.remove(ft.getItem());
+				System.out.println("apa");
+			}
 		}
 		/*
 		 * Handles the blaswave in all directions.
@@ -345,13 +352,13 @@ public class PlayState extends BasicGameState {
 			Block block = (Block)tiles[tempSquare.getGridx()][tempSquare.getGridy()];	
 			if(!block.isImmovable()){
 				removeWall(block);					
-				tempSquare = new FloorTile(block.getGridx(),block.getGridy(),gamecont,nrtiles).setImg(floorTile);					
+				tempSquare = new FloorTile(block.getGridx(),block.getGridy(),gamecont,nrtiles).setImg(floorTile);
 				if (dice.nextInt(10) == 2) {
 					FloorTile tempTile = (FloorTile)tempSquare;
 					Item tempItem = new Item(gamecont,slow,tempTile, nrtiles);
 					item.add(tempItem);
 					tempTile.setItem(tempItem);
-				}					
+				}
 			}else{
 				return true;
 			}
@@ -382,8 +389,5 @@ public class PlayState extends BasicGameState {
 			playerControls.put("P"+(i+1)+"E",Integer.parseInt(gameSettings.get("P"+(i+1)+"E")));
 			playerControls.put("P"+(i+1)+"B",Integer.parseInt(gameSettings.get("P"+(i+1)+"B")));
 		}
-	}
-	public GameContainer getGamecontainer(){
-		return gamecont;
 	}
 }

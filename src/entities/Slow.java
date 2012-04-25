@@ -17,11 +17,11 @@ import org.newdawn.slick.Image;
  *
  */
 public class Slow extends Item implements Renderable {
-	Player p;
-	FloorTile tile;
-	Image img;
-	double timeTil;
-	int posx,posy,sizex,sizey;
+//	Player p;
+//	FloorTile tile;
+//	Image img;
+//	double timeTil;
+//	int posx,posy,sizex,sizey;
 
 	public Slow(GameContainer gc, Image image, FloorTile ft, int tiles) {
 		super(gc, image, ft, tiles);

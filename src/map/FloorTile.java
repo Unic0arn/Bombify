@@ -82,6 +82,7 @@ public class FloorTile implements Square {
 	public void setItem(Item item) {
 		this.item = item;
 	}
+	
 	public Player getPlayer() {
 		return player;
 	}
