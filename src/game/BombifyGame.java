@@ -6,7 +6,7 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
-//import org.newdawn.slick.Music;
+
 
 import settings.*;
 /**
@@ -16,7 +16,7 @@ import settings.*;
  * @author Fredrik & Victor
  * @version 2012-04-23
  */
-public class BombifyGame extends StateBasedGame{	
+public class BombifyGame extends StateBasedGame{
 	static SettingsContainer gameSettings; // All the settings of the game stored in a HashMap
 	public BombifyGame() {
 		super("Bombify");
@@ -32,8 +32,7 @@ public class BombifyGame extends StateBasedGame{
 
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
-		addState(new Lobby(gameSettings));
-		
+		addState(new Lobby(gameSettings));		
 		addState(new PlayState(gameSettings));
 		addState(new SettingsMenu(gameSettings,this));
 	}

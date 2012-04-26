@@ -1,9 +1,7 @@
 package settings;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.JOptionPane;
@@ -11,8 +9,6 @@ import javax.swing.JOptionPane;
 import guiParts.Button;
 import game.BombifyGame;
 import game.Constants;
-import game.Lobby;
-import game.PlayState;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
@@ -37,14 +33,13 @@ public class SettingsMenu extends BasicGameState {
 	Button[] b;
 	Button returnButton;
 	String[] settingList;
-	private int xRes = 800, yRes = 600;
 	AppGameContainer app;
 	SettingsContainer sc;
 	BombifyGame bg;
 	public SettingsMenu(SettingsContainer gameSettings, BombifyGame bombifyGame) {
 		sc = gameSettings;
 		bg = bombifyGame;
-		
+
 	}
 
 	@Override
@@ -68,13 +63,7 @@ public class SettingsMenu extends BasicGameState {
 		}
 		returnButton = new Button(300,50,50,50,main);
 		returnButton.setShortCut(Constants.LOBBY);
-		/*b[0] = new Button(50, 250, 200, 100, main);
-		b[0] = new Button(50, 150, 50, 50, "main");
-		b[1] = new Button(50, 250, 50, 50, "640 x 480");
-		b[2] = new Button(50, 350, 50, 50, "start");
-		b[0].setShortCut(Constants.LOBBY);
-		b[2].setShortCut(Constants.GAME);	*/
-		}
+	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
@@ -91,49 +80,23 @@ public class SettingsMenu extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
 		Input in = container.getInput();		
-		
+
 		if (in.isMousePressed(0)) {
 			for(int i= 0; i < b.length;i++){
-			Vector2f mousePos = new Vector2f(in.getAbsoluteMouseX(),
-					in.getAbsoluteMouseY());
-			
-			if (b[i].isClicked(mousePos)) {
-				String tempString = b[i].getString();
-				String tempValue = JOptionPane.showInputDialog(null);
-				sc.remove(tempString);
-				sc.put(tempString, tempValue);
-				//game.enterState(b[i].getShortCut());
-			}
-			if(returnButton.isClicked(mousePos)){
-				//sc.writeToFile();
-				game.enterState(returnButton.getShortCut());
-			}
-//			
-//			if (b[2].isClicked(mousePos)) {
-//				game.enterState(b[2].getShortCut());
-//			}
-			
-			/*if (b[1].isClicked(mousePos)) {
-				AppGameContainer app = new AppGameContainer(new BombifyGame());
-				app.setDisplayMode(640, 480, false);
-				game.enterState(b[0].getShortCut());
-				//setResoulution(640, 480);
-			}*/
+				Vector2f mousePos = new Vector2f(in.getAbsoluteMouseX(),
+						in.getAbsoluteMouseY());
+
+				if (b[i].isClicked(mousePos)) {
+					String tempString = b[i].getString();
+					String tempValue = JOptionPane.showInputDialog(null);
+					sc.remove(tempString);
+					sc.put(tempString, tempValue);
+				}
+				if(returnButton.isClicked(mousePos)){
+					game.enterState(returnButton.getShortCut());
+				}
 			}
 		}
-	}
-	
-	private void setResoulution(int x, int y){
-		this.xRes = x;
-		this.yRes = y;
-	}
-	
-	public int getYres() {
-		return yRes;
-	}
-	
-	public int getXres() {
-		return xRes;
 	}
 
 	@Override

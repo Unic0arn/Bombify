@@ -11,6 +11,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Vector2f;
+import org.newdawn.slick.Sound;
 
 public class Player implements Renderable {
 
@@ -24,6 +25,7 @@ public class Player implements Renderable {
 	int posx,posy,sizex,sizey;
 	SpriteSheet ss;
 	Animation anime; 
+	Sound life; 
 
 	public Player(FloorTile tile,Color c){
 		this.currentTile = tile;
@@ -34,6 +36,7 @@ public class Player implements Renderable {
 		try {
 			ss = new SpriteSheet("/res/players.png", 20, 30);
 			anime = new Animation(ss,0,0,0,0,true,animationspeed,true);
+			life = new Sound("res/life.wav");
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
@@ -126,6 +129,7 @@ public class Player implements Renderable {
 			System.out.println("Bombsize is now " + bombSize);
 			break;
 		case 2: 
+			life.play();
 			lives++;
 			System.out.println("Lives: " + lives);
 			break;

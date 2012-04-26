@@ -9,6 +9,7 @@ import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Sound;
 
 import settings.SettingsContainer;
 /**
@@ -19,19 +20,23 @@ import settings.SettingsContainer;
  *
  */
 public class Lobby extends BasicGameState {
+	
 	Button[] b; // An array of buttons.
 	private Image menu, start, settings, quit;
+	Sound fx;
 
 
 	SettingsContainer sc;
 	public Lobby(SettingsContainer sc){
-		this.sc = sc;
+		this.sc = sc;		
 	}
 
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 	throws SlickException {
+		fx = new Sound("res/SMK.wav");
+		
 		menu = new Image("res/menu.png");
 		start = new Image("res/start.png");
 		settings = new Image("res/settings.png");
@@ -64,6 +69,8 @@ public class Lobby extends BasicGameState {
 			for(int i= 0; i < b.length;i++){
 
 				if(b[i].isClicked(mousePos)){
+					fx.play();
+					fx.loop();
 					game.enterState(b[i].getShortCut());
 				}
 

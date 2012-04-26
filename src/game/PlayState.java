@@ -15,6 +15,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import settings.SettingsContainer;
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Sound;
 
 import powerups.*;
 
@@ -51,6 +52,7 @@ public class PlayState extends BasicGameState {
 	int nrtiles = 15; // Odd number = nice field
 	Animation bomb;
 	SpriteSheet ss;
+	Sound soundBomb;
 
 	/**
 	 * Creates a new game with the desired settings.
@@ -67,6 +69,7 @@ public class PlayState extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame game)
 			throws SlickException {
+		soundBomb = new Sound("res/bomb.wav");
 		gamecont = gc;
 		parseSettings(); // Start by parsing all the settings.
 
@@ -281,6 +284,7 @@ public class PlayState extends BasicGameState {
 	 * @param b
 	 */
 	public void removeBomb(Bomb b) {
+		soundBomb.play();
 		boolean hitWallNorth = false,hitWallEast= false,hitWallWest= false,hitWallSouth= false;
 		bombs.remove(b);
 		b.getTile().setBurning();

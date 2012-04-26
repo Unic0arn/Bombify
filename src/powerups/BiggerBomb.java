@@ -2,14 +2,12 @@ package powerups;
 
 import map.FloorTile;
 
-import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import entities.Item;
-import entities.Player;
 import game.PlayState;
 
 public class BiggerBomb implements Item {
