@@ -2,23 +2,25 @@ package powerups;
 
 import map.FloorTile;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import entities.Item;
+import entities.Player;
 import game.PlayState;
 
-public class Life implements Item {
-	Image life;
+public class BiggerBomb implements Item {
+	Image biggerBomb;
 	FloorTile tile;
 	int posx,posy,sizex,sizey;
 
-	public Life(GameContainer gc,FloorTile ft, int tiles) {
-	
+	public BiggerBomb(GameContainer gc, FloorTile ft, int tiles) {
+		
 		try {
-			life = new Image("res/life.png");
+			biggerBomb = new Image("res/dynamite.png");
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -32,15 +34,15 @@ public class Life implements Item {
 
 	@Override
 	public void render(GameContainer c, Graphics g) {
-		g.drawImage(life,
+		g.drawImage(biggerBomb,
 				posx,
 				posy,
 				posx+sizex,
 				posy+sizey,
 				0,
 				0,
-				life.getWidth(),
-				life.getHeight());			
+				biggerBomb.getWidth(),
+				biggerBomb.getHeight());
 	}
 
 	@Override
@@ -51,8 +53,7 @@ public class Life implements Item {
 
 	@Override
 	public int getID() {
-		
-		return 2;
+		return 1;
 	}
 
 }

@@ -15,12 +15,12 @@ import org.newdawn.slick.geom.Vector2f;
 public class Player implements Renderable {
 
 	int placeableBombs = 5, speed = 3, bombTime = 1, bombs = 0, bombDelay = 1000, sinceLastBomb = 1000,
-	hitDelay = 1000, sinceLastHit = 1000,bombSize = 1, animationspeed = 500, lives = 3;
+			hitDelay = 1000, sinceLastHit = 1000,bombSize = 1, animationspeed = 500, lives = 3;
 
 	FloorTile currentTile, goalTile;
 	Vector2f pos, velo = new Vector2f(0, 0),direction = new Vector2f(0, 0);
 	boolean hitting = false,moving = false;
-Color playerColor;
+	Color playerColor;
 	int posx,posy,sizex,sizey;
 	SpriteSheet ss;
 	Animation anime; 
@@ -50,7 +50,6 @@ Color playerColor;
 			sinceLastHit = sinceLastHit+ delta;
 		}
 
-
 		if(!moving) {
 			if(!(direction.x == 0 && direction.y == 0)){
 				int destinationx = (int) (currentTile.getGridx() +  direction.x);
@@ -62,8 +61,7 @@ Color playerColor;
 					if(tempTile.hasPlayer() && hitting && isHitAllowed() ){
 						tempTile.getPlayer().hurt();
 						sinceLastHit = 0;
-					}
-					if(!tempTile.hasPlayer() && !tempTile.hasBomb()){
+					}else if(!tempTile.hasPlayer() && !tempTile.hasBomb()){
 						goalTile = tempTile;				
 						moving = true;
 						currentTile.setPlayer(null);
@@ -71,6 +69,10 @@ Color playerColor;
 						if(goalTile.isBurning()){
 							hurt();
 						}
+					}
+					if(tempTile.hasItem()){
+						System.out.println("LOL");
+						getItem(p,tempTile.getItem());
 					}
 				}
 			}else if(hitting){
@@ -115,6 +117,29 @@ Color playerColor;
 			}
 		}
 		return true;
+	}
+
+	private void getItem(PlayState p, Item item) {
+		switch (item.getID()){
+		case 1: 
+			bombSize++;
+			System.out.println("Bombsize is now " + bombSize);
+			break;
+		case 2: 
+			lives++;
+			System.out.println("Lives: " + lives);
+			break;
+		case 3: 
+			speed--;
+			System.out.println("Speed is now " + speed);
+			break;
+		case 4: 
+			speed++;
+			System.out.println("Speed is now " + speed);
+			break;
+		}
+		p.removeItem(item);
+		goalTile.setItem(null);
 	}
 
 	private boolean isFloor(Square s){

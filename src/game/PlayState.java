@@ -16,6 +16,8 @@ import org.newdawn.slick.state.StateBasedGame;
 import settings.SettingsContainer;
 import org.newdawn.slick.Animation;
 
+import powerups.*;
+
 import entities.Bomb;
 import entities.Item;
 import entities.Player;
@@ -268,6 +270,10 @@ public class PlayState extends BasicGameState {
 		tile.setBomb(tempBomb);
 		System.out.println("Bomb created in 'PlayState'");
 	}
+	
+	public void removeItem(Item i) {
+		item.remove(i);
+	}
 
 
 	/**
@@ -368,10 +374,28 @@ public class PlayState extends BasicGameState {
 				FloorTile tempTile = (FloorTile)tiles[xTile][yTile];
 				tempTile.setBurning();
 				
-				if (new Random().nextInt(10) == 2) {
-					/*Item tempItem = new Item(gamecont,losw,tempTile, nrtiles);
-					item.add(tempItem);
-					tempTile.setItem(tempItem);*/
+				int dice = new Random().nextInt(10)+1;
+				switch(dice) {
+				case 1 : 
+					BiggerBomb tempBB = new BiggerBomb(gamecont, tempTile, nrtiles);
+					item.add(tempBB); 
+					tempTile.setItem(tempBB);
+					break;
+				case 2 : 
+					Life tempL = new Life(gamecont, tempTile, nrtiles);
+					item.add(tempL); 	
+					tempTile.setItem(tempL);	
+				break;
+				case 3 : 
+					Slow tempSlow = new Slow(gamecont, tempTile, nrtiles);
+					item.add(tempSlow); 	
+					tempTile.setItem(tempSlow);	
+				break;
+				case 4 : 
+					Speed tempSpeed = new Speed(gamecont, tempTile, nrtiles);
+					item.add(tempSpeed);
+					tempTile.setItem(tempSpeed);
+				break;				
 				}
 			}
 			return true;
