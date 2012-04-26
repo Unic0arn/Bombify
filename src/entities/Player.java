@@ -5,6 +5,7 @@ import map.FloorTile;
 import map.Square;
 
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -12,24 +13,26 @@ import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Vector2f;
 
 public class Player implements Renderable {
-	int placeableBombs = 1, speed = 3, bombTime = 3, bombs = 0, 
-			bombSize = 5, animationspeed = 500, lives = 100;
-	FloorTile tile, goal;
+
+	int placeableBombs = 5, speed = 3, bombTime = 1, bombs = 0, bombDelay = 1000, sinceLastBomb = 1000,
+	hitDelay = 1000, sinceLastHit = 1000,bombSize = 1, animationspeed = 500, lives = 3;
+
+	FloorTile currentTile, goalTile;
 	Vector2f pos, velo = new Vector2f(0, 0),direction = new Vector2f(0, 0);
 	boolean hitting = false,moving = false;
-
+Color playerColor;
 	int posx,posy,sizex,sizey;
 	SpriteSheet ss;
 	Animation anime; 
 
-	public Player(FloorTile tile){
-		this.tile = tile;
+	public Player(FloorTile tile,Color c){
+		this.currentTile = tile;
 		pos = tile.getMiddle();
-		goal = tile;
+		goalTile = tile;
 		tile.setPlayer(this);
-		
+		playerColor = c;
 		try {
-			ss = new SpriteSheet("/res/b.png", 20, 30);
+			ss = new SpriteSheet("/res/players.png", 20, 30);
 			anime = new Animation(ss,0,0,0,0,true,animationspeed,true);
 		} catch (SlickException e) {
 			e.printStackTrace();
@@ -39,28 +42,49 @@ public class Player implements Renderable {
 	public boolean update(GameContainer c, int delta, PlayState p) throws SlickException {		
 		sizex = (c.getWidth()/p.getTiles().length);
 		sizey = (c.getHeight()/p.getTiles().length);
-		
-		
+
+		if(sinceLastBomb<=bombDelay){
+			sinceLastBomb = sinceLastBomb + delta;
+		}
+		if(sinceLastHit<=hitDelay){
+			sinceLastHit = sinceLastHit+ delta;
+		}
+
+
 		if(!moving) {
-			if(!direction.equals(new Vector2f(0,0))){
-				int destinationx = (int) (tile.getGridx() +  direction.x);
-				int destinationy = (int) (tile.getGridy() + direction.y); 
-				Square s = p.getTiles()[destinationx][destinationy];
+			if(!(direction.x == 0 && direction.y == 0)){
+				int destinationx = (int) (currentTile.getGridx() +  direction.x);
+				int destinationy = (int) (currentTile.getGridy() + direction.y); 
+				Square[][] tileGrid = p.getTiles();
+				Square s = tileGrid[destinationx][destinationy];
 				if(isFloor(s)){
 					FloorTile tempTile = (FloorTile)s;
-					if(!tempTile.hasPlayer()){
-						goal = (FloorTile)s;					
+					if(tempTile.hasPlayer() && hitting && isHitAllowed() ){
+						tempTile.getPlayer().hurt();
+						sinceLastHit = 0;
+					}
+					if(!tempTile.hasPlayer() && !tempTile.hasBomb()){
+						goalTile = tempTile;				
 						moving = true;
-						tile.setPlayer(null);
-						goal.setPlayer(this);
-					}}
+						currentTile.setPlayer(null);
+						goalTile.setPlayer(this);
+						if(goalTile.isBurning()){
+							hurt();
+						}
+					}
+				}
 			}else if(hitting){
-				p.createBomb(this,tile);
-				System.out.println("Bomb in 'player' created.");
+				if(!currentTile.hasBomb()){
+					p.createBomb(this,currentTile);
+					bombs++;
+					sinceLastBomb = 0;
+					System.out.println("Bomb in 'player' created.");
+					System.out.println("Antal bomber: "+bombs);
+				}
 				hitting = false;
 			}
 		}else{
-			
+
 			//Right
 			if(direction.equals(new Vector2f(1,0))){
 				anime = new Animation(ss,9,0,9,0,true, animationspeed,true);
@@ -75,18 +99,18 @@ public class Player implements Renderable {
 			else if(direction.equals(new Vector2f(0,1))){
 				anime = new Animation(ss,0,0,1,0,true,animationspeed,true);
 			}
-			
+
 			//Up
 			else if(direction.equals(new Vector2f(0,-1))){
 				anime = new Animation(ss,3,0,4,0,true,animationspeed,true);
 			}
 
-			if(goal.getMiddle().copy().sub(pos).length()<0.1){
+			if(goalTile.getMiddle().copy().sub(pos).length()<0.1){
 				moving  = false;
-				tile = goal;
+				currentTile = goalTile;
 			}
 			else{
-				velo = (goal.getMiddle().copy().sub(pos).scale(0.1f*speed));
+				velo = (goalTile.getMiddle().copy().sub(pos).scale(0.1f*speed));
 				pos.add(velo);
 			}
 		}
@@ -98,7 +122,7 @@ public class Player implements Renderable {
 	}
 	@Override
 	public void render(GameContainer c, Graphics g) {
-		g.drawAnimation(anime, pos.x-(sizex/6f), pos.y-(sizey/6f));
+		g.drawAnimation(anime, pos.x-(sizex/6f), pos.y-(sizey/6f),playerColor);
 	}
 
 	public void setDirection(Vector2f a) {
@@ -118,25 +142,31 @@ public class Player implements Renderable {
 			}			
 		}
 	}
-	
+
 	public int getBombSize(){
 		return bombSize;
 	}
-	
+
 	public double getBombTime() {
 		return bombTime;
 	}
-	
+	public void decreaseBombCount(){
+		bombs--;
+	}
 	public boolean isBombAllowed(){
-		if (bombs<=3){
-			bombs++;
-			System.out.println("Antal bomber: "+bombs);
+		if (bombs<placeableBombs && sinceLastBomb>=bombDelay){
 			return true;
-			}
+		}
+		return false;
+	}
+	public boolean isHitAllowed(){
+		if (sinceLastHit>=hitDelay){
+			return true;
+		}
 		return false;
 	}
 
-	public void hurt(PlayState p) {
+	public void hurt() {
 		lives--;
 		System.out.println("Lives: " + lives);
 		if(lives <= 0){

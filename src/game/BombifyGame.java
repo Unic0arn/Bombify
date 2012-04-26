@@ -16,10 +16,7 @@ import settings.*;
  * @author Fredrik & Victor
  * @version 2012-04-23
  */
-public class BombifyGame extends StateBasedGame{
-	
-	
-	
+public class BombifyGame extends StateBasedGame{	
 	static SettingsContainer gameSettings; // All the settings of the game stored in a HashMap
 	public BombifyGame() {
 		super("Bombify");
@@ -35,25 +32,20 @@ public class BombifyGame extends StateBasedGame{
 
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
-		addState(new Lobby());
-		PlayState state = new PlayState(gameSettings);
+		addState(new Lobby(gameSettings));
 		
-		addState(state);
+		addState(new PlayState(gameSettings));
 		addState(new SettingsMenu(gameSettings,this));
 	}
 	public static void main(String[] args) throws SlickException
 	{
-		AppGameContainer app = new AppGameContainer(new BombifyGame());
-		
-//		SettingsMenu s = new SettingsMenu();
-//		app.setDisplayMode(s.getXres(), s.getYres(), false);
-		
+		AppGameContainer app = new AppGameContainer(new BombifyGame());		
 
 		// Application properties
 		app.setDisplayMode(
 				Integer.parseInt(gameSettings.get("GAME_SIZE_X")),
 				Integer.parseInt(gameSettings.get("GAME_SIZE_Y")), 
-				Integer.parseInt(gameSettings.get("FULLSCREEN"))==0);
+				Integer.parseInt(gameSettings.get("FULLSCREEN"))==1);
 		app.setSmoothDeltas(true);
 		app.setTargetFrameRate(Integer.parseInt(gameSettings.get("MAX_FPS")));
 		app.setTargetFrameRate(60);

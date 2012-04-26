@@ -46,11 +46,11 @@ public class Item implements Renderable {
 		
 	}
 	public void update(GameContainer c, PlayState game, int delta){
-		removeItem(game);
+		//TODO
 	}
 	
 	public void removeItem(PlayState p){
-		//p.removeItem(tile);
+		//TODO
 	}
 
 	public FloorTile getTile(){

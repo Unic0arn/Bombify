@@ -1,17 +1,15 @@
 package map;
 
-import org.newdawn.slick.Animation;
-//import org.newdawn.slick.Color;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-//import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
-
 import entities.Bomb;
 import entities.Item;
 import entities.Player;
+import game.PlayState;
 /**
  * A class that contains information about a tile on the floor.
  * @author Fredrik & Victor
@@ -19,14 +17,25 @@ import entities.Player;
  *
  */
 public class FloorTile implements Square {
-	private Image img;
+	private Image imgBurning,imgFloorTile;
 	private Item item;
 	private Player player;
-	int posx,posy,sizex,sizey,gridx,gridy;
+	int posx,posy,sizex,sizey,gridx,gridy, burnTime, maxBurnTime = 800;
 	private Bomb bomb;
-	
-	
-	public FloorTile(int x, int y, GameContainer container, int tiles){
+	private boolean isBurning;
+
+	public FloorTile(int x, int y, GameContainer container, int tiles) {
+
+		try {
+			imgFloorTile = new Image("res/ground.png");
+			imgBurning = new Image("res/fire.png");
+
+		} catch (SlickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
 		gridx = x;
 		gridy = y;
 		sizex = (container.getWidth()/tiles);
@@ -37,23 +46,40 @@ public class FloorTile implements Square {
 	@Override
 	public void render(GameContainer container, Graphics g, int x, int y,
 			int tiles) throws SlickException {
-		if(img!=null){			
-			g.drawImage(img,
+
+		g.drawImage(imgFloorTile,
+				posx,
+				posy,
+				posx+sizex,
+				posy+sizey,
+				0,
+				0,
+				imgBurning.getWidth(),
+				imgBurning.getHeight());
+		if(isBurning){
+			g.drawImage(imgBurning,
 					posx,
 					posy,
 					posx+sizex,
 					posy+sizey,
 					0,
 					0,
-					img.getWidth(),
-					img.getHeight());
+					imgBurning.getWidth(),
+					imgBurning.getHeight());
 		}
 	}
-	@Override
-	public FloorTile setImg(Image i){
-		img = i;
-		return this;
+
+	public void update(GameContainer c, PlayState game, int delta){
+		if(isBurning) {
+			burnTime = burnTime + delta;
+		}
+
+		if(burnTime >= maxBurnTime){
+			burnTime=0;
+			isBurning=false;
+		}			
 	}
+
 	public Vector2f getMiddle(){
 		return new Vector2f(posx+(sizex/2f), posy+(sizey/2f));
 	}
@@ -70,6 +96,13 @@ public class FloorTile implements Square {
 	}
 	public void setBomb(Bomb bomb) {
 		this.bomb = bomb;
+	}
+
+	public void setBurning(){
+		isBurning = true;
+	}
+	public boolean isBurning(){
+		return isBurning; 
 	}
 	//---------------------------------
 	public boolean hasItem(){

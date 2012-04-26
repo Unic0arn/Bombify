@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -12,7 +13,6 @@ import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.Image; 
 import settings.SettingsContainer;
 import org.newdawn.slick.Animation;
 
@@ -38,15 +38,14 @@ public class PlayState extends BasicGameState {
 	SettingsContainer gameSettings; //An object to contain all settings.
 	GameContainer gamecont;
 	HashMap<String,Integer> playerControls; //Store the player controls in a hashmap.
-	//Player[] player; //A vector of the players.
+	Player[] players; //A vector of the players.
 	Square[][] tiles; //A grid of all the "tiles" in the game.
 	ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 	ArrayList<Item> item = new ArrayList<Item>();
-	Player[] players;
+
 	int nrplayers; // The amount of players 1-4
 	int hitCounter = 0;
-	private Image outerBrick, concrete, floorTile, removableWall, slow,
-	light, dynamite; 
+	
 	int nrtiles = 15; // Odd number = nice field
 	Animation bomb;
 	SpriteSheet ss;
@@ -69,18 +68,10 @@ public class PlayState extends BasicGameState {
 		gamecont = gc;
 		parseSettings(); // Start by parsing all the settings.
 
-		//Assign the images.
-		outerBrick = new Image("res/pyrWall.png");
-		floorTile = new Image("res/ground.png");
-		concrete = new Image("res/concrete.png");
-		removableWall = new Image("res/rock.png");		
-		light= new Image("res/lightning.png");
-		slow = new Image("res/slow.png");
-		dynamite= new Image("res/dynamite.png");
 
 		//Defines the tiles.
 		tiles = new Square[nrtiles][nrtiles];
-		ss = new SpriteSheet("res/bomb.png",50 , 50);
+		
 
 
 		/**********************************************
@@ -90,12 +81,12 @@ public class PlayState extends BasicGameState {
 		for(int x = 0;x<nrtiles;x++){
 			for(int y = 0;y<nrtiles;y++){
 				if(x == 0||x ==nrtiles-1||y==0||y==nrtiles-1){
-					tiles[x][y] = new OuterWall(x,y,gamecont,nrtiles).setImg(outerBrick);
+					tiles[x][y] = new OuterWall(x,y,gamecont,nrtiles);
 				}else if(y%2==0 && x%2==0){
-					tiles[x][y] = new Block(x,y,gamecont,nrtiles).setImg(concrete);
+					tiles[x][y] = new Block(x,y,gamecont,nrtiles);
 				}else{
 
-					tiles[x][y] = new FloorTile(x,y,gc,nrtiles).setImg(floorTile);
+					tiles[x][y] = new FloorTile(x,y,gc,nrtiles);
 				}
 			}
 		}
@@ -105,18 +96,18 @@ public class PlayState extends BasicGameState {
 		 */
 		players = new Player[nrplayers];
 		FloorTile ft = (FloorTile) tiles[1][1];
-		players[0] = new Player(ft);
+		players[0] = new Player(ft,Color.cyan);
 		if(nrplayers > 1){
 			ft = (FloorTile) tiles[nrtiles-2][nrtiles-2];
-			players[1] = new Player(ft);	
+			players[1] = new Player(ft,Color.red);	
 		}
 		if(nrplayers > 2){
 			ft = (FloorTile) tiles[1][nrtiles-2];
-			players[2] = new Player(ft);	
+			players[2] = new Player(ft,Color.green);	
 		}
 		if(nrplayers > 3){
 			ft = (FloorTile) tiles[nrtiles-2][1];
-			players[3] = new Player(ft);	
+			players[3] = new Player(ft,Color.magenta);	
 		}
 
 
@@ -134,7 +125,7 @@ public class PlayState extends BasicGameState {
 								|| i==13 && j==12 || i==13 && j==13 || i==12 && j==13 || i==1 && j==12 || i==1 & j==13 || i==2 && j==13){
 							//Do nothing. 
 						}else {
-							tiles[i][j] = new Block(i,j,gamecont,nrtiles).setImmovable(false).setImg(removableWall);
+							tiles[i][j] = new Block(i,j,gamecont,nrtiles).setImmovable(false);
 						}
 					}
 				}
@@ -164,8 +155,19 @@ public class PlayState extends BasicGameState {
 		updatePlayers(c,delta,in);
 		updateBombs(c,delta,in);
 		updateItems(c,delta,in);
+		updateMap(c,delta,in);
 	}
 
+	private void updateMap(GameContainer c, int delta, Input in) {
+		for(int i = 0;i < tiles.length;i++){
+			for(int j=0;j<tiles.length;j++){
+				if(tiles[i][j] instanceof FloorTile){
+					FloorTile tempTile = (FloorTile)tiles[i][j];
+					tempTile.update(c, this, delta);
+				}
+			}
+		}
+	}
 	private void renderMap(GameContainer gc, Graphics g) throws SlickException {
 		for(int i =0;i<nrtiles;i++){
 			for(int j = 0;j<nrtiles;j++){
@@ -175,8 +177,10 @@ public class PlayState extends BasicGameState {
 	}
 
 	private void updatePlayers(GameContainer c, int delta, Input in) {
+		int alivePlayers = 0;
 		for(int i = 0; i < players.length; i++){
 			if(players[i].isAlive()){
+				alivePlayers++;
 				Vector2f direction = new Vector2f(0, 0);
 				if (in.isKeyDown(playerControls.get("P"+(i+1)+"N"))) {
 					direction.add(new Vector2f(0, -1));
@@ -201,6 +205,18 @@ public class PlayState extends BasicGameState {
 					e.printStackTrace();
 				}
 			}
+		}
+		if(alivePlayers == 1){
+			for(int i = 0; i < players.length; i++){
+				if(players[i].isAlive()){
+					System.out.println("Player " + i + " won! Give him Ice cream!");
+				}
+			}
+			c.exit();
+			
+		}else if(alivePlayers == 0){
+			System.out.println("N00bs you died by the same bomb, lulz");
+			c.exit();
 		}
 	}
 
@@ -243,11 +259,10 @@ public class PlayState extends BasicGameState {
 	}
 
 	public void removeWall(Block b) {
-		tiles[b.getGridx()][b.getGridy()] = new FloorTile(b.getGridx(),b.getGridy(),gamecont,nrtiles).setImg(floorTile);		
+		tiles[b.getGridx()][b.getGridy()] = new FloorTile(b.getGridx(),b.getGridy(),gamecont,nrtiles);		
 	}
 
-	public void createBomb(Player p, FloorTile tile){		
-		bomb = new Animation(ss,0,0,1,0,true,500,true);
+	public void createBomb(Player p, FloorTile tile){
 		Bomb tempBomb = new Bomb(gamecont, p, bomb, tile, nrtiles);
 		bombs.add(tempBomb);
 		tile.setBomb(tempBomb);
@@ -263,23 +278,24 @@ public class PlayState extends BasicGameState {
 		boolean hitWallNorth = false,hitWallEast= false,hitWallWest= false,hitWallSouth= false;
 		System.out.println("bombs size "+ bombs.size());
 		bombs.remove(b);
-
+		b.getTile().setBurning();
 		int tilex = b.getTile().getGridx();
 		int tiley = b.getTile().getGridy();
 		int bombSize = b.getPlayer().getBombSize();
-
+		
+		b.getPlayer().decreaseBombCount();
 		/*
 		 * Handles the situation of the player standing on the bomb.
 		 */
 		FloorTile ft = (FloorTile)tiles[tilex][tiley];
 		if(ft.hasPlayer()){
-			ft.getPlayer().hurt(this);
+			ft.getPlayer().hurt();
 			System.out.println("tilex tiley");
 		}
 
 		ft.setBomb(null);
 		if(ft.hasPlayer()){
-			ft.getPlayer().hurt(this);
+			ft.getPlayer().hurt();
 			System.out.println("tilex tiley bomb null");
 		}
 
@@ -290,8 +306,8 @@ public class PlayState extends BasicGameState {
 		for (int i = 1; i<=bombSize;i++){
 			if(!hitWallNorth)hitWallNorth=checkNorth(i,tilex,tiley);
 			if(!hitWallEast)hitWallEast=checkEast(i,tilex,tiley);
-			if(!hitWallWest)hitWallWest=checkWest(i,tilex,tiley);
 			if(!hitWallSouth)hitWallSouth=checkSouth(i,tilex,tiley);
+			if(!hitWallWest)hitWallWest=checkWest(i,tilex,tiley);
 		}
 	}
 
@@ -300,7 +316,7 @@ public class PlayState extends BasicGameState {
 	 * @param i - The distance from the origin.
 	 * @param tilex - The origin x
 	 * @param tiley - The origin y
-	 * @return true - if anything were in the way of the blastway false - otherwise
+	 * @return true - if anything were in the way of the blastwave false - otherwise
 	 */
 	private boolean checkSouth(int i, int tilex, int tiley) {
 		if(tiley+i >= nrtiles)return false;
@@ -349,26 +365,30 @@ public class PlayState extends BasicGameState {
 	 * @return true - if the tile is obstructing the blastway false - otherwise.
 	 */
 	private boolean checkPath(Square tempSquare){
-		Random dice = new Random(); 
 		if(tempSquare instanceof Block){
-			Block block = (Block)tiles[tempSquare.getGridx()][tempSquare.getGridy()];	
+			int xTile = tempSquare.getGridx();
+			int yTile = tempSquare.getGridy();
+			
+			Block block = (Block)tiles[xTile][yTile];	
 			if(!block.isImmovable()){
 				removeWall(block);					
-				tempSquare = new FloorTile(block.getGridx(),block.getGridy(),gamecont,nrtiles).setImg(floorTile);
-				if (dice.nextInt(10) == 2) {
-					FloorTile tempTile = (FloorTile)tempSquare;
-					Item tempItem = new Item(gamecont,slow,tempTile, nrtiles);
+				tiles[xTile][yTile] = new FloorTile(xTile,yTile,gamecont,nrtiles);
+				FloorTile tempTile = (FloorTile)tiles[xTile][yTile];
+				tempTile.setBurning();
+				System.out.println(tempTile.isBurning());
+				
+				if (new Random().nextInt(10) == 2) {
+					/*Item tempItem = new Item(gamecont,losw,tempTile, nrtiles);
 					item.add(tempItem);
-					tempTile.setItem(tempItem);
+					tempTile.setItem(tempItem);*/
 				}
-			}else{
-				return true;
 			}
-
+			return true;
 		}else if(tempSquare instanceof FloorTile){
 			FloorTile ft = (FloorTile)tempSquare;
+			ft.setBurning();
 			if(ft.hasPlayer()){
-				ft.getPlayer().hurt(this);
+				ft.getPlayer().hurt();
 				System.out.println("hurt checkPath");
 			}
 

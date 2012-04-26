@@ -13,7 +13,8 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-//import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 
 
 public class Bomb implements Renderable {
@@ -22,10 +23,15 @@ public class Bomb implements Renderable {
 	Image img;
 	double timeTil;
 	int posx,posy,sizex,sizey;
-	Animation anime;
-	
+	Animation animeBomb;
+
 	public Bomb(GameContainer gc, Player player, Animation b,FloorTile ft,int tiles){
-		anime = b;
+		try {
+			animeBomb = new Animation(new SpriteSheet("res/bomb.png",50 , 50),0,0,1,0,true,500,true);
+		} catch (SlickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		p = player;
 		tile = ft;
 		timeTil = player.getBombTime() * 1000;
@@ -34,24 +40,15 @@ public class Bomb implements Renderable {
 
 		posx = (gc.getWidth()/tiles * ft.getGridx());
 		posy = (gc.getHeight()/tiles *ft.getGridy());
-		
-		
+
+
 	}
-	
+
 	@Override
 	public void render(GameContainer c, Graphics g) {
-		g.drawAnimation(anime, posx-(sizex/10), posy-(sizey/10f));
-//			g.drawImage(img,
-//					posx,
-//					posy,
-//					posx+sizex,
-//					posy+sizey,
-//					0,
-//					0,
-//					img.getWidth(),
-//					img.getHeight());
+		g.drawAnimation(animeBomb, posx-(sizex/10), posy-(sizey/10f));
 	}
-	
+
 	public void update(GameContainer c, PlayState game, int delta){
 		timeTil = timeTil - delta;
 		if(timeTil <= 0){
@@ -64,7 +61,7 @@ public class Bomb implements Renderable {
 	public FloorTile getTile(){
 		return tile;
 	}
-	
+
 	public Player getPlayer(){
 		return p;
 	}

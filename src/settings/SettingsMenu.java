@@ -44,6 +44,7 @@ public class SettingsMenu extends BasicGameState {
 	public SettingsMenu(SettingsContainer gameSettings, BombifyGame bombifyGame) {
 		sc = gameSettings;
 		bg = bombifyGame;
+		
 	}
 
 	@Override
@@ -72,8 +73,8 @@ public class SettingsMenu extends BasicGameState {
 		b[1] = new Button(50, 250, 50, 50, "640 x 480");
 		b[2] = new Button(50, 350, 50, 50, "start");
 		b[0].setShortCut(Constants.LOBBY);
-		b[2].setShortCut(Constants.GAME);	*/	
-	}
+		b[2].setShortCut(Constants.GAME);	*/
+		}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)

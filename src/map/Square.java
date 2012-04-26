@@ -3,11 +3,7 @@ package map;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-//import org.newdawn.slick.geom.Vector2f;
-
-//import entities.Player;
 
 
 public interface Square {
@@ -24,11 +20,6 @@ public interface Square {
 	 */
 	public void render(GameContainer container, Graphics g,
 			int x, int y, int tiles) throws SlickException ;
-	/**
-	 * Sets the square to contain a new image.
-	 * @param i - The image to replace the old image with.
-	 */
-	public Square setImg(Image i);
 	public int getGridx();
 	public int getGridy();
 }
