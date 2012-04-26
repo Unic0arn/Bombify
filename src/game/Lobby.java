@@ -16,7 +16,7 @@ import settings.SettingsContainer;
  * A lobby to welcome the player when first starting the application.
  * Contains buttons with shortcuts to the game or settings.
  * @author Fredrik Hallberg & Victor Dahlin
- * @version 2012-04-22
+ * @version 2012-04-26
  *
  */
 public class Lobby extends BasicGameState {
@@ -25,10 +25,9 @@ public class Lobby extends BasicGameState {
 	private Image menu, start, settings, quit;
 	Sound fx;
 
-
 	SettingsContainer sc;
 	public Lobby(SettingsContainer sc){
-		this.sc = sc;		
+		this.sc = sc;
 	}
 
 
@@ -75,7 +74,7 @@ public class Lobby extends BasicGameState {
 				}
 
 				if(b[0].isClicked(mousePos)){
-					b[0].quit(container);
+					container.exit();
 				}
 			}
 		}

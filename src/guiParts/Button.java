@@ -148,11 +148,4 @@ public class Button {
 	public String getString(){
 		return buttonString;
 	}
-	/**
-	 * Brute force quitting of the program. 
-	 * @param c
-	 */
-	public void quit(GameContainer c) {
-		c.exit();		
-	}
 }

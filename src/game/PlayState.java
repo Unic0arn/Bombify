@@ -7,6 +7,7 @@ import java.util.Random;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
@@ -32,11 +33,11 @@ import map.FloorTile;
  * A game that is based on players trying to blow each other up.
  * 
  * @author Fredrik Hallberg & Victor Dahlin
- * @version 2012-04-25
+ * @version 2012-04-26
  *
  */
 
-public class PlayState extends BasicGameState {
+public class PlayState extends BasicGameState{
 	Boolean paused =false; //Maybe for pausing the game not used at the moment!
 	SettingsContainer gameSettings; //An object to contain all settings.
 	GameContainer gamecont;
@@ -45,13 +46,12 @@ public class PlayState extends BasicGameState {
 	Square[][] tiles; //A grid of all the "tiles" in the game.
 	ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 	ArrayList<Item> item = new ArrayList<Item>();
-
 	int nrplayers; // The amount of players 1-4
-	int hitCounter = 0;
-	
+	int hitCounter = 0;	
 	int nrtiles = 15; // Odd number = nice field
 	Animation bomb;
 	SpriteSheet ss;
+	Image hearts;
 	Sound soundBomb;
 
 	/**
@@ -59,7 +59,7 @@ public class PlayState extends BasicGameState {
 	 * @param gs - The settings file.
 	 * @throws SlickException
 	 */
-	public PlayState(SettingsContainer gs) throws SlickException {
+	public PlayState(SettingsContainer gs) throws SlickException{
 		super();
 		gameSettings = gs;
 	}
@@ -69,14 +69,14 @@ public class PlayState extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame game)
 			throws SlickException {
+		hearts = new Image("res/heartSmall.png");
 		soundBomb = new Sound("res/bomb.wav");
 		gamecont = gc;
 		parseSettings(); // Start by parsing all the settings.
 
 
 		//Defines the tiles.
-		tiles = new Square[nrtiles][nrtiles];
-		
+		tiles = new Square[nrtiles][nrtiles];	
 
 
 		/**********************************************
@@ -100,19 +100,21 @@ public class PlayState extends BasicGameState {
 		 *  Creates the players and gives them positions.
 		 */
 		players = new Player[nrplayers];
-		FloorTile ft = (FloorTile) tiles[1][1];
-		players[0] = new Player(ft,Color.cyan);
+		FloorTile floorTile = (FloorTile) tiles[1][1];
+		players[0] = new Player(floorTile,Color.cyan);
+		
+		
 		if(nrplayers > 1){
-			ft = (FloorTile) tiles[nrtiles-2][nrtiles-2];
-			players[1] = new Player(ft,Color.red);	
+			floorTile = (FloorTile) tiles[nrtiles-2][nrtiles-2];
+			players[1] = new Player(floorTile,Color.red);	
 		}
 		if(nrplayers > 2){
-			ft = (FloorTile) tiles[1][nrtiles-2];
-			players[2] = new Player(ft,Color.green);	
+			floorTile = (FloorTile) tiles[1][nrtiles-2];
+			players[2] = new Player(floorTile,Color.green);	
 		}
 		if(nrplayers > 3){
-			ft = (FloorTile) tiles[nrtiles-2][1];
-			players[3] = new Player(ft,Color.magenta);	
+			floorTile = (FloorTile) tiles[nrtiles-2][1];
+			players[3] = new Player(floorTile,Color.magenta);	
 		}
 
 
@@ -140,7 +142,7 @@ public class PlayState extends BasicGameState {
 
 	@Override
 	public void render(GameContainer c, StateBasedGame game, Graphics g)
-			throws SlickException {
+			throws SlickException{
 		renderMap(c,g);
 		renderBombs(c,g);
 		renderItems(c,g);
@@ -150,20 +152,20 @@ public class PlayState extends BasicGameState {
 
 	@Override
 	public void update(GameContainer c, StateBasedGame game, int delta)
-			throws SlickException {
+			throws SlickException{
 		Input in = c.getInput();
 
 		//Just checking if anyone pressed the escape key to end game.
-		if (in.isKeyDown(Input.KEY_ESCAPE)) {
-			c.exit();
-		}
+//		if (in.isKeyDown(Input.KEY_ESCAPE)) {
+//			c.exit();
+//		}
 		updatePlayers(c,delta,in);
 		updateBombs(c,delta,in);
 		updateItems(c,delta,in);
 		updateMap(c,delta,in);
 	}
 
-	private void updateMap(GameContainer c, int delta, Input in) {
+	private void updateMap(GameContainer c, int delta, Input in){
 		for(int i = 0;i < tiles.length;i++){
 			for(int j=0;j<tiles.length;j++){
 				if(tiles[i][j] instanceof FloorTile){
@@ -173,7 +175,8 @@ public class PlayState extends BasicGameState {
 			}
 		}
 	}
-	private void renderMap(GameContainer gc, Graphics g) throws SlickException {
+	
+	private void renderMap(GameContainer gc, Graphics g) throws SlickException{
 		for(int i =0;i<nrtiles;i++){
 			for(int j = 0;j<nrtiles;j++){
 				tiles[i][j].render(gc,g, i, j, nrtiles);
@@ -181,7 +184,7 @@ public class PlayState extends BasicGameState {
 		}
 	}
 
-	private void updatePlayers(GameContainer c, int delta, Input in) {
+	private void updatePlayers(GameContainer c, int delta, Input in){
 		int alivePlayers = 0;
 		for(int i = 0; i < players.length; i++){
 			if(players[i].isAlive()){
@@ -199,9 +202,10 @@ public class PlayState extends BasicGameState {
 				else if (in.isKeyDown(playerControls.get("P"+(i+1)+"E"))) {
 					direction.add(new Vector2f(1, 0));
 				}
-				if (in.isKeyDown(playerControls.get("P"+(i+1)+"B"))) {
+				if (in.isKeyDown(playerControls.get("P"+(i+1)+"B"))) {	
 					players[i].hit();
 				}
+				
 				players[i].setDirection(direction);
 
 				try {
@@ -213,11 +217,10 @@ public class PlayState extends BasicGameState {
 		}
 		if(alivePlayers == 1){
 			for(int i = 0; i < players.length; i++){
-				if(players[i].isAlive()){
-					System.out.println("Player " + i + " won! Give him Ice cream!");
+				if(players[i].isAlive()){					
+					c.exit();
 				}
 			}
-			c.exit();
 			
 		}else if(alivePlayers == 0){
 			System.out.println("N00bs you died by the same bomb, lulz");
@@ -225,25 +228,61 @@ public class PlayState extends BasicGameState {
 		}
 	}
 
-	private void renderPlayers(GameContainer c, Graphics g) {
+	private void renderPlayers(GameContainer c, Graphics g){
 		for(int i = 0; i < players.length; i++){
-			if(players[i].isAlive())players[i].render(c, g);
+			if(players[i].isAlive()) {
+				players[i].render(c, g);
+				
+				int position = 0;				
+				int pl1Life = players[0].getLifes();
+				while (pl1Life > 0) {
+					g.drawImage(hearts, position, 0); 
+					position+=25;
+					pl1Life--;
+				}
+				
+				position = 0;
+				int pl2Life = players[1].getLifes();				
+				while (pl2Life > 0) {
+					g.drawImage(hearts, position, 570); 
+					position+=25;
+					pl2Life--;
+				}
+				
+				position = 0;
+				int pl3Life = players[2].getLifes();				
+				while (pl3Life > 0) {
+					g.drawImage(hearts, 650+position, 0); 
+					position+=25;
+					pl3Life--;
+				}
+				
+				position = 0;
+				int pl4Life = players[3].getLifes();				
+				while (pl4Life > 0) {
+					g.drawImage(hearts, 650+position, 570); 
+					position+=25;
+					pl4Life--;
+				}
+				
+			}
 		}
 	}
 
-	private void updateBombs(GameContainer c, int delta, Input in) {
+	private void updateBombs(GameContainer c, int delta, Input in){
 		for(int i = 0; i < bombs.size();i++){
 			bombs.get(i).update(c, this, delta);
 		}
 	}
 
-	private void renderBombs(GameContainer c, Graphics g) {
+	private void renderBombs(GameContainer c, Graphics g){
 		for(int i = 0; i < bombs.size();i++){
 			bombs.get(i).render(c, g);
 		}
 	}
 
-	private void updateItems(GameContainer c, int delta, Input in) {}
+	private void updateItems(GameContainer c, int delta, Input in) {		
+	}
 
 
 	private void renderItems(GameContainer c, Graphics g) {

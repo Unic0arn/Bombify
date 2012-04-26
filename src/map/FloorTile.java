@@ -35,7 +35,6 @@ public class FloorTile implements Square {
 			e.printStackTrace();
 		}
 
-
 		gridx = x;
 		gridy = y;
 		sizex = (container.getWidth()/tiles);

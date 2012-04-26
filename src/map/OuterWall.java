@@ -17,7 +17,7 @@ public class OuterWall implements Square {
 
 	public OuterWall(int x, int y, GameContainer container, int tiles){
 		try {
-			imgOuterWall = new Image("res/outerWall.png");
+			imgOuterWall = new Image("res/outerWall.png");			
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -31,16 +31,16 @@ public class OuterWall implements Square {
 		int sizey = (container.getHeight()/tiles);
 		int posx = (container.getWidth()/tiles * x);
 		int posy = (container.getHeight()/tiles * y);
-
-		g.drawImage(imgOuterWall ,
+		
+		g.drawImage(imgOuterWall, 
 				posx,
 				posy,
 				posx+sizex,
 				posy+sizey,
 				0,
 				0,
-				imgOuterWall .getWidth(),
-				imgOuterWall .getHeight());
+				imgOuterWall.getWidth(),
+				imgOuterWall.getHeight());
 	}
 
 

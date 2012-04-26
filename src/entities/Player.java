@@ -12,6 +12,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.Image;
 
 public class Player implements Renderable {
 
@@ -22,9 +23,10 @@ public class Player implements Renderable {
 	Vector2f pos, velo = new Vector2f(0, 0),direction = new Vector2f(0, 0);
 	boolean hitting = false,moving = false;
 	Color playerColor;
+	Image hearts;
 	int posx,posy,sizex,sizey;
 	SpriteSheet ss;
-	Animation anime; 
+	Animation players; 
 	Sound life; 
 
 	public Player(FloorTile tile,Color c){
@@ -35,8 +37,9 @@ public class Player implements Renderable {
 		playerColor = c;
 		try {
 			ss = new SpriteSheet("/res/players.png", 20, 30);
-			anime = new Animation(ss,0,0,0,0,true,animationspeed,true);
+			players = new Animation(ss,0,0,0,0,true,animationspeed,true);
 			life = new Sound("res/life.wav");
+			hearts = new Image("res/heartSmall.png");
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
@@ -59,11 +62,14 @@ public class Player implements Renderable {
 				int destinationy = (int) (currentTile.getGridy() + direction.y); 
 				Square[][] tileGrid = p.getTiles();
 				Square s = tileGrid[destinationx][destinationy];
+				
 				if(isFloor(s)){
 					FloorTile tempTile = (FloorTile)s;
+					
 					if(tempTile.hasPlayer() && hitting && isHitAllowed() ){
 						tempTile.getPlayer().hurt();
 						sinceLastHit = 0;
+					
 					}else if(!tempTile.hasPlayer() && !tempTile.hasBomb()){
 						goalTile = tempTile;				
 						moving = true;
@@ -92,22 +98,22 @@ public class Player implements Renderable {
 
 			//Right
 			if(direction.equals(new Vector2f(1,0))){
-				anime = new Animation(ss,9,0,9,0,true, animationspeed,true);
+				players = new Animation(ss,9,0,9,0,true, animationspeed,true);
 			}
 
 			//Left
 			else if(direction.equals(new Vector2f(-1,0))){
-				anime = new Animation(ss,4,0,7,0,true,animationspeed,true);
+				players = new Animation(ss,4,0,7,0,true,animationspeed,true);
 			}
 
 			//Down
 			else if(direction.equals(new Vector2f(0,1))){
-				anime = new Animation(ss,0,0,1,0,true,animationspeed,true);
+				players = new Animation(ss,0,0,1,0,true,animationspeed,true);
 			}
 
 			//Up
 			else if(direction.equals(new Vector2f(0,-1))){
-				anime = new Animation(ss,3,0,4,0,true,animationspeed,true);
+				players = new Animation(ss,3,0,4,0,true,animationspeed,true);
 			}
 
 			if(goalTile.getMiddle().copy().sub(pos).length()<0.1){
@@ -151,7 +157,7 @@ public class Player implements Renderable {
 	}
 	@Override
 	public void render(GameContainer c, Graphics g) {
-		g.drawAnimation(anime, pos.x-(sizex/6f), pos.y-(sizey/6f),playerColor);
+		g.drawAnimation(players, pos.x-(sizex/6f), pos.y-(sizey/6f),playerColor);
 	}
 
 	public void setDirection(Vector2f a) {
@@ -170,6 +176,10 @@ public class Player implements Renderable {
 				hitting=true;
 			}			
 		}
+	}
+	
+	public int getLifes(){
+		return lives;
 	}
 
 	public int getBombSize(){
@@ -202,9 +212,4 @@ public class Player implements Renderable {
 			System.out.println("I died");
 		}
 	}
-
-	public int changeSpeed(int s) {
-		return speed -= s;
-	}
-
 }

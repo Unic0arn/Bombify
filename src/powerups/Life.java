@@ -15,7 +15,7 @@ public class Life implements Item {
 	FloorTile tile;
 	int posx,posy,sizex,sizey;
 
-	public Life(GameContainer gc,FloorTile ft, int tiles) {
+	public Life(GameContainer gc,FloorTile ft, int tiles){
 	
 		try {
 			life = new Image("res/life.png");
@@ -31,7 +31,7 @@ public class Life implements Item {
 	}
 
 	@Override
-	public void render(GameContainer c, Graphics g) {
+	public void render(GameContainer c, Graphics g){
 		g.drawImage(life,
 				posx,
 				posy,
@@ -40,19 +40,16 @@ public class Life implements Item {
 				0,
 				0,
 				life.getWidth(),
-				life.getHeight());			
+				life.getHeight());	
 	}
 
 	@Override
 	public void update(GameContainer c, PlayState game, int delta) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
-	public int getID() {
-		
+	public int getID() {		
 		return 2;
 	}
-
 }
