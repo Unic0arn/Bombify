@@ -1,36 +1,24 @@
 
 package powerups;
 
-import entities.Item;
-import entities.Player;
-import entities.Renderable;
-import game.PlayState;
 import map.FloorTile;
 
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 
-/**
- * Item slow will slow down player
- * @author Victor
- * @version 2012-04-25
- *
- */
+import entities.Item;
+
 public class Slow extends Item{
+	Image slow;
 	
-	public Slow(GameContainer gc, Image image, FloorTile ft, int tiles) {
-		super(gc, image, ft, tiles);
-	}
-	
-	public FloorTile getTile(){
-		return null;
-	}
-	
-	public Player getPlayer(){
-		return null;
-	}
-
+	public Slow(GameContainer gc, FloorTile ft, int tiles) {
+		super(gc,ft, tiles);
+		try {
+			slow = new Image("res/slow.png");
+		} catch (SlickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}	
 }

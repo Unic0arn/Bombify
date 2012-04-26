@@ -16,13 +16,11 @@ import org.newdawn.slick.Image;
 public class Item implements Renderable {
 	Player p;
 	FloorTile tile;
-	Image img;
 	double timeTil;
 	int posx,posy,sizex,sizey;
 
 	
-	public Item(GameContainer gc, Image image,FloorTile ft,int tiles){		
-		img = image;
+	public Item(GameContainer gc,FloorTile ft,int tiles){
 		tile = ft;
 		sizex = (gc.getWidth()/tiles);
 		sizey = (gc.getHeight()/tiles);
@@ -34,15 +32,15 @@ public class Item implements Renderable {
 	@Override
 	public void render(GameContainer c, Graphics g) {
 			
-			g.drawImage(img,
-					posx,
-					posy,
-					posx+sizex,
-					posy+sizey,
-					0,
-					0,
-					img.getWidth(),
-					img.getHeight());
+//			g.drawImage(img,
+//					posx,
+//					posy,
+//					posx+sizex,
+//					posy+sizey,
+//					0,
+//					0,
+//					img.getWidth(),
+//					img.getHeight());
 		
 	}
 	public void update(GameContainer c, PlayState game, int delta){

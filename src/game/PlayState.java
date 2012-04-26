@@ -276,7 +276,6 @@ public class PlayState extends BasicGameState {
 	 */
 	public void removeBomb(Bomb b) {
 		boolean hitWallNorth = false,hitWallEast= false,hitWallWest= false,hitWallSouth= false;
-		System.out.println("bombs size "+ bombs.size());
 		bombs.remove(b);
 		b.getTile().setBurning();
 		int tilex = b.getTile().getGridx();
@@ -290,16 +289,9 @@ public class PlayState extends BasicGameState {
 		FloorTile ft = (FloorTile)tiles[tilex][tiley];
 		if(ft.hasPlayer()){
 			ft.getPlayer().hurt();
-			System.out.println("tilex tiley");
 		}
-
 		ft.setBomb(null);
-		if(ft.hasPlayer()){
-			ft.getPlayer().hurt();
-			System.out.println("tilex tiley bomb null");
-		}
-
-
+		
 		/*
 		 * Handles the blaswave in all directions.
 		 */
@@ -375,7 +367,6 @@ public class PlayState extends BasicGameState {
 				tiles[xTile][yTile] = new FloorTile(xTile,yTile,gamecont,nrtiles);
 				FloorTile tempTile = (FloorTile)tiles[xTile][yTile];
 				tempTile.setBurning();
-				System.out.println(tempTile.isBurning());
 				
 				if (new Random().nextInt(10) == 2) {
 					/*Item tempItem = new Item(gamecont,losw,tempTile, nrtiles);
@@ -389,7 +380,6 @@ public class PlayState extends BasicGameState {
 			ft.setBurning();
 			if(ft.hasPlayer()){
 				ft.getPlayer().hurt();
-				System.out.println("hurt checkPath");
 			}
 
 			if(ft.hasBomb()){
