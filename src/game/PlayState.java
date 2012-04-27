@@ -219,13 +219,13 @@ public class PlayState extends BasicGameState{
 		if(alivePlayers == 1){
 			for(int i = 0; i < players.length; i++){
 				if(players[i].isAlive()){					
-					c.exit();
+					//c.exit();
 				}
 			}
 
 		}else if(alivePlayers == 0){
 			System.out.println("N00bs you died by the same bomb, lulz");
-			c.exit();
+			//c.exit();
 		}
 	}
 
@@ -234,8 +234,8 @@ public class PlayState extends BasicGameState{
 			if(players[i].isAlive()) {
 				players[i].render(c, g);				
 
-				int position = 0;				
-				if(players.length < 3) {				
+				//Top left corner
+				int position = 0;
 					int pl1Life = players[0].getLifes();				
 					while (pl1Life > 0) {
 						g.drawImage(hearts, position, 0); 
@@ -243,33 +243,32 @@ public class PlayState extends BasicGameState{
 						pl1Life--;
 					}
 
+					//Right corner
 					position = 0;
 					int pl2Life = players[1].getLifes();				
 					while (pl2Life > 0) {
-						g.drawImage(hearts, 750+position, 570); 
+						g.drawImage(hearts, 700+position, 570); 
 						position+=25;
 						pl2Life--;
 					}
-				}
-
-				if (players.length >3){
+					
+					//Left Corner
 					position = 0;
 					int pl3Life = players[2].getLifes();				
 					while (pl3Life > 0) {
-						g.drawImage(hearts, position, 0); 
+						g.drawImage(hearts, 20+position, 570); 
 						position+=25;
 						pl3Life--;
 					}
-
+				
+					// Top right corner
 					position = 0;
-					int pl4Life = players[3].getLifes();				
+					int pl4Life = players[3].getLifes();			
 					while (pl4Life > 0) {
-						g.drawImage(hearts, 650+position, 570); 
+						g.drawImage(hearts, 750+position, 570); 
 						position+=25;
 						pl4Life--;
 					}
-				}
-
 			}
 		}
 	}
