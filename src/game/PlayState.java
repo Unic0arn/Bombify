@@ -102,8 +102,8 @@ public class PlayState extends BasicGameState{
 		players = new Player[nrplayers];
 		FloorTile floorTile = (FloorTile) tiles[1][1];
 		players[0] = new Player(floorTile,Color.cyan);
-		
-		
+
+
 		if(nrplayers > 1){
 			floorTile = (FloorTile) tiles[nrtiles-2][nrtiles-2];
 			players[1] = new Player(floorTile,Color.red);	
@@ -156,9 +156,9 @@ public class PlayState extends BasicGameState{
 		Input in = c.getInput();
 
 		//Just checking if anyone pressed the escape key to end game.
-//		if (in.isKeyDown(Input.KEY_ESCAPE)) {
-//			c.exit();
-//		}
+		//		if (in.isKeyDown(Input.KEY_ESCAPE)) {
+		//			c.exit();
+		//		}
 		updatePlayers(c,delta,in);
 		updateBombs(c,delta,in);
 		updateItems(c,delta,in);
@@ -175,7 +175,7 @@ public class PlayState extends BasicGameState{
 			}
 		}
 	}
-	
+
 	private void renderMap(GameContainer gc, Graphics g) throws SlickException{
 		for(int i =0;i<nrtiles;i++){
 			for(int j = 0;j<nrtiles;j++){
@@ -205,7 +205,7 @@ public class PlayState extends BasicGameState{
 				if (in.isKeyDown(playerControls.get("P"+(i+1)+"B"))) {	
 					players[i].hit();
 				}
-				
+
 				players[i].setDirection(direction);
 
 				try {
@@ -213,10 +213,8 @@ public class PlayState extends BasicGameState{
 				} catch (SlickException e) {
 					e.printStackTrace();
 				}
-			}
-			
-			
-			
+			}			
+
 		}
 		if(alivePlayers == 1){
 			for(int i = 0; i < players.length; i++){
@@ -224,7 +222,7 @@ public class PlayState extends BasicGameState{
 					c.exit();
 				}
 			}
-			
+
 		}else if(alivePlayers == 0){
 			System.out.println("N00bs you died by the same bomb, lulz");
 			c.exit();
@@ -235,39 +233,43 @@ public class PlayState extends BasicGameState{
 		for(int i = 0; i < players.length; i++){
 			if(players[i].isAlive()) {
 				players[i].render(c, g);				
-				
+
 				int position = 0;				
-				int pl1Life = players[0].getLifes();				
-				while (pl1Life > 0) {
-					g.drawImage(hearts, position, 0); 
-					position+=25;
-					pl1Life--;
+				if(players.length < 3) {				
+					int pl1Life = players[0].getLifes();				
+					while (pl1Life > 0) {
+						g.drawImage(hearts, position, 0); 
+						position+=25;
+						pl1Life--;
+					}
+
+					position = 0;
+					int pl2Life = players[1].getLifes();				
+					while (pl2Life > 0) {
+						g.drawImage(hearts, 750+position, 570); 
+						position+=25;
+						pl2Life--;
+					}
 				}
-				
-				position = 0;
-				int pl2Life = players[1].getLifes();				
-				while (pl2Life > 0) {
-					g.drawImage(hearts, 750+position, 570); 
-					position+=25;
-					pl2Life--;
+
+				if (players.length >3){
+					position = 0;
+					int pl3Life = players[2].getLifes();				
+					while (pl3Life > 0) {
+						g.drawImage(hearts, position, 0); 
+						position+=25;
+						pl3Life--;
+					}
+
+					position = 0;
+					int pl4Life = players[3].getLifes();				
+					while (pl4Life > 0) {
+						g.drawImage(hearts, 650+position, 570); 
+						position+=25;
+						pl4Life--;
+					}
 				}
-				
-				position = 0;
-				int pl3Life = players[2].getLifes();				
-				while (pl3Life > 0) {
-					g.drawImage(hearts, position, 0); 
-					position+=25;
-					pl3Life--;
-				}
-				
-				position = 0;
-				int pl4Life = players[3].getLifes();				
-				while (pl4Life > 0) {
-					g.drawImage(hearts, 650+position, 570); 
-					position+=25;
-					pl4Life--;
-				}
-				
+
 			}
 		}
 	}
@@ -315,7 +317,7 @@ public class PlayState extends BasicGameState{
 		tile.setBomb(tempBomb);
 		System.out.println("Bomb created in 'PlayState'");
 	}
-	
+
 	public void removeItem(Item i) {
 		item.remove(i);
 	}
@@ -333,7 +335,7 @@ public class PlayState extends BasicGameState{
 		int tilex = b.getTile().getGridx();
 		int tiley = b.getTile().getGridy();
 		int bombSize = b.getPlayer().getBombSize();
-		
+
 		b.getPlayer().decreaseBombCount();
 		/*
 		 * Handles the situation of the player standing on the bomb.
@@ -343,7 +345,7 @@ public class PlayState extends BasicGameState{
 			ft.getPlayer().hurt();
 		}
 		ft.setBomb(null);
-		
+
 		/*
 		 * Handles the blaswave in all directions.
 		 */
@@ -412,14 +414,14 @@ public class PlayState extends BasicGameState{
 		if(tempSquare instanceof Block){
 			int xTile = tempSquare.getGridx();
 			int yTile = tempSquare.getGridy();
-			
+
 			Block block = (Block)tiles[xTile][yTile];	
 			if(!block.isImmovable()){
 				removeWall(block);					
 				tiles[xTile][yTile] = new FloorTile(xTile,yTile,gamecont,nrtiles);
 				FloorTile tempTile = (FloorTile)tiles[xTile][yTile];
 				tempTile.setBurning();
-				
+
 				int dice = new Random().nextInt(10)+1;
 				switch(dice) {
 				case 1 : 
@@ -431,17 +433,17 @@ public class PlayState extends BasicGameState{
 					Life tempL = new Life(gamecont, tempTile, nrtiles);
 					item.add(tempL); 	
 					tempTile.setItem(tempL);	
-				break;
+					break;
 				case 3 : 
 					Slow tempSlow = new Slow(gamecont, tempTile, nrtiles);
 					item.add(tempSlow); 	
 					tempTile.setItem(tempSlow);	
-				break;
+					break;
 				case 4 : 
 					Speed tempSpeed = new Speed(gamecont, tempTile, nrtiles);
 					item.add(tempSpeed);
 					tempTile.setItem(tempSpeed);
-				break;				
+					break;				
 				}
 			}
 			return true;
