@@ -214,6 +214,9 @@ public class PlayState extends BasicGameState{
 					e.printStackTrace();
 				}
 			}
+			
+			
+			
 		}
 		if(alivePlayers == 1){
 			for(int i = 0; i < players.length; i++){
@@ -231,10 +234,10 @@ public class PlayState extends BasicGameState{
 	private void renderPlayers(GameContainer c, Graphics g){
 		for(int i = 0; i < players.length; i++){
 			if(players[i].isAlive()) {
-				players[i].render(c, g);
+				players[i].render(c, g);				
 				
 				int position = 0;				
-				int pl1Life = players[0].getLifes();
+				int pl1Life = players[0].getLifes();				
 				while (pl1Life > 0) {
 					g.drawImage(hearts, position, 0); 
 					position+=25;
@@ -244,7 +247,7 @@ public class PlayState extends BasicGameState{
 				position = 0;
 				int pl2Life = players[1].getLifes();				
 				while (pl2Life > 0) {
-					g.drawImage(hearts, position, 570); 
+					g.drawImage(hearts, 750+position, 570); 
 					position+=25;
 					pl2Life--;
 				}
@@ -252,7 +255,7 @@ public class PlayState extends BasicGameState{
 				position = 0;
 				int pl3Life = players[2].getLifes();				
 				while (pl3Life > 0) {
-					g.drawImage(hearts, 650+position, 0); 
+					g.drawImage(hearts, position, 0); 
 					position+=25;
 					pl3Life--;
 				}
