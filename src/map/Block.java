@@ -25,7 +25,7 @@ public class Block implements Square{
 	}
 	public Block(int x, int y, GameContainer container, int tiles) {
 		try {
-			imgBlockImmovable = new Image("res/concrete.png");
+			imgBlockImmovable = new Image("res/tree.png");
 			imgBlockMovable = new Image("res/brick.png");
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block

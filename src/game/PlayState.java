@@ -70,7 +70,7 @@ public class PlayState extends BasicGameState{
 	public void init(GameContainer gc, StateBasedGame game)
 			throws SlickException {
 		hearts = new Image("res/heartSmall.png");
-		soundBomb = new Sound("res/bomb.wav");
+		soundBomb = new Sound("res/sound/bomb.wav");
 		gamecont = gc;
 		parseSettings(); // Start by parsing all the settings.
 
@@ -232,7 +232,33 @@ public class PlayState extends BasicGameState{
 	private void renderPlayers(GameContainer c, Graphics g){
 		for(int i = 0; i < players.length; i++){
 			if(players[i].isAlive()) {
-				players[i].render(c, g);				
+				players[i].render(c, g);
+				
+				
+//				int pos = 0; 
+//				int playersLife = players[i].getLifes();
+//				while (playersLife > 0){
+//					switch (players.length){
+//					case 1: 
+//						g.drawImage(hearts,pos,0);
+//						playersLife--;
+//						break;
+//					case 2:
+//						g.drawImage(hearts,700+pos, 570);
+//						playersLife--;
+//						break;
+//					case 3:
+//						g.drawImage(hearts,pos,570);
+//						playersLife--;
+//						break;
+//					case 4:
+//						g.drawImage(hearts,750+pos,570);
+//						playersLife--;
+//						break;
+//					}
+//					pos=0;
+//				}
+				
 
 				//Top left corner
 				int position = 0;

@@ -34,7 +34,7 @@ public class Lobby extends BasicGameState {
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 	throws SlickException {
-		fx = new Sound("res/SMK.wav");
+		fx = new Sound("res/sound/SMK.wav");
 		
 		menu = new Image("res/menu.png");
 		start = new Image("res/start.png");

@@ -38,7 +38,7 @@ public class Player implements Renderable {
 		try {
 			ss = new SpriteSheet("/res/players.png", 20, 30);
 			players = new Animation(ss,0,0,0,0,true,animationspeed,true);
-			life = new Sound("res/life.wav");
+			life = new Sound("res/sound/life.wav");
 			hearts = new Image("res/heartSmall.png");
 		} catch (SlickException e) {
 			e.printStackTrace();
