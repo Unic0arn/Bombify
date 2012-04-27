@@ -282,7 +282,7 @@ public class PlayState extends BasicGameState{
 					position = 0;
 					int pl3Life = players[2].getLifes();				
 					while (pl3Life > 0) {
-						g.drawImage(hearts, 20+position, 570); 
+						g.drawImage(hearts, position, 570); 
 						position+=25;
 						pl3Life--;
 					}
@@ -291,7 +291,7 @@ public class PlayState extends BasicGameState{
 					position = 0;
 					int pl4Life = players[3].getLifes();			
 					while (pl4Life > 0) {
-						g.drawImage(hearts, 750+position, 570); 
+						g.drawImage(hearts, 700+position, 0); 
 						position+=25;
 						pl4Life--;
 					}

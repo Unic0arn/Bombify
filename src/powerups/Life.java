@@ -18,7 +18,7 @@ public class Life implements Item {
 	public Life(GameContainer gc,FloorTile ft, int tiles){
 	
 		try {
-			life = new Image("res/sound/life.png");
+			life = new Image("res/life.png");
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
