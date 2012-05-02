@@ -1,18 +1,15 @@
 package game;
 
 import java.text.ParseException;
-
-import menu.Instructions;
-import menu.Lobby;
-import menu.SettingsMenu;
-
+import settings.*;
+import menu.*;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 
-import settings.*;
+
 /**
  * The main game container! Distributes all the effort across different
  * "gameStates" which basically are different "windows".

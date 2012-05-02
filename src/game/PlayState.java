@@ -48,12 +48,10 @@ public class PlayState extends BasicGameState{
 	ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 	ArrayList<Item> item = new ArrayList<Item>();
 	int nrplayers, winner=0, nrtiles = 15;
-
 	Animation bomb;
 	SpriteSheet ss;
 	Image hearts, gameOver;
 	Sound soundBomb, background, gg;
-	
 	private TrueTypeFont playerFont; //Special font for ending
 
 	/**
@@ -167,12 +165,18 @@ public class PlayState extends BasicGameState{
 	@Override
 	public void render(GameContainer c, StateBasedGame game, Graphics g)
 			throws SlickException{
-		if(checker){
-			background.stop();
-			gg.play();
+		
+		int x = 0;
+		if(checker){			
+			if(x == 0){
+				background.stop();
+				gg.play();
+				x = 1;
+			}
 			g.drawImage(gameOver, 0, 0);
 			playerFont.drawString(350, 320, "Player " + winner + " won!" , Color.black);
-		} else {		
+		
+		}else {		
 			renderMap(c,g);
 			renderBombs(c,g);
 			renderItems(c,g);
@@ -268,6 +272,27 @@ public class PlayState extends BasicGameState{
 	private void renderPlayers(GameContainer c, Graphics g){
 		for(int i = 0; i < players.length;i++){			
 			if(players[i].isAlive()){
+				int pos = 0;
+				int lifes = players[i].getLifes();
+				while(lifes > 0){
+					switch(i){
+					case 0 :
+						g.drawImage(hearts, pos, 0); //PL1
+						break;
+					case 1 : 
+						g.drawImage(hearts, 675+pos, 570); //PL2 
+						break;
+					case 2 :
+						g.drawImage(hearts, pos, 570); //PL3
+						break;
+					case 3 : 
+						g.drawImage(hearts, 675+pos, 0); //PL4
+						break;
+					}
+					lifes--;
+					pos+=25;
+				}
+				
 				players[i].render(c, g);
 			}
 		}
