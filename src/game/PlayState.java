@@ -52,9 +52,9 @@ public class PlayState extends BasicGameState{
 	Animation bomb;
 	SpriteSheet ss;
 	Image hearts, gameOver;
-	Sound soundBomb, fx, gg;
+	Sound soundBomb, background, gg;
 	
-	private TrueTypeFont font2; //Special font for ending
+	private TrueTypeFont playerFont; //Special font for ending
 
 	/**
 	 * Creates a new game with the desired settings.
@@ -76,7 +76,7 @@ public class PlayState extends BasicGameState{
 			InputStream inputStream	= ResourceLoader.getResourceAsStream("res/fonts/bluespecial.ttf"); 
 			Font awtFont2 = Font.createFont(Font.TRUETYPE_FONT, inputStream);
 			awtFont2 = awtFont2.deriveFont(24f); // set font size
-			font2 = new TrueTypeFont(awtFont2, true);
+			playerFont = new TrueTypeFont(awtFont2, true);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -84,17 +84,20 @@ public class PlayState extends BasicGameState{
 		
 		hearts = new Image("res/heartSmall.png");
 		gameOver = new Image("res/gameOver.png");
+		
+		/* Sounds */
 		soundBomb = new Sound("res/sound/bomb.wav");
-		fx = new Sound("res/sound/SMK.wav");
-		gg = new Sound("res/sound/game_over.wav");		
+		background = new Sound("res/sound/background.wav");
+		gg = new Sound("res/sound/game_over.wav");
 
-
-		gamecont = gc;
-		parseSettings(); // Start by parsing all the settings.
 
 		/* Background music */
-		fx.play();
-		fx.loop();
+		background.play();
+		background.loop();
+		
+		gamecont = gc;
+		parseSettings(); // Start by parsing all the settings.
+		
 
 		//Defines the tiles.
 		tiles = new Square[nrtiles][nrtiles];	
@@ -164,9 +167,11 @@ public class PlayState extends BasicGameState{
 	@Override
 	public void render(GameContainer c, StateBasedGame game, Graphics g)
 			throws SlickException{
-		if(checker){			
+		if(checker){
+			background.stop();
+			gg.play();
 			g.drawImage(gameOver, 0, 0);
-			font2.drawString(350, 320, "Player " + winner + " won!" , Color.black);
+			playerFont.drawString(350, 320, "Player " + winner + " won!" , Color.black);
 		} else {		
 			renderMap(c,g);
 			renderBombs(c,g);

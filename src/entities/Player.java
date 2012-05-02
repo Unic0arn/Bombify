@@ -41,7 +41,7 @@ public class Player implements Renderable {
 			life = new Sound("res/sound/life.wav");
 			hearts = new Image("res/heartSmall.png");
 			fail = new Sound("res/sound/icq.wav");
-			//lightning = new Sound("res/sound/lightning.wav");
+			lightning = new Sound("res/sound/lightning.wav");
 			
 		} catch (SlickException e) {
 			e.printStackTrace();

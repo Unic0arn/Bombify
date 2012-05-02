@@ -1,7 +1,8 @@
 package menu;
 
+import java.util.Date;
+
 import game.Constants;
-import game.PlayState;
 import guiParts.Button;
 
 import org.newdawn.slick.GameContainer;
@@ -17,7 +18,7 @@ public class Instructions extends BasicGameState {
 	Image menu;
 	Button[] button; 	
 	SettingsContainer sc;
-	
+	Date startTime;	
 	
 	public Instructions(SettingsContainer sc){
 		this.sc = sc;
@@ -26,25 +27,23 @@ public class Instructions extends BasicGameState {
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		//TODO
-		//menu = new Image("res/menu.png");
-//		button = new Button[1];
-//		button[0]= new Button(50, 450, 200, 100, quit);
-		
+		startTime = new Date(); 
+		menu = new Image("res/new/instructions.png");		
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame game, Graphics g)
 			throws SlickException {
-		//TODO
-		//g.drawImage(menu,0,0);		
+		g.drawImage(menu,0,0);		
 	}
 
 	@Override
 	public void update(GameContainer gameCont, StateBasedGame game, int delta)
 			throws SlickException {
-		//TODO
-		//game.addState(new PlayState(sc));		
+		Date newTime = new Date();		
+		if(newTime.getSeconds() > startTime.getSeconds() + 4){
+			game.enterState(Constants.GAME);
+		}
 	}
 
 	@Override

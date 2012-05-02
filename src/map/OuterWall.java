@@ -17,7 +17,7 @@ public class OuterWall implements Square {
 
 	public OuterWall(int x, int y, GameContainer container, int tiles){
 		try {
-			imgOuterWall = new Image("res/outerWall.png");			
+			imgOuterWall = new Image("res/new/immovable.png");			
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

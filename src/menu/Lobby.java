@@ -24,9 +24,9 @@ import settings.SettingsContainer;
 public class Lobby extends BasicGameState {	
 	Button[] b; // An array of buttons.
 	private Image menu, start, settings, quit;
-	Sound fx;	
-
+	Sound fx;
 	SettingsContainer sc;
+	
 	public Lobby(SettingsContainer sc){
 		this.sc = sc;
 	}
@@ -46,7 +46,7 @@ public class Lobby extends BasicGameState {
 		b[2] = new Button(50,350,200,100, settings);
 		b[3] = new Button(0,0,0,0,"");
 
-		b[1].setShortCut(Constants.GAME);
+		b[1].setShortCut(Constants.INSTRUCTIONS);
 		b[2].setShortCut(Constants.SETTINGMENU);
 	}
 	@Override
