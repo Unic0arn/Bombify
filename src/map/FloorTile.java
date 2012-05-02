@@ -27,6 +27,7 @@ public class FloorTile implements Square {
 	public FloorTile(int x, int y, GameContainer container, int tiles) {
 
 		try {
+			//imgFloorTile = new Image("res/new/sand.png");
 			imgFloorTile = new Image("res/ground.png");
 			imgBurning = new Image("res/fire.png");
 

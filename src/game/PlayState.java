@@ -1,8 +1,10 @@
 package game;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.awt.Font;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -14,19 +16,18 @@ import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import settings.SettingsContainer;
+
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.util.ResourceLoader;
 
 import powerups.*;
-
+import settings.SettingsContainer;
 import entities.Bomb;
 import entities.Item;
 import entities.Player;
-import map.Block; 
-import map.OuterWall;
-import map.Square;
-import map.FloorTile;
+import map.*;
 
 /**
  * This is the playing part of the game.
@@ -34,11 +35,11 @@ import map.FloorTile;
  * 
  * @author Fredrik Hallberg & Victor Dahlin
  * @version 2012-04-26
- *
  */
 
+@SuppressWarnings("deprecation")
 public class PlayState extends BasicGameState{
-	Boolean paused =false; //Maybe for pausing the game not used at the moment!
+	Boolean paused =false, checker = false; //Maybe for pausing the game not used at the moment!
 	SettingsContainer gameSettings; //An object to contain all settings.
 	GameContainer gamecont;
 	HashMap<String,Integer> playerControls; //Store the player controls in a hashmap.
@@ -46,13 +47,14 @@ public class PlayState extends BasicGameState{
 	Square[][] tiles; //A grid of all the "tiles" in the game.
 	ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 	ArrayList<Item> item = new ArrayList<Item>();
-	int nrplayers; // The amount of players 1-4
-	int hitCounter = 0;	
-	int nrtiles = 15; // Odd number = nice field
+	int nrplayers, winner=0, nrtiles = 15;
+
 	Animation bomb;
 	SpriteSheet ss;
-	Image hearts;
-	Sound soundBomb;
+	Image hearts, gameOver;
+	Sound soundBomb, fx, gg;
+	
+	private TrueTypeFont font2; //Special font for ending
 
 	/**
 	 * Creates a new game with the desired settings.
@@ -63,21 +65,39 @@ public class PlayState extends BasicGameState{
 		super();
 		gameSettings = gs;
 	}
-	/**
-	 * Starting position for field and players. 
-	 */
+
+	/* Starting position for field and players. */
 	@Override
 	public void init(GameContainer gc, StateBasedGame game)
 			throws SlickException {
+
+		/* Special font for render() */
+		try {
+			InputStream inputStream	= ResourceLoader.getResourceAsStream("res/fonts/bluespecial.ttf"); 
+			Font awtFont2 = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+			awtFont2 = awtFont2.deriveFont(24f); // set font size
+			font2 = new TrueTypeFont(awtFont2, true);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		hearts = new Image("res/heartSmall.png");
+		gameOver = new Image("res/gameOver.png");
 		soundBomb = new Sound("res/sound/bomb.wav");
+		fx = new Sound("res/sound/SMK.wav");
+		gg = new Sound("res/sound/game_over.wav");		
+
+
 		gamecont = gc;
 		parseSettings(); // Start by parsing all the settings.
 
+		/* Background music */
+		fx.play();
+		fx.loop();
 
 		//Defines the tiles.
 		tiles = new Square[nrtiles][nrtiles];	
-
 
 		/**********************************************
 		 * This algorithm decides where walls, concrete
@@ -99,10 +119,10 @@ public class PlayState extends BasicGameState{
 		/************************************************
 		 *  Creates the players and gives them positions.
 		 */
+
 		players = new Player[nrplayers];
 		FloorTile floorTile = (FloorTile) tiles[1][1];
 		players[0] = new Player(floorTile,Color.cyan);
-
 
 		if(nrplayers > 1){
 			floorTile = (FloorTile) tiles[nrtiles-2][nrtiles-2];
@@ -110,7 +130,7 @@ public class PlayState extends BasicGameState{
 		}
 		if(nrplayers > 2){
 			floorTile = (FloorTile) tiles[1][nrtiles-2];
-			players[2] = new Player(floorTile,Color.green);	
+			players[2] = new Player(floorTile,Color.green);
 		}
 		if(nrplayers > 3){
 			floorTile = (FloorTile) tiles[nrtiles-2][1];
@@ -140,13 +160,19 @@ public class PlayState extends BasicGameState{
 		}
 	}
 
+	/* Draws game if players <= 1 draw game over*/
 	@Override
 	public void render(GameContainer c, StateBasedGame game, Graphics g)
 			throws SlickException{
-		renderMap(c,g);
-		renderBombs(c,g);
-		renderItems(c,g);
-		renderPlayers(c,g);
+		if(checker){			
+			g.drawImage(gameOver, 0, 0);
+			font2.drawString(350, 320, "Player " + winner + " won!" , Color.black);
+		} else {		
+			renderMap(c,g);
+			renderBombs(c,g);
+			renderItems(c,g);
+			renderPlayers(c,g);
+		}
 	}
 
 
@@ -156,16 +182,34 @@ public class PlayState extends BasicGameState{
 		Input in = c.getInput();
 
 		//Just checking if anyone pressed the escape key to end game.
-		//		if (in.isKeyDown(Input.KEY_ESCAPE)) {
-		//			c.exit();
-		//		}
-		updatePlayers(c,delta,in);
-		updateBombs(c,delta,in);
-		updateItems(c,delta,in);
-		updateMap(c,delta,in);
+		if(in.isKeyDown(Input.KEY_ESCAPE)) {
+			c.exit();
+		}
+
+		/* Check for alive players */
+		int alivePlayers = 0; // Alive players
+		for(int i = 0; i < players.length;i++){
+			if(players[i].isAlive()){
+				alivePlayers++;			
+			}
+
+			if(alivePlayers <= 1){
+				winner = i; 
+			}
+		}
+
+		// Game exits if players <= 1
+		if(alivePlayers > 1){
+			updatePlayers(c,delta,in);
+			updateBombs(c,delta,in);
+			updateMap(c,delta,in);
+		} else{
+			checker = true;
+		}
 	}
 
 	private void updateMap(GameContainer c, int delta, Input in){
+
 		for(int i = 0;i < tiles.length;i++){
 			for(int j=0;j<tiles.length;j++){
 				if(tiles[i][j] instanceof FloorTile){
@@ -179,16 +223,14 @@ public class PlayState extends BasicGameState{
 	private void renderMap(GameContainer gc, Graphics g) throws SlickException{
 		for(int i =0;i<nrtiles;i++){
 			for(int j = 0;j<nrtiles;j++){
-				tiles[i][j].render(gc,g, i, j, nrtiles);
-			}
+				tiles[i][j].render(gc,g, i, j, nrtiles);			
+			}			
 		}
 	}
 
 	private void updatePlayers(GameContainer c, int delta, Input in){
-		int alivePlayers = 0;
 		for(int i = 0; i < players.length; i++){
 			if(players[i].isAlive()){
-				alivePlayers++;
 				Vector2f direction = new Vector2f(0, 0);
 				if (in.isKeyDown(playerControls.get("P"+(i+1)+"N"))) {
 					direction.add(new Vector2f(0, -1));
@@ -216,85 +258,12 @@ public class PlayState extends BasicGameState{
 			}			
 
 		}
-		if(alivePlayers == 1){
-			for(int i = 0; i < players.length; i++){
-				if(players[i].isAlive()){					
-					//c.exit();
-				}
-			}
-
-		}else if(alivePlayers == 0){
-			System.out.println("N00bs you died by the same bomb, lulz");
-			//c.exit();
-		}
 	}
 
 	private void renderPlayers(GameContainer c, Graphics g){
-		for(int i = 0; i < players.length; i++){
-			if(players[i].isAlive()) {
+		for(int i = 0; i < players.length;i++){			
+			if(players[i].isAlive()){
 				players[i].render(c, g);
-				
-				
-//				int pos = 0; 
-//				int playersLife = players[i].getLifes();
-//				while (playersLife > 0){
-//					switch (players.length){
-//					case 1: 
-//						g.drawImage(hearts,pos,0);
-//						playersLife--;
-//						break;
-//					case 2:
-//						g.drawImage(hearts,700+pos, 570);
-//						playersLife--;
-//						break;
-//					case 3:
-//						g.drawImage(hearts,pos,570);
-//						playersLife--;
-//						break;
-//					case 4:
-//						g.drawImage(hearts,750+pos,570);
-//						playersLife--;
-//						break;
-//					}
-//					pos=0;
-//				}
-				
-
-				//Top left corner
-				int position = 0;
-					int pl1Life = players[0].getLifes();				
-					while (pl1Life > 0) {
-						g.drawImage(hearts, position, 0); 
-						position+=25;
-						pl1Life--;
-					}
-
-					//Right corner
-					position = 0;
-					int pl2Life = players[1].getLifes();				
-					while (pl2Life > 0) {
-						g.drawImage(hearts, 700+position, 570); 
-						position+=25;
-						pl2Life--;
-					}
-					
-					//Left Corner
-					position = 0;
-					int pl3Life = players[2].getLifes();				
-					while (pl3Life > 0) {
-						g.drawImage(hearts, position, 570); 
-						position+=25;
-						pl3Life--;
-					}
-				
-					// Top right corner
-					position = 0;
-					int pl4Life = players[3].getLifes();			
-					while (pl4Life > 0) {
-						g.drawImage(hearts, 700+position, 0); 
-						position+=25;
-						pl4Life--;
-					}
 			}
 		}
 	}
@@ -310,10 +279,6 @@ public class PlayState extends BasicGameState{
 			bombs.get(i).render(c, g);
 		}
 	}
-
-	private void updateItems(GameContainer c, int delta, Input in) {		
-	}
-
 
 	private void renderItems(GameContainer c, Graphics g) {
 		for(int i = 0; i < item.size(); i++){
@@ -340,13 +305,11 @@ public class PlayState extends BasicGameState{
 		Bomb tempBomb = new Bomb(gamecont, p, bomb, tile, nrtiles);
 		bombs.add(tempBomb);
 		tile.setBomb(tempBomb);
-		System.out.println("Bomb created in 'PlayState'");
 	}
 
 	public void removeItem(Item i) {
 		item.remove(i);
 	}
-
 
 	/**
 	 * Removes the bomb from the field and handles the CONSEQUENCES!!!!
@@ -354,26 +317,22 @@ public class PlayState extends BasicGameState{
 	 */
 	public void removeBomb(Bomb b) {
 		soundBomb.play();
-		boolean hitWallNorth = false,hitWallEast= false,hitWallWest= false,hitWallSouth= false;
+		boolean hitWallNorth=false, hitWallEast=false, hitWallWest=false, hitWallSouth=false;
 		bombs.remove(b);
 		b.getTile().setBurning();
 		int tilex = b.getTile().getGridx();
 		int tiley = b.getTile().getGridy();
 		int bombSize = b.getPlayer().getBombSize();
-
 		b.getPlayer().decreaseBombCount();
-		/*
-		 * Handles the situation of the player standing on the bomb.
-		 */
+
+		/* Handles the situation of the player standing on the bomb. */
 		FloorTile ft = (FloorTile)tiles[tilex][tiley];
 		if(ft.hasPlayer()){
 			ft.getPlayer().hurt();
 		}
 		ft.setBomb(null);
 
-		/*
-		 * Handles the blaswave in all directions.
-		 */
+		/* Handles the blaswave in all directions. */
 		for (int i = 1; i<=bombSize;i++){
 			if(!hitWallNorth)hitWallNorth=checkNorth(i,tilex,tiley);
 			if(!hitWallEast)hitWallEast=checkEast(i,tilex,tiley);
@@ -437,14 +396,14 @@ public class PlayState extends BasicGameState{
 	 */
 	private boolean checkPath(Square tempSquare){
 		if(tempSquare instanceof Block){
-			int xTile = tempSquare.getGridx();
-			int yTile = tempSquare.getGridy();
+			int tileX = tempSquare.getGridx();
+			int tileY = tempSquare.getGridy();
 
-			Block block = (Block)tiles[xTile][yTile];	
+			Block block = (Block)tiles[tileX][tileY];	
 			if(!block.isImmovable()){
 				removeWall(block);					
-				tiles[xTile][yTile] = new FloorTile(xTile,yTile,gamecont,nrtiles);
-				FloorTile tempTile = (FloorTile)tiles[xTile][yTile];
+				tiles[tileX][tileY] = new FloorTile(tileX,tileY,gamecont,nrtiles);
+				FloorTile tempTile = (FloorTile)tiles[tileX][tileY];
 				tempTile.setBurning();
 
 				int dice = new Random().nextInt(10)+1;

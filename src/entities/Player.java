@@ -26,8 +26,8 @@ public class Player implements Renderable {
 	Image hearts;
 	int posx,posy,sizex,sizey;
 	SpriteSheet ss;
-	Animation players; 
-	Sound life; 
+	Animation players;
+	Sound life, fail, lightning;
 
 	public Player(FloorTile tile,Color c){
 		this.currentTile = tile;
@@ -40,6 +40,9 @@ public class Player implements Renderable {
 			players = new Animation(ss,0,0,0,0,true,animationspeed,true);
 			life = new Sound("res/sound/life.wav");
 			hearts = new Image("res/heartSmall.png");
+			fail = new Sound("res/sound/icq.wav");
+			//lightning = new Sound("res/sound/lightning.wav");
+			
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
@@ -139,11 +142,11 @@ public class Player implements Renderable {
 			lives++;
 			System.out.println("Lives: " + lives);
 			break;
-		case 3: 
+		case 3:
 			speed--;
 			System.out.println("Speed is now " + speed);
 			break;
-		case 4: 
+		case 4:
 			speed++;
 			System.out.println("Speed is now " + speed);
 			break;
@@ -206,6 +209,7 @@ public class Player implements Renderable {
 	}
 
 	public void hurt() {
+		fail.play();
 		lives--;
 		System.out.println("Lives: " + lives);
 		if(lives <= 0){

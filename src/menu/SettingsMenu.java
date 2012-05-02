@@ -1,4 +1,4 @@
-package settings;
+package menu;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -6,9 +6,9 @@ import java.util.TreeSet;
 
 import javax.swing.JOptionPane;
 
-import guiParts.Button;
 import game.BombifyGame;
 import game.Constants;
+import guiParts.Button;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
@@ -19,6 +19,8 @@ import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.Image;
+
+import settings.SettingsContainer;
 
 /**
  *  This SettingsMenu will change state of the screen
