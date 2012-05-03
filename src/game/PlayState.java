@@ -51,7 +51,7 @@ public class PlayState extends BasicGameState{
 	Animation bomb;
 	SpriteSheet ss;
 	Image hearts, gameOver;
-	Sound soundBomb, background, gg;
+	Sound soundBomb, gg, background;
 	private TrueTypeFont playerFont; //Special font for ending
 
 	/**
@@ -86,12 +86,7 @@ public class PlayState extends BasicGameState{
 		/* Sounds */
 		soundBomb = new Sound("res/sound/bomb.wav");
 		background = new Sound("res/sound/background.wav");
-		gg = new Sound("res/sound/game_over.wav");
-
-
-		/* Background music */
-		background.play();
-		background.loop();
+		gg = new Sound("res/sound/game_over.wav");	
 		
 		gamecont = gc;
 		parseSettings(); // Start by parsing all the settings.
@@ -159,23 +154,20 @@ public class PlayState extends BasicGameState{
 				}
 			}
 		}
+
+		background.play(1, 0.1f);
+		background.loop(1, 0.1f);
 	}
 
 	/* Draws game if players <= 1 draw game over*/
 	@Override
 	public void render(GameContainer c, StateBasedGame game, Graphics g)
-			throws SlickException{
+			throws SlickException{	
 		
-		int x = 0;
-		if(checker){			
-			if(x == 0){
-				background.stop();
-				gg.play();
-				x = 1;
-			}
+		if(checker){
+			background.stop();
 			g.drawImage(gameOver, 0, 0);
-			playerFont.drawString(350, 320, "Player " + winner + " won!" , Color.black);
-		
+			playerFont.drawString(350, 320, "Player " + winner + " won!" , Color.black);		
 		}else {		
 			renderMap(c,g);
 			renderBombs(c,g);
@@ -199,11 +191,8 @@ public class PlayState extends BasicGameState{
 		int alivePlayers = 0; // Alive players
 		for(int i = 0; i < players.length;i++){
 			if(players[i].isAlive()){
-				alivePlayers++;			
-			}
-
-			if(alivePlayers <= 1){
-				winner = i; 
+				alivePlayers++;	
+				winner = i;
 			}
 		}
 
@@ -346,7 +335,7 @@ public class PlayState extends BasicGameState{
 	 * @param b
 	 */
 	public void removeBomb(Bomb b) {
-		soundBomb.play();
+		soundBomb.play(1, 0.3f);
 		boolean hitWallNorth=false, hitWallEast=false, hitWallWest=false, hitWallSouth=false;
 		bombs.remove(b);
 		b.getTile().setBurning();

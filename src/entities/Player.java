@@ -138,13 +138,18 @@ public class Player implements Renderable {
 			System.out.println("Bombsize is now " + bombSize);
 			break;
 		case 2: 
-			life.play();
+			life.play(1, 0.3f);
 			lives++;
 			System.out.println("Lives: " + lives);
 			break;
 		case 3:
-			speed--;
-			System.out.println("Speed is now " + speed);
+			if(speed > 3){
+				speed--;
+				System.out.println("Speed is now " + speed);
+			} else {
+				System.out.println("Decrease speed isnt possible");
+			}
+			
 			break;
 		case 4:
 			speed++;

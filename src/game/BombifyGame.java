@@ -21,8 +21,7 @@ public class BombifyGame extends StateBasedGame{
 	static SettingsContainer gameSettings; // All the settings of the game stored in a HashMap
 	public BombifyGame() {
 		super("Bombify");
-		try{
-			
+		try{			
 			gameSettings = new SettingsContainer("res/Bombify.cfg");
 		} catch(ParseException e){
 			System.out.println("Error in config file on line " + e.getErrorOffset());
@@ -33,9 +32,9 @@ public class BombifyGame extends StateBasedGame{
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
 		addState(new Lobby(gameSettings));		
-		addState(new PlayState(gameSettings));
 		addState(new SettingsMenu(gameSettings,this));
 		addState(new Instructions(gameSettings));
+		addState(new PlayState(gameSettings));
 	}
 	public static void main(String[] args) throws SlickException
 	{
