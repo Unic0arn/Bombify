@@ -2,6 +2,7 @@ package game;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
 import java.awt.Font;
@@ -53,6 +54,7 @@ public class PlayState extends BasicGameState{
 	Image hearts, gameOver;
 	Sound soundBomb, gg, background;
 	private TrueTypeFont playerFont; //Special font for ending
+	Date startTime;
 
 	/**
 	 * Creates a new game with the desired settings.
@@ -73,24 +75,27 @@ public class PlayState extends BasicGameState{
 		try {
 			InputStream inputStream	= ResourceLoader.getResourceAsStream("res/fonts/bluespecial.ttf"); 
 			Font awtFont2 = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-			awtFont2 = awtFont2.deriveFont(24f); // set font size
+			awtFont2 = awtFont2.deriveFont(40f); // set font size
 			playerFont = new TrueTypeFont(awtFont2, true);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
+		/* Start timer */
+		startTime = new Date();
+
 		hearts = new Image("res/heartSmall.png");
 		gameOver = new Image("res/gameOver.png");
-		
+
 		/* Sounds */
 		soundBomb = new Sound("res/sound/bomb.wav");
 		background = new Sound("res/sound/background.wav");
 		gg = new Sound("res/sound/game_over.wav");	
-		
+
 		gamecont = gc;
 		parseSettings(); // Start by parsing all the settings.
-		
+
 
 		//Defines the tiles.
 		tiles = new Square[nrtiles][nrtiles];	
@@ -163,12 +168,13 @@ public class PlayState extends BasicGameState{
 	@Override
 	public void render(GameContainer c, StateBasedGame game, Graphics g)
 			throws SlickException{	
-		
+
 		if(checker){
+			renderMap(c,g);
 			background.stop();
-			g.drawImage(gameOver, 0, 0);
-			playerFont.drawString(350, 320, "Player " + winner + " won!" , Color.black);		
-		}else {		
+			playerFont.drawString(275, 300, "Player " + winner + " wins!\n", Color.black);	
+			playerFont.drawString(275, 350, "Game will now exit", Color.black);
+		}else {
 			renderMap(c,g);
 			renderBombs(c,g);
 			renderItems(c,g);
@@ -180,11 +186,15 @@ public class PlayState extends BasicGameState{
 	@Override
 	public void update(GameContainer c, StateBasedGame game, int delta)
 			throws SlickException{
+		
 		Input in = c.getInput();
-
-		//Just checking if anyone pressed the escape key to end game.
-		if(in.isKeyDown(Input.KEY_ESCAPE)) {
-			c.exit();
+		
+		/* Close game in 3 secs after player x wins */
+		if(checker){
+			Date newTime = new Date();
+			if(newTime.getSeconds() > startTime.getSeconds() + 10){
+				c.exit();
+			}
 		}
 
 		/* Check for alive players */
@@ -192,7 +202,7 @@ public class PlayState extends BasicGameState{
 		for(int i = 0; i < players.length;i++){
 			if(players[i].isAlive()){
 				alivePlayers++;	
-				winner = i;
+				winner = i+1;
 			}
 		}
 
@@ -281,7 +291,7 @@ public class PlayState extends BasicGameState{
 					lifes--;
 					pos+=25;
 				}
-				
+
 				players[i].render(c, g);
 			}
 		}
