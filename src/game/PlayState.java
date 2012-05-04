@@ -172,8 +172,9 @@ public class PlayState extends BasicGameState{
 		if(checker){
 			renderMap(c,g);
 			background.stop();
-			playerFont.drawString(275, 300, "Player " + winner + " wins!\n", Color.black);	
-			playerFont.drawString(275, 350, "Game will now exit", Color.black);
+			playerFont.drawString(250, 225, "Game Over", Color.black);	
+			playerFont.drawString(250, 275, "Player " + winner + " wins!\n", Color.white);	
+			playerFont.drawString(250, 325, "Game will now exit..", Color.black);
 		}else {
 			renderMap(c,g);
 			renderBombs(c,g);
@@ -192,7 +193,7 @@ public class PlayState extends BasicGameState{
 		/* Close game in 3 secs after player x wins */
 		if(checker){
 			Date newTime = new Date();
-			if(newTime.getSeconds() > startTime.getSeconds() + 10){
+			if(newTime.getSeconds() > startTime.getSeconds() + 9){
 				c.exit();
 			}
 		}
