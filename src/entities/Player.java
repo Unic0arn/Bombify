@@ -16,14 +16,15 @@ import org.newdawn.slick.Image;
 
 public class Player implements Renderable {
 
-	int placeableBombs = 5, speed = 3, bombTime = 1, bombs = 0, bombDelay = 1000, sinceLastBomb = 1000,
-			hitDelay = 1000, sinceLastHit = 1000,bombSize = 1, animationspeed = 500, lives = 3;
+	int placeableBombs = 5, speed = 3, bombTime = 10, placedBombs = 0,
+			bombDelay = 1000, sinceLastBomb = 1000,
+			hitDelay = 1000, sinceLastHit = 1000,
+			bombSize = 2, animationspeed = 500, lives = 3;
 
 	FloorTile currentTile, goalTile;
 	Vector2f pos, velo = new Vector2f(0, 0),direction = new Vector2f(0, 0);
-	boolean hitting = false,moving = false;
+	boolean performAction = false,moving = false;
 	Color playerColor;
-	Image hearts;
 	int posx,posy,sizex,sizey;
 	SpriteSheet ss;
 	Animation players;
@@ -39,7 +40,6 @@ public class Player implements Renderable {
 			ss = new SpriteSheet("/res/players.png", 20, 30);
 			players = new Animation(ss,0,0,0,0,true,animationspeed,true);
 			life = new Sound("res/sound/life.wav");
-			hearts = new Image("res/heartSmall.png");
 			fail = new Sound("res/sound/icq.wav");
 			lightning = new Sound("res/sound/lightning.wav");
 			
@@ -69,7 +69,7 @@ public class Player implements Renderable {
 				if(isFloor(s)){
 					FloorTile tempTile = (FloorTile)s;
 					
-					if(tempTile.hasPlayer() && hitting && isHitAllowed() ){
+					if(tempTile.hasPlayer() && performAction && isHitAllowed() ){
 						tempTile.getPlayer().hurt();
 						sinceLastHit = 0;
 					
@@ -83,52 +83,52 @@ public class Player implements Renderable {
 						}
 					}
 					if(tempTile.hasItem()){
-						System.out.println("LOL");
 						getItem(p,tempTile.getItem());
 					}
 				}
-			}else if(hitting){
+			}else if(performAction){
 				if(!currentTile.hasBomb()){
-					p.createBomb(this,currentTile);
-					bombs++;
+					p.createBomb(this,currentTile,bombSize,bombTime);
+					placedBombs++;
 					sinceLastBomb = 0;
-					System.out.println("Bomb in 'player' created.");
-					System.out.println("Antal bomber: "+bombs);
 				}
-				hitting = false;
+				performAction = false;
 			}
 		}else{
-
-			//Right
-			if(direction.equals(new Vector2f(1,0))){
-				players = new Animation(ss,9,0,9,0,true, animationspeed,true);
-			}
-
-			//Left
-			else if(direction.equals(new Vector2f(-1,0))){
-				players = new Animation(ss,4,0,7,0,true,animationspeed,true);
-			}
-
-			//Down
-			else if(direction.equals(new Vector2f(0,1))){
-				players = new Animation(ss,0,0,1,0,true,animationspeed,true);
-			}
-
-			//Up
-			else if(direction.equals(new Vector2f(0,-1))){
-				players = new Animation(ss,3,0,4,0,true,animationspeed,true);
-			}
-
-			if(goalTile.getMiddle().copy().sub(pos).length()<0.1){
-				moving  = false;
-				currentTile = goalTile;
-			}
-			else{
-				velo = (goalTile.getMiddle().copy().sub(pos).scale(0.1f*speed));
-				pos.add(velo);
-			}
+			chooseAnimation();
 		}
 		return true;
+	}
+
+	private void chooseAnimation() {
+		//Right
+		if(direction.equals(new Vector2f(1,0))){
+			players = new Animation(ss,9,0,9,0,true, animationspeed,true);
+		}
+
+		//Left
+		else if(direction.equals(new Vector2f(-1,0))){
+			players = new Animation(ss,4,0,7,0,true,animationspeed,true);
+		}
+
+		//Down
+		else if(direction.equals(new Vector2f(0,1))){
+			players = new Animation(ss,0,0,1,0,true,animationspeed,true);
+		}
+
+		//Up
+		else if(direction.equals(new Vector2f(0,-1))){
+			players = new Animation(ss,3,0,4,0,true,animationspeed,true);
+		}
+
+		if(goalTile.getMiddle().copy().sub(pos).length()<0.1){
+			moving  = false;
+			currentTile = goalTile;
+		}
+		else{
+			velo = (goalTile.getMiddle().copy().sub(pos).scale(0.1f*speed));
+			pos.add(velo);
+		}
 	}
 
 	private void getItem(PlayState p, Item item) {
@@ -174,34 +174,21 @@ public class Player implements Renderable {
 	public boolean isAlive(){
 		return lives > 0;
 	}
-	public Vector2f getPos() {
-		return pos;
-	}
-
-	public void hit() {
+	public void actionPressed() {
 		if(!moving) {
 			if(isBombAllowed()) {
-				hitting=true;
+				performAction=true;
 			}			
 		}
 	}
 	
-	public int getLifes(){
+	public int getLives(){
 		return lives;
 	}
 
-	public int getBombSize(){
-		return bombSize;
-	}
 
-	public double getBombTime() {
-		return bombTime;
-	}
-	public void decreaseBombCount(){
-		bombs--;
-	}
 	public boolean isBombAllowed(){
-		if (bombs<placeableBombs && sinceLastBomb>=bombDelay){
+		if (placedBombs<placeableBombs && sinceLastBomb>=bombDelay){
 			return true;
 		}
 		return false;
@@ -220,5 +207,9 @@ public class Player implements Renderable {
 		if(lives <= 0){
 			System.out.println("I died");
 		}
+	}
+
+	public void decreaseBombs() {
+		placedBombs--;
 	}
 }

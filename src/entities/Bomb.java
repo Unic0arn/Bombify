@@ -18,29 +18,31 @@ import org.newdawn.slick.SpriteSheet;
 
 
 public class Bomb implements Renderable {
-	Player p;
 	FloorTile tile;
 	Image img;
 	double timeTil;
+	int bombSize;
+	int bombTime;
 	int posx,posy,sizex,sizey;
 	Animation animeBomb;
+	Player player;
 
-	public Bomb(GameContainer gc, Player player, Animation b,FloorTile ft,int tiles){
+	public Bomb(GameContainer gc, int bombSize, int bombTime, Animation b,FloorTile ft,int tiles, Player p){
 		try {
 			animeBomb = new Animation(new SpriteSheet("res/bomb.png",50 , 50),0,0,1,0,true,500,true);
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		p = player;
 		tile = ft;
-		timeTil = player.getBombTime() * 1000;
+		timeTil = bombTime * 1000; // bombTime in milliseconds
 		sizex = (gc.getWidth()/tiles);
 		sizey = (gc.getHeight()/tiles);
-
+		player = p;
 		posx = (gc.getWidth()/tiles * ft.getGridx());
 		posy = (gc.getHeight()/tiles *ft.getGridy());
-
+		this.bombSize = bombSize;
+		this.bombTime = bombTime;
 
 	}
 
@@ -57,12 +59,13 @@ public class Bomb implements Renderable {
 	}
 	public void explodeBomb(PlayState game){
 		game.removeBomb(this);
+		player.decreaseBombs();
 	}
 	public FloorTile getTile(){
 		return tile;
 	}
 
-	public Player getPlayer(){
-		return p;
+	public int getBombSize() {
+		return bombSize;
 	}
 }
