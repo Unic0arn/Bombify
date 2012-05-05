@@ -42,6 +42,7 @@ public class Instructions extends BasicGameState {
 	}
 
 
+	/* Check if the time is under 3 seconds otherwise continue draw menu */
 	@Override
 	public void update(GameContainer gameCont, StateBasedGame game, int delta)
 			throws SlickException {

@@ -173,7 +173,7 @@ public class PlayState extends BasicGameState{
 			renderMap(c,g);
 			background.stop();
 			playerFont.drawString(250, 225, "Game Over", Color.black);	
-			playerFont.drawString(250, 275, "Player " + winner + " wins!\n", Color.white);	
+			playerFont.drawString(250, 275, "Player " + winner + " wins!\n", Color.black);	
 			playerFont.drawString(250, 325, "Game will now exit..", Color.black);
 		}else {
 			renderMap(c,g);
