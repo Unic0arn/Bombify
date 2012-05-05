@@ -187,9 +187,9 @@ public class PlayState extends BasicGameState{
 	@Override
 	public void update(GameContainer c, StateBasedGame game, int delta)
 			throws SlickException{
-		
+
 		Input in = c.getInput();
-		
+
 		/* Close game in 3 secs after player x wins */
 		if(checker){
 			Date newTime = new Date();
@@ -254,7 +254,7 @@ public class PlayState extends BasicGameState{
 					direction.add(new Vector2f(1, 0));
 				}
 				if (in.isKeyDown(playerControls.get("P"+(i+1)+"B"))) {	
-					players[i].hit();
+					players[i].actionPressed();
 				}
 
 				players[i].setDirection(direction);
@@ -273,7 +273,7 @@ public class PlayState extends BasicGameState{
 		for(int i = 0; i < players.length;i++){			
 			if(players[i].isAlive()){
 				int pos = 0;
-				int lifes = players[i].getLifes();
+				int lifes = players[i].getLives();
 				while(lifes > 0){
 					switch(i){
 					case 0 :
@@ -326,13 +326,20 @@ public class PlayState extends BasicGameState{
 	public ArrayList<Bomb> getBombs(){
 		return bombs;
 	}
-
+	/**
+	 * Replaces the wall with a floortile.
+	 * @param b - The block to be replaced with a floortile.
+	 */
 	public void removeWall(Block b) {
 		tiles[b.getGridx()][b.getGridy()] = new FloorTile(b.getGridx(),b.getGridy(),gamecont,nrtiles);		
 	}
-
-	public void createBomb(Player p, FloorTile tile){
-		Bomb tempBomb = new Bomb(gamecont, p, bomb, tile, nrtiles);
+	/**
+	 * Creates a bomb at the current tile.
+	 * @param p - The player who put down the bomb.
+	 * @param tile - The tile on which the bomb should be placed.
+	 */
+	public void createBomb(Player p, FloorTile tile, int bombSize, int bombTime){
+		Bomb tempBomb = new Bomb(gamecont, bombSize, bombTime, bomb, tile, nrtiles,p);
 		bombs.add(tempBomb);
 		tile.setBomb(tempBomb);
 	}
@@ -352,8 +359,7 @@ public class PlayState extends BasicGameState{
 		b.getTile().setBurning();
 		int tilex = b.getTile().getGridx();
 		int tiley = b.getTile().getGridy();
-		int bombSize = b.getPlayer().getBombSize();
-		b.getPlayer().decreaseBombCount();
+		int bombSize = b.getBombSize();
 
 		/* Handles the situation of the player standing on the bomb. */
 		FloorTile ft = (FloorTile)tiles[tilex][tiley];
