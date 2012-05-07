@@ -16,7 +16,7 @@ import org.newdawn.slick.Image;
 
 public class Player implements Renderable {
 
-	int placeableBombs = 5, speed = 3, bombTime = 10, placedBombs = 0,
+	int placeableBombs = 5, speed = 3, bombTime = 2, placedBombs = 0,
 			bombDelay = 1000, sinceLastBomb = 1000,
 			hitDelay = 1000, sinceLastHit = 1000,
 			bombSize = 2, animationspeed = 500, lives = 3;

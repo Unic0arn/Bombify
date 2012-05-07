@@ -53,7 +53,7 @@ public class PlayState extends BasicGameState{
 	SpriteSheet ss;
 	Image hearts, gameOver;
 	Sound soundBomb, gg, background;
-	private TrueTypeFont playerFont; //Special font for ending
+	private TrueTypeFont playerFont, playerLife; //Special font for ending
 	Date startTime;
 
 	/**
@@ -74,9 +74,11 @@ public class PlayState extends BasicGameState{
 		/* Special font for render() */
 		try {
 			InputStream inputStream	= ResourceLoader.getResourceAsStream("res/fonts/bluespecial.ttf"); 
-			Font awtFont2 = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-			awtFont2 = awtFont2.deriveFont(40f); // set font size
-			playerFont = new TrueTypeFont(awtFont2, true);
+			Font awtFont = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+			awtFont = awtFont.deriveFont(40f); // set font size		
+			playerFont = new TrueTypeFont(awtFont, true);
+			awtFont = awtFont.deriveFont(23f);
+			playerLife = new TrueTypeFont(awtFont, true);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -272,18 +274,26 @@ public class PlayState extends BasicGameState{
 	private void renderPlayers(GameContainer c, Graphics g){
 		for(int i = 0; i < players.length;i++){			
 			if(players[i].isAlive()){
-				int pos = 0;
+				int pos = 25;
 				int lifes = players[i].getLives();
+				
+				/* Showing where player is */
+				playerLife.drawString(0, 0, "P1", Color.cyan);
+				playerLife.drawString(670, 570, "P2", Color.red);
+				playerLife.drawString(5, 570, "P3", Color.green);
+				playerLife.drawString(670, 0, "P4", Color.magenta);
+				
+				/* Draw players life */
 				while(lifes > 0){
 					switch(i){
-					case 0 :
+					case 0 :									
 						g.drawImage(hearts, pos, 0); //PL1
 						break;
 					case 1 : 
 						g.drawImage(hearts, 675+pos, 570); //PL2 
 						break;
 					case 2 :
-						g.drawImage(hearts, pos, 570); //PL3
+						g.drawImage(hearts, 25+pos, 570); //PL3
 						break;
 					case 3 : 
 						g.drawImage(hearts, 675+pos, 0); //PL4
