@@ -8,9 +8,7 @@ import guiParts.Button;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -18,11 +16,10 @@ import settings.SettingsContainer;
 
 @SuppressWarnings("deprecation")
 public class Instructions extends BasicGameState {
-	Image menu;
-	Button[] button; 	
-	SettingsContainer sc;
-	Date startTime;	
-	Sound background;
+	Image menu; //Background
+	Button[] button; //Button vector
+	SettingsContainer sc; 
+	Date startTime;	//Count down for game
 	StateBasedGame theGame;
 	public Instructions(SettingsContainer sc){
 		this.sc = sc;
@@ -33,7 +30,6 @@ public class Instructions extends BasicGameState {
 			throws SlickException {
 		startTime = new Date(); 
 		menu = new Image("res/new/instructions.png");
-		background = new Sound("res/sound/background.wav");
 		theGame = game;
 	}
 
@@ -42,7 +38,6 @@ public class Instructions extends BasicGameState {
 			throws SlickException {
 		g.drawImage(menu,0,0);		
 	}
-
 
 	/* Check if the time is under 3 seconds otherwise continue draw menu */
 	@Override
@@ -61,5 +56,4 @@ public class Instructions extends BasicGameState {
 	public int getID() {
 		return Constants.INSTRUCTIONS;
 	}
-
 }
