@@ -65,7 +65,10 @@ public class PlayState extends BasicGameState{
 		super();
 		gameSettings = gs;
 	}
-
+	@Override
+	public void enter(GameContainer container, StateBasedGame game){
+		background.loop(1, 0.1f);
+	}
 	/* Starting position for field and players. */
 	@Override
 	public void init(GameContainer gc, StateBasedGame game)
@@ -161,9 +164,6 @@ public class PlayState extends BasicGameState{
 				}
 			}
 		}
-
-		background.play(1, 0.1f);
-		background.loop(1, 0.1f);
 	}
 
 	/* Draws game if players <= 1 draw game over*/
@@ -197,6 +197,15 @@ public class PlayState extends BasicGameState{
 			Date newTime = new Date();
 			if(newTime.getSeconds() > startTime.getSeconds() + 10){
 				c.exit();
+			}
+		}
+
+		if(in.isKeyPressed(Input.KEY_M)){
+			if(background.playing()){
+				background.stop();
+			}
+			else{
+				background.loop(1, 0.1f);
 			}
 		}
 
@@ -276,13 +285,13 @@ public class PlayState extends BasicGameState{
 			if(players[i].isAlive()){
 				int pos = 25;
 				int lifes = players[i].getLives();
-				
+
 				/* Showing where player is */
 				playerLife.drawString(0, 0, "P1", Color.cyan);
 				playerLife.drawString(670, 570, "P2", Color.red);
 				playerLife.drawString(5, 570, "P3", Color.green);
 				playerLife.drawString(670, 0, "P4", Color.magenta);
-				
+
 				/* Draw players life */
 				while(lifes > 0){
 					switch(i){
