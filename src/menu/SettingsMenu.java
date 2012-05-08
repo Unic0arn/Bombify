@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
 
@@ -31,13 +32,14 @@ import settings.SettingsContainer;
  * 
  */
 public class SettingsMenu extends BasicGameState {
-	private Image menu, main, quit;
+	private Image menu, main, quit, change;
 	Button[] b;
 	Button returnButton, quitButton;
 	String[] settingList;
 	AppGameContainer app;
 	SettingsContainer sc;
 	BombifyGame bg;
+	LinkedList<String> settings;
 	
 	public SettingsMenu(SettingsContainer gameSettings, BombifyGame bombifyGame) {
 		sc = gameSettings;
@@ -52,28 +54,35 @@ public class SettingsMenu extends BasicGameState {
 		menu = new Image("res/menu.png");
 		main = new  Image("res/main.png");
 		quit = new Image("res/quit.png");
+		change = new Image("res/change.png");
 		
 		List<String> mapKeys = new ArrayList<String>(sc.keySet());
 		TreeSet<String> sortedKeys = new TreeSet<String>(mapKeys);
-		b = new Button[sortedKeys.size()];
-		settingList = new String[sortedKeys.size()];
+		settings = new LinkedList<String>(); 
 		Iterator<String> it = sortedKeys.iterator();
-		String temp;
 		
-		/* Make text element to button from SettingContainer */
-		for(int i = 0; i< b.length;i++){
+		
+		/* Get settings and store in a list */
+		for(int i = 0; i< sortedKeys.size();i++){
+			String temp;
 			if(it.hasNext()){
 				temp = it.next();
-				settingList[i] = temp;
-				b[i] = new Button(200,20*i+50,50,20,temp);
-				b[i].setImage(main);
+				if(!temp.matches("P[1-4][N|S|W|E|B]")) {
+					settings.add(temp);
+				}
 			}
 		}
+		
+		/* Setting buttons */
+		b = new  Button[settings.size()];
+		for(int i=0; i<settings.size();i++){
+			b[i] = new Button(250,50*i+175,50,50,change);
+		}
 		/* Return buttons */
-		returnButton = new Button(300,300,100,75,main);
+		returnButton = new Button(200,450,100,75,main);
 		returnButton.setShortCut(Constants.LOBBY);
 		
-		quitButton = new Button(300, 375, 100, 75, quit);	
+		quitButton = new Button(50, 450, 100, 75, quit);	
 	}
 
 	@Override
@@ -85,7 +94,7 @@ public class SettingsMenu extends BasicGameState {
 		
 		for (int i = 0; i < b.length; i++) {
 			b[i].render(container, game, g);
-			g.drawString(settingList[i] + ": " + sc.get(settingList[i]), 20,20*i+50);
+			g.drawString(settings.get(i) + ": " + sc.get(settings.get(i)), 50,56*i+175);
 		}
 	}
 
@@ -106,6 +115,10 @@ public class SettingsMenu extends BasicGameState {
 					String tempValue = JOptionPane.showInputDialog(null);
 					sc.remove(tempString);
 					sc.put(tempString, tempValue);
+					System.out.println(tempString);
+					System.out.println(tempValue);
+					//sc.writeToFile();
+
 				}
 				/* Return to main menu */
 				if(returnButton.isClicked(mousePos)){
