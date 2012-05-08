@@ -27,7 +27,7 @@ import settings.SettingsContainer;
  *  like resolution etc.   
  * 
  * @author Fredrik & Victor
- * @version 2012-04-22
+ * @version 2012-05-08
  * 
  */
 public class SettingsMenu extends BasicGameState {
@@ -47,13 +47,14 @@ public class SettingsMenu extends BasicGameState {
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		List<String> mapKeys = new ArrayList<String>(sc.keySet());
-		TreeSet<String> sortedKeys = new TreeSet<String>(mapKeys);
 		
+		/* Menu images */
 		menu = new Image("res/menu.png");
 		main = new  Image("res/main.png");
 		quit = new Image("res/quit.png");
 		
+		List<String> mapKeys = new ArrayList<String>(sc.keySet());
+		TreeSet<String> sortedKeys = new TreeSet<String>(mapKeys);
 		b = new Button[sortedKeys.size()];
 		settingList = new String[sortedKeys.size()];
 		Iterator<String> it = sortedKeys.iterator();
@@ -70,7 +71,8 @@ public class SettingsMenu extends BasicGameState {
 		}
 		/* Return buttons */
 		returnButton = new Button(300,300,100,75,main);
-		returnButton.setShortCut(Constants.LOBBY);		
+		returnButton.setShortCut(Constants.LOBBY);
+		
 		quitButton = new Button(300, 375, 100, 75, quit);	
 	}
 

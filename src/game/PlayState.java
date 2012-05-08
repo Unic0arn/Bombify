@@ -35,7 +35,7 @@ import map.*;
  * A game that is based on players trying to blow each other up.
  * 
  * @author Fredrik Hallberg & Victor Dahlin
- * @version 2012-04-26
+ * @version 2012-05-08
  */
 
 @SuppressWarnings("deprecation")
@@ -200,6 +200,7 @@ public class PlayState extends BasicGameState{
 			}
 		}
 
+		/* Mute button */
 		if(in.isKeyPressed(Input.KEY_M)){
 			if(background.playing()){
 				background.stop();
@@ -207,6 +208,11 @@ public class PlayState extends BasicGameState{
 			else{
 				background.loop(1, 0.1f);
 			}
+		}
+		
+		/* Exit button */
+		if(in.isKeyPressed(Input.KEY_ESCAPE)){
+			c.exit();
 		}
 
 		/* Check for alive players */

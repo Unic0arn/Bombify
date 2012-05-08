@@ -5,5 +5,5 @@ package game;
  *
  */
 public abstract class Constants {
-	public static final int LOBBY=0, GAME=1, SETTINGMENU=2, INSTRUCTIONS=3, GAMEOVER=4;
+	public static final int LOBBY=0, GAME=1, SETTINGMENU=2, INSTRUCTIONS=3;
 }

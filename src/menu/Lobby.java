@@ -18,7 +18,7 @@ import settings.SettingsContainer;
  * A lobby to welcome the player when first starting the application.
  * Contains buttons with shortcuts to the game or settings.
  * @author Fredrik Hallberg & Victor Dahlin
- * @version 2012-04-26
+ * @version 2012-05-08
  *
  */
 public class Lobby extends BasicGameState {	
