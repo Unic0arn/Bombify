@@ -195,7 +195,7 @@ public class PlayState extends BasicGameState{
 		/* Close game in 3 secs after player x wins */
 		if(checker){
 			Date newTime = new Date();
-			if(newTime.getSeconds() > startTime.getSeconds() + 9){
+			if(newTime.getSeconds() > startTime.getSeconds() + 10){
 				c.exit();
 			}
 		}
