@@ -285,26 +285,24 @@ public class PlayState extends BasicGameState{
 			if(players[i].isAlive()){
 				int pos = 25;
 				int lifes = players[i].getLives();
-
-				/* Showing where player is */
-				playerLife.drawString(0, 0, "P1", Color.cyan);
-				playerLife.drawString(670, 570, "P2", Color.red);
-				playerLife.drawString(5, 570, "P3", Color.green);
-				playerLife.drawString(670, 0, "P4", Color.magenta);
-
-				/* Draw players life */
+				
+				/* Draw players life and show where players is */
 				while(lifes > 0){
 					switch(i){
-					case 0 :									
+					case 0 :
+						playerLife.drawString(0, 0, "P1", Color.cyan);
 						g.drawImage(hearts, pos, 0); //PL1
 						break;
 					case 1 : 
+						playerLife.drawString(670, 570, "P2", Color.red);
 						g.drawImage(hearts, 675+pos, 570); //PL2 
 						break;
 					case 2 :
+						playerLife.drawString(5, 570, "P3", Color.green);
 						g.drawImage(hearts, 25+pos, 570); //PL3
 						break;
 					case 3 : 
+						playerLife.drawString(670, 0, "P4", Color.magenta);
 						g.drawImage(hearts, 675+pos, 0); //PL4
 						break;
 					}
