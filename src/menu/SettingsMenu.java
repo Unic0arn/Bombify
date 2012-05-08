@@ -31,17 +31,17 @@ import settings.SettingsContainer;
  * 
  */
 public class SettingsMenu extends BasicGameState {
-	private Image menu, main;
+	private Image menu, main, quit;
 	Button[] b;
-	Button returnButton;
+	Button returnButton, quitButton;
 	String[] settingList;
 	AppGameContainer app;
 	SettingsContainer sc;
 	BombifyGame bg;
+	
 	public SettingsMenu(SettingsContainer gameSettings, BombifyGame bombifyGame) {
 		sc = gameSettings;
 		bg = bombifyGame;
-
 	}
 
 	@Override
@@ -49,12 +49,17 @@ public class SettingsMenu extends BasicGameState {
 			throws SlickException {
 		List<String> mapKeys = new ArrayList<String>(sc.keySet());
 		TreeSet<String> sortedKeys = new TreeSet<String>(mapKeys);
+		
 		menu = new Image("res/menu.png");
 		main = new  Image("res/main.png");
+		quit = new Image("res/quit.png");
+		
 		b = new Button[sortedKeys.size()];
 		settingList = new String[sortedKeys.size()];
 		Iterator<String> it = sortedKeys.iterator();
 		String temp;
+		
+		/* Make text element to button from SettingContainer */
 		for(int i = 0; i< b.length;i++){
 			if(it.hasNext()){
 				temp = it.next();
@@ -63,19 +68,23 @@ public class SettingsMenu extends BasicGameState {
 				b[i].setImage(main);
 			}
 		}
-		returnButton = new Button(300,50,50,50,main);
-		returnButton.setShortCut(Constants.LOBBY);
+		/* Return buttons */
+		returnButton = new Button(300,300,100,75,main);
+		returnButton.setShortCut(Constants.LOBBY);		
+		quitButton = new Button(300, 375, 100, 75, quit);	
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
 		menu.draw(0, 0);
+		returnButton.render(container, game, g);
+		quitButton.render(container, game, g);
+		
 		for (int i = 0; i < b.length; i++) {
 			b[i].render(container, game, g);
 			g.drawString(settingList[i] + ": " + sc.get(settingList[i]), 20,20*i+50);
 		}
-		returnButton.render(container, game, g);
 	}
 
 	@Override
@@ -88,14 +97,22 @@ public class SettingsMenu extends BasicGameState {
 				Vector2f mousePos = new Vector2f(in.getAbsoluteMouseX(),
 						in.getAbsoluteMouseY());
 
+				/* Will replace new String in 'Bombify.cfg if player changed 
+				  anything and new settings will work after restart */
 				if (b[i].isClicked(mousePos)) {
 					String tempString = b[i].getString();
 					String tempValue = JOptionPane.showInputDialog(null);
 					sc.remove(tempString);
 					sc.put(tempString, tempValue);
 				}
+				/* Return to main menu */
 				if(returnButton.isClicked(mousePos)){
 					game.enterState(returnButton.getShortCut());
+				}
+				
+				/* Quit game */
+				if(quitButton.isClicked(mousePos)){
+					container.exit();
 				}
 			}
 		}
