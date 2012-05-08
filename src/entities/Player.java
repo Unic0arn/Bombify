@@ -96,6 +96,14 @@ public class Player implements Renderable {
 			}
 		}else{
 			chooseAnimation();
+			if(goalTile.getMiddle().copy().sub(pos).length()<0.1){
+				moving  = false;
+				currentTile = goalTile;
+			}
+			else{
+				velo = (goalTile.getMiddle().copy().sub(pos).scale(0.1f*speed));
+				pos.add(velo);
+			}
 		}
 		return true;
 	}
@@ -119,15 +127,6 @@ public class Player implements Renderable {
 		//Up
 		else if(direction.equals(new Vector2f(0,-1))){
 			players = new Animation(ss,3,0,4,0,true,animationspeed,true);
-		}
-
-		if(goalTile.getMiddle().copy().sub(pos).length()<0.1){
-			moving  = false;
-			currentTile = goalTile;
-		}
-		else{
-			velo = (goalTile.getMiddle().copy().sub(pos).scale(0.1f*speed));
-			pos.add(velo);
 		}
 	}
 
