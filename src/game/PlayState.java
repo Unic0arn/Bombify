@@ -48,7 +48,7 @@ public class PlayState extends BasicGameState{
 	Square[][] tiles; //A grid of all the "tiles" in the game.
 	ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 	ArrayList<Item> item = new ArrayList<Item>();
-	int nrplayers, winner=0, nrtiles = 15;
+	int nrplayers, winner=0, nrtiles = 31;
 	Animation bomb;
 	SpriteSheet ss;
 	Image hearts, gameOver;
