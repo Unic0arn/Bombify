@@ -8,6 +8,7 @@ import guiParts.Button;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
@@ -22,7 +23,7 @@ public class Instructions extends BasicGameState {
 	SettingsContainer sc;
 	Date startTime;	
 	Sound background;
-	
+	StateBasedGame theGame;
 	public Instructions(SettingsContainer sc){
 		this.sc = sc;
 	}
@@ -33,6 +34,7 @@ public class Instructions extends BasicGameState {
 		startTime = new Date(); 
 		menu = new Image("res/new/instructions.png");
 		background = new Sound("res/sound/background.wav");
+		theGame = game;
 	}
 
 	@Override
@@ -51,7 +53,10 @@ public class Instructions extends BasicGameState {
 			game.enterState(Constants.GAME);
 		}
 	}
-
+	@Override
+	public void keyPressed(int kc, char v) {
+	  theGame.enterState(Constants.GAME);
+	}  
 	@Override
 	public int getID() {
 		return Constants.INSTRUCTIONS;
