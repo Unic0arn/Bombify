@@ -1,4 +1,4 @@
-package powerups;
+package entities.powerups;
 
 import map.FloorTile;
 
@@ -10,14 +10,15 @@ import org.newdawn.slick.SlickException;
 import entities.Item;
 import game.PlayState;
 
-public class Speed implements Item{
-	Image speed;
+public class BiggerBomb implements Item {
+	Image biggerBomb;
 	FloorTile tile;
 	int posx,posy,sizex,sizey;
-	
-	public Speed(GameContainer gc, FloorTile ft, int tiles) {
+
+	public BiggerBomb(GameContainer gc, FloorTile ft, int tiles) {
+		
 		try {
-			speed = new Image("res/lightning.png");
+			biggerBomb = new Image("res/dynamite.png");
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -31,15 +32,15 @@ public class Speed implements Item{
 
 	@Override
 	public void render(GameContainer c, Graphics g) {
-		g.drawImage(speed,
+		g.drawImage(biggerBomb,
 				posx,
 				posy,
 				posx+sizex,
 				posy+sizey,
 				0,
 				0,
-				speed.getWidth(),
-				speed.getHeight());		
+				biggerBomb.getWidth(),
+				biggerBomb.getHeight());
 	}
 
 	@Override
@@ -50,7 +51,7 @@ public class Speed implements Item{
 
 	@Override
 	public int getID() {
-		return 4;
+		return 1;
 	}
 
 }

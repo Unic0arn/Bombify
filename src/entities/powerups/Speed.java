@@ -1,4 +1,4 @@
-package powerups;
+package entities.powerups;
 
 import map.FloorTile;
 
@@ -10,15 +10,14 @@ import org.newdawn.slick.SlickException;
 import entities.Item;
 import game.PlayState;
 
-public class Life implements Item {
-	Image life;
+public class Speed implements Item{
+	Image speed;
 	FloorTile tile;
 	int posx,posy,sizex,sizey;
-
-	public Life(GameContainer gc,FloorTile ft, int tiles){
 	
+	public Speed(GameContainer gc, FloorTile ft, int tiles) {
 		try {
-			life = new Image("res/life.png");
+			speed = new Image("res/lightning.png");
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -31,25 +30,27 @@ public class Life implements Item {
 	}
 
 	@Override
-	public void render(GameContainer c, Graphics g){
-		g.drawImage(life,
+	public void render(GameContainer c, Graphics g) {
+		g.drawImage(speed,
 				posx,
 				posy,
 				posx+sizex,
 				posy+sizey,
 				0,
 				0,
-				life.getWidth(),
-				life.getHeight());	
+				speed.getWidth(),
+				speed.getHeight());		
 	}
 
 	@Override
 	public void update(GameContainer c, PlayState game, int delta) {
 		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public int getID() {		
-		return 2;
+	public int getID() {
+		return 4;
 	}
+
 }

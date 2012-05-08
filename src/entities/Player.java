@@ -21,6 +21,7 @@ public class Player implements Renderable {
 			hitDelay = 1000, sinceLastHit = 1000,
 			bombSize = 2, animationspeed = 500, lives = 3;
 
+	float animationScale;
 	FloorTile currentTile, goalTile;
 	Vector2f pos, velo = new Vector2f(0, 0),direction = new Vector2f(0, 0);
 	boolean performAction = false,moving = false;
@@ -30,14 +31,17 @@ public class Player implements Renderable {
 	Animation players;
 	Sound life, fail, lightning;
 
-	public Player(FloorTile tile,Color c){
+	public Player(FloorTile tile,Color c,int tiles){
 		this.currentTile = tile;
 		pos = tile.getMiddle();
 		goalTile = tile;
 		tile.setPlayer(this);
 		playerColor = c;
 		try {
-			ss = new SpriteSheet("/res/players.png", 20, 30);
+
+			animationScale = (float) (1.0/(tiles/15.0));
+			ss = new SpriteSheet(new Image("/res/players.png").getScaledCopy(animationScale),
+					(int)(20.0*animationScale), (int)(30.0*animationScale));
 			players = new Animation(ss,0,0,0,0,true,animationspeed,true);
 			life = new Sound("res/sound/life.wav");
 			fail = new Sound("res/sound/icq.wav");

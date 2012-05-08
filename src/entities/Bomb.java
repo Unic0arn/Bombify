@@ -26,10 +26,15 @@ public class Bomb implements Renderable {
 	int posx,posy,sizex,sizey;
 	Animation animeBomb;
 	Player player;
+	float animationScale;
 
 	public Bomb(GameContainer gc, int bombSize, int bombTime, Animation b,FloorTile ft,int tiles, Player p){
+		animationScale = (float) (1.0/(tiles/15.0));
+		
 		try {
-			animeBomb = new Animation(new SpriteSheet("res/bomb.png",50 , 50),0,0,1,0,true,500,true);
+			animeBomb = new Animation(new SpriteSheet(new Image("res/bomb.png").getScaledCopy(animationScale),
+					(int)(50.0*animationScale), (int)(50.0*animationScale)),
+					0,0,1,0,true,500,true);
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

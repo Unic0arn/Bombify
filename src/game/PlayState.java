@@ -23,11 +23,14 @@ import org.newdawn.slick.Sound;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.util.ResourceLoader;
 
-import powerups.*;
 import settings.SettingsContainer;
 import entities.Bomb;
 import entities.Item;
 import entities.Player;
+import entities.powerups.BiggerBomb;
+import entities.powerups.Life;
+import entities.powerups.Slow;
+import entities.powerups.Speed;
 import map.*;
 
 /**
@@ -48,7 +51,7 @@ public class PlayState extends BasicGameState{
 	Square[][] tiles; //A grid of all the "tiles" in the game.
 	ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 	ArrayList<Item> item = new ArrayList<Item>();
-	int nrplayers, winner=0, nrtiles = 15;
+	int nrplayers, winner=0, nrtiles = 31;
 	Animation bomb;
 	SpriteSheet ss;
 	Image hearts, gameOver;
@@ -90,7 +93,7 @@ public class PlayState extends BasicGameState{
 		/* Start timer */
 		startTime = new Date();
 
-		hearts = new Image("res/heartSmall.png");
+		hearts = new Image("res/heartSmall.png").getScaledCopy((float) (1.0/(nrtiles/15.0)));
 		gameOver = new Image("res/gameOver.png");
 
 		/* Sounds */
@@ -128,19 +131,19 @@ public class PlayState extends BasicGameState{
 
 		players = new Player[nrplayers];
 		FloorTile floorTile = (FloorTile) tiles[1][1];
-		players[0] = new Player(floorTile,Color.cyan);
+		players[0] = new Player(floorTile,Color.cyan,nrtiles);
 
 		if(nrplayers > 1){
 			floorTile = (FloorTile) tiles[nrtiles-2][nrtiles-2];
-			players[1] = new Player(floorTile,Color.red);	
+			players[1] = new Player(floorTile,Color.red,nrtiles);	
 		}
 		if(nrplayers > 2){
 			floorTile = (FloorTile) tiles[1][nrtiles-2];
-			players[2] = new Player(floorTile,Color.green);
+			players[2] = new Player(floorTile,Color.green,nrtiles);
 		}
 		if(nrplayers > 3){
 			floorTile = (FloorTile) tiles[nrtiles-2][1];
-			players[3] = new Player(floorTile,Color.magenta);	
+			players[3] = new Player(floorTile,Color.magenta,nrtiles);	
 		}
 
 

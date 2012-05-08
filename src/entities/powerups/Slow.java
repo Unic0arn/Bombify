@@ -1,5 +1,5 @@
 
-package powerups;
+package entities.powerups;
 
 import map.FloorTile;
 
