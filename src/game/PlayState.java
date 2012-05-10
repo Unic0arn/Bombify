@@ -43,7 +43,8 @@ import map.*;
 
 @SuppressWarnings("deprecation")
 public class PlayState extends BasicGameState{
-	int checker = 0, player=0;
+	boolean checker;
+	int player=0;
 	SettingsContainer gameSettings; //An object to contain all settings.
 	GameContainer gamecont;
 	HashMap<String,Integer> playerControls; //Store the player controls in a hashmap.
@@ -172,21 +173,12 @@ public class PlayState extends BasicGameState{
 		gg.play(1, 0.3f);
 		player = 1;
 	}	
-	
+
 	@Override
 	public void render(GameContainer c, StateBasedGame game, Graphics g)
 			throws SlickException{
 		renderMap(c,g);
-		if(checker==1){
-			gg.play();
-			if(player == 0){
-				playGameOver();
-			}			
-			Date newTime = new Date();
-			if(newTime.getSeconds() > startTime.getSeconds() + 10){
-				c.exit();
-			}
-
+		if(checker){
 			playerFont.drawString(250, 225, "Game Over", Color.black);	
 			playerFont.drawString(250, 275, "Player " + winner + " wins!\n", Color.black);	
 			playerFont.drawString(250, 325, "Game will now exit..", Color.black);
@@ -202,6 +194,17 @@ public class PlayState extends BasicGameState{
 	public void update(GameContainer c, StateBasedGame game, int delta)
 			throws SlickException{
 		Input in = c.getInput();
+
+		if(checker){
+			gg.play();
+			if(player == 0){
+				playGameOver();
+			}
+			Date newTime = new Date();
+			if(newTime.getSeconds() > startTime.getSeconds() + 10){
+				c.exit();
+			}
+		}
 
 		/* Mute button */
 		if(in.isKeyPressed(Input.KEY_M)){
@@ -234,7 +237,7 @@ public class PlayState extends BasicGameState{
 			updateMap(c,delta,in);
 		}else{			
 			background.stop();
-			checker = 1;	
+			checker = true;	
 		}
 	}
 
