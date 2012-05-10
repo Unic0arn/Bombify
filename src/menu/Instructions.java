@@ -29,7 +29,7 @@ public class Instructions extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		startTime = new Date(); 
-		menu = new Image("res/new/instructions.png");
+		menu = new Image("res/menu/instructions.png");
 		theGame = game;
 	}
 

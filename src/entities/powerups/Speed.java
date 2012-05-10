@@ -17,7 +17,7 @@ public class Speed implements Item{
 	
 	public Speed(GameContainer gc, FloorTile ft, int tiles) {
 		try {
-			speed = new Image("res/lightning.png");
+			speed = new Image("res/items/lightning.png");
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

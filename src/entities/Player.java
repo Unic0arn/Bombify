@@ -42,6 +42,7 @@ public class Player implements Renderable {
 			animationScale = (float) (1.0/(tiles/15.0));
 			ss = new SpriteSheet(new Image("/res/players.png").getScaledCopy(animationScale),
 					(int)(20.0*animationScale), (int)(30.0*animationScale));
+			
 			players = new Animation(ss,0,0,0,0,true,animationspeed,true);
 			life = new Sound("res/sound/life.wav");
 			fail = new Sound("res/sound/icq.wav");
@@ -155,6 +156,7 @@ public class Player implements Renderable {
 			
 			break;
 		case 4:
+			lightning.play(1,0.3f);
 			speed++;
 			System.out.println("Speed is now " + speed);
 			break;

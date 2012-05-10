@@ -18,7 +18,7 @@ public class BiggerBomb implements Item {
 	public BiggerBomb(GameContainer gc, FloorTile ft, int tiles) {
 		
 		try {
-			biggerBomb = new Image("res/dynamite.png");
+			biggerBomb = new Image("res/items/dynamite.png");
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

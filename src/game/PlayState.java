@@ -43,7 +43,7 @@ import map.*;
 
 @SuppressWarnings("deprecation")
 public class PlayState extends BasicGameState{
-	Boolean paused =false, checker = false; //Maybe for pausing the game not used at the moment!
+	int checker = 0, player=0;
 	SettingsContainer gameSettings; //An object to contain all settings.
 	GameContainer gamecont;
 	HashMap<String,Integer> playerControls; //Store the player controls in a hashmap.
@@ -54,7 +54,7 @@ public class PlayState extends BasicGameState{
 	int nrplayers, winner=0, nrtiles = 15;
 	Animation bomb;
 	SpriteSheet ss;
-	Image hearts, gameOver;
+	Image hearts;
 	Sound soundBomb, gg, background;
 	private TrueTypeFont playerFont, playerLife; //Special font for ending
 	Date startTime;
@@ -94,7 +94,6 @@ public class PlayState extends BasicGameState{
 		startTime = new Date();
 
 		hearts = new Image("res/heartSmall.png").getScaledCopy((float) (1.0/(nrtiles/15.0)));
-		gameOver = new Image("res/gameOver.png");
 
 		/* Sounds */
 		soundBomb = new Sound("res/sound/bomb.wav");
@@ -169,19 +168,29 @@ public class PlayState extends BasicGameState{
 		}
 	}
 
-	/* Draws game if players <= 1 draw game over*/
+	public void playGameOver(){
+		gg.play(1, 0.3f);
+		player = 1;
+	}	
+	
 	@Override
 	public void render(GameContainer c, StateBasedGame game, Graphics g)
-			throws SlickException{	
+			throws SlickException{
+		renderMap(c,g);
+		if(checker==1){
+			gg.play();
+			if(player == 0){
+				playGameOver();
+			}			
+			Date newTime = new Date();
+			if(newTime.getSeconds() > startTime.getSeconds() + 10){
+				c.exit();
+			}
 
-		if(checker){
-			renderMap(c,g);
-			background.stop();
 			playerFont.drawString(250, 225, "Game Over", Color.black);	
 			playerFont.drawString(250, 275, "Player " + winner + " wins!\n", Color.black);	
 			playerFont.drawString(250, 325, "Game will now exit..", Color.black);
 		}else {
-			renderMap(c,g);
 			renderBombs(c,g);
 			renderItems(c,g);
 			renderPlayers(c,g);
@@ -192,16 +201,7 @@ public class PlayState extends BasicGameState{
 	@Override
 	public void update(GameContainer c, StateBasedGame game, int delta)
 			throws SlickException{
-
 		Input in = c.getInput();
-
-		/* Close game in 3 secs after player x wins */
-		if(checker){
-			Date newTime = new Date();
-			if(newTime.getSeconds() > startTime.getSeconds() + 10){
-				c.exit();
-			}
-		}
 
 		/* Mute button */
 		if(in.isKeyPressed(Input.KEY_M)){
@@ -212,7 +212,7 @@ public class PlayState extends BasicGameState{
 				background.loop(1, 0.1f);
 			}
 		}
-		
+
 		/* Exit button */
 		if(in.isKeyPressed(Input.KEY_ESCAPE)){
 			c.exit();
@@ -232,13 +232,13 @@ public class PlayState extends BasicGameState{
 			updatePlayers(c,delta,in);
 			updateBombs(c,delta,in);
 			updateMap(c,delta,in);
-		} else{
-			checker = true;
+		}else{			
+			background.stop();
+			checker = 1;	
 		}
 	}
 
 	private void updateMap(GameContainer c, int delta, Input in){
-
 		for(int i = 0;i < tiles.length;i++){
 			for(int j=0;j<tiles.length;j++){
 				if(tiles[i][j] instanceof FloorTile){
@@ -294,7 +294,7 @@ public class PlayState extends BasicGameState{
 			if(players[i].isAlive()){
 				int pos = 25;
 				int lifes = players[i].getLives();
-				
+
 				/* Draw players life and show where players is */
 				while(lifes > 0){
 					switch(i){

@@ -35,10 +35,10 @@ public class Lobby extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {		
 		
-		menu = new Image("res/menu.png");
-		start = new Image("res/start.png");
-		settings = new Image("res/settings.png");
-		quit = new Image("res/quit.png");
+		menu = new Image("res/menu/menu.png");
+		start = new Image("res/menu/start.png");
+		settings = new Image("res/menu/settings.png");
+		quit = new Image("res/menu/quit.png");
 
 		b = new Button[4];
 		b[0] = new Button(50, 450, 200, 100, quit);

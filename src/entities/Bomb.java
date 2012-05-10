@@ -32,7 +32,7 @@ public class Bomb implements Renderable {
 		animationScale = (float) (1.0/(tiles/15.0));
 		
 		try {
-			animeBomb = new Animation(new SpriteSheet(new Image("res/bomb.png").getScaledCopy(animationScale),
+			animeBomb = new Animation(new SpriteSheet(new Image("res/items/bomb.png").getScaledCopy(animationScale),
 					(int)(50.0*animationScale), (int)(50.0*animationScale)),
 					0,0,1,0,true,500,true);
 		} catch (SlickException e) {

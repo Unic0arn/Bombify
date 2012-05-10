@@ -22,7 +22,7 @@ public class BombifyGame extends StateBasedGame{
 	public BombifyGame() {
 		super("Bombify");
 		try{			
-			gameSettings = new SettingsContainer("res/Bombify.cfg");
+			gameSettings = new SettingsContainer("res/config/Bombify.cfg");
 		} catch(ParseException e){
 			System.out.println("Error in config file on line " + e.getErrorOffset());
 			System.exit(0);

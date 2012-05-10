@@ -19,7 +19,7 @@ public class Slow implements Item{
 	public Slow(GameContainer gc, FloorTile ft, int tiles) {
 		
 		try {
-			slow = new Image("res/new/slow.png");
+			slow = new Image("res/items/slow.png");
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -49,9 +49,9 @@ public class SettingsMenu extends BasicGameState {
 			throws SlickException {
 		
 		/* Menu images */
-		menu = new Image("res/menu.png");
-		main = new  Image("res/main.png");
-		quit = new Image("res/quit.png");
+		menu = new Image("res/menu/menu.png");
+		main = new  Image("res/menu/main.png");
+		quit = new Image("res/menu/quit.png");
 		
 		List<String> mapKeys = new ArrayList<String>(sc.keySet());
 		TreeSet<String> sortedKeys = new TreeSet<String>(mapKeys);
