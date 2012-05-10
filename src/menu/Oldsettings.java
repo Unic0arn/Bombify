@@ -30,7 +30,7 @@ import settings.SettingsContainer;
  * @version 2012-05-08
  * 
  */
-public class SettingsMenu extends BasicGameState {
+public class Oldsettings extends BasicGameState {
 	private Image menu, main, quit;
 	Button[] b;
 	Button returnButton, quitButton;
@@ -39,7 +39,7 @@ public class SettingsMenu extends BasicGameState {
 	SettingsContainer sc;
 	BombifyGame bg;
 	
-	public SettingsMenu(SettingsContainer gameSettings, BombifyGame bombifyGame) {
+	public Oldsettings(SettingsContainer gameSettings, BombifyGame bombifyGame) {
 		sc = gameSettings;
 		bg = bombifyGame;
 	}
@@ -104,11 +104,10 @@ public class SettingsMenu extends BasicGameState {
 				if (b[i].isClicked(mousePos)) {
 					String tempString = b[i].getString();
 					String tempValue = JOptionPane.showInputDialog(null);
-					sc.remove(tempString);
+					
 					sc.put(tempString, tempValue);
-					
+					sc.remove(tempString);
 					sc.writeToFile();
-					
 				}
 				/* Return to main menu */
 				if(returnButton.isClicked(mousePos)){
