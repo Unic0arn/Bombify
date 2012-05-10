@@ -105,9 +105,8 @@ public class SettingsMenu extends BasicGameState {
 					String tempString = b[i].getString();
 					String tempValue = JOptionPane.showInputDialog(null);
 					sc.remove(tempString);
-					sc.put(tempString, tempValue);
-					
-					sc.writeToFile();
+					sc.put(tempString, tempValue);					
+					//sc.writeToFile();
 					
 				}
 				/* Return to main menu */
